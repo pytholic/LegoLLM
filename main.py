@@ -1,9 +1,10 @@
 """Main entry point for the application."""
 
 import urllib.request
-from pathlib import Path
 
-from src.logging import logger
+from legollm import logger
+from legollm.core.preprocessor import SimpleTextPreprocessor
+from legollm.core.tokenizer import WhiteSpaceTokenizer
 
 
 def download_file_from_url(url: str, filepath: str) -> None:
@@ -19,20 +20,20 @@ def download_file_from_url(url: str, filepath: str) -> None:
     logger.info("Data downloaded successfully.")
 
 
+def read_file(filepath: str) -> str:
+    """Read a file."""
+    with open(filepath, encoding="utf-8") as file:
+        return file.read()
+
+
 def main() -> None:
     """Main function."""
-    filepath = Path("data/the-verdict.txt")
-    if not Path(filepath).exists():
-        download_file_from_url(
-            url="https://raw.githubusercontent.com/pytholic/LegoLLM/main/data/the-verdict.txt",
-            filepath=str(filepath),
-        )
-    else:
-        logger.info(f"File {filepath} already exists.")
-
-    with open(filepath, encoding="utf-8") as file:
-        data = file.read()
-        logger.info(f"Length of Data: {len(data)}")
+    raw_test = read_file("data/the-verdict.txt")
+    tokenizer = WhiteSpaceTokenizer()
+    preprocessor = SimpleTextPreprocessor()
+    vocabulary = preprocessor.process_text(raw_test, tokenizer)
+    # print first 10 dataclass items    
+    print(vocabulary)
 
 
 if __name__ == "__main__":
