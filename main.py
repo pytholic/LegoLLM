@@ -1,7 +1,7 @@
 """Main entry point for the application."""
 
-from pathlib import Path
 import urllib.request
+from pathlib import Path
 
 from src.logging import logger
 

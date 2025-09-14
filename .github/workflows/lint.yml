@@ -1,0 +1,39 @@
+# Linting git workflow
+
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      branches:
+        description: 'Comma-separated list of branches to run on'
+        required: false
+        default: 'main'
+      python-version:
+        description: 'Python version to use'
+        required: false
+        default: '3.12'
+
+concurrency:
+  group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python ${{ github.event.inputs.python-version || '3.12' }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ github.event.inputs.python-version || '3.12' }}
+      - name: Run pre-commit on PR changed files
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --files $(git diff --name-only --diff-filter=ACMRT origin/${{ github.base_ref }} HEAD)
+        env:
+          SKIP: no-commit-to-branch
