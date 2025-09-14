@@ -1,9 +1,9 @@
 [project]
-name = "tmpl-python-project"
+name = "LegoLLM"
 version = "0.1.0"
-description = "A modern Python project template."
+description = "A complete LLM development framework from first principles, designed as modular 'Lego pieces' that can be combined, swapped, and extended."
 authors = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "pytholic", email = "rajahaseeb147@gmail.com"},
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -116,43 +116,6 @@ omit = [
     "src/config.py",
     "src/logging.py",
 ]
-
-[tool.mypy]
-# Python language version to use for type checking
-python_version = "3.12"
-# Disallow functions without type annotations
-disallow_untyped_defs = true
-# Disallow partial type annotations for functions
-disallow_incomplete_defs = true
-# Type-check the body of functions without annotations
-check_untyped_defs = true
-# Disallow decorators without type annotations
-disallow_untyped_decorators = true
-# Disallow using Any types that come from missing imports
-disallow_any_unimported = true
-# Treat missing parameter types as non-Optional
-no_implicit_optional = true
-# Enable strict handling of Optional types
-strict_optional = true
-# Warn about casting an expression to its inferred type
-warn_redundant_casts = true
-# Warn about # type: ignore comments not needed
-warn_unused_ignores = true
-# Warn when returning Any from a function with a non-Any return type
-warn_return_any = true
-# Warn about code determined to be unreachable
-warn_unreachable = true
-# Allow using Any in generic types like List[Any]
-disallow_any_generics = false
-# Disable implicit re-exporting of imported names
-implicit_reexport = false
-# Show error codes in error messages
-show_error_codes = true
-
-[tool.mypy.overrides]
-module = "tests.*"
-disallow_untyped_defs = false
-check_untyped_defs = false
 
 [tool.pyright]
 pythonVersion = "3.12"

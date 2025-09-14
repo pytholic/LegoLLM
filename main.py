@@ -8,7 +8,7 @@ def main() -> None:
     """Main function."""
     logger.info("Starting application...")
     logger.info(f"Application settings: {settings}")
-    
+
     # Add your main application logic here
     logger.info("Hello, World!")
 
