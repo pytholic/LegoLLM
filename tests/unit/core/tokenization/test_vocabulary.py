@@ -2,7 +2,12 @@ from pathlib import Path
 
 import pytest
 
-from legollm.core.tokenization.vocabulary import VocabularyBuilder, VocabularyManager
+from legollm.core.tokenization.vocabulary import (
+    END_OF_TEXT_TOKEN,
+    UNK_TOKEN,
+    VocabularyBuilder,
+    VocabularyManager,
+)
 
 
 @pytest.fixture
@@ -24,13 +29,17 @@ class TestVocabularyBuilder:
         """Test the build_from_tokens method."""
         tokens = ["hello", "world", "!"]
         vocabulary = vocabulary_builder.build_from_tokens(tokens)
-        assert vocabulary == {"!": 0, "hello": 1, "world": 2}
+        # Should include original tokens + special tokens
+        expected = {"!": 0, "hello": 1, "world": 2, UNK_TOKEN: 3, END_OF_TEXT_TOKEN: 4}
+        assert vocabulary == expected
 
     def test_build_from_tokens_remove_duplicates(self, vocabulary_builder: VocabularyBuilder):
         """Test the build_from_tokens method removes duplicates."""
         tokens = ["hello", "world", "hello"]
         vocabulary = vocabulary_builder.build_from_tokens(tokens)
-        assert vocabulary == {"hello": 0, "world": 1}
+        # Should include deduplicated tokens + special tokens
+        expected = {"hello": 0, "world": 1, UNK_TOKEN: 2, END_OF_TEXT_TOKEN: 3}
+        assert vocabulary == expected
 
     def test_build_from_tokens_raise_error_on_empty_list(
         self, vocabulary_builder: VocabularyBuilder
@@ -39,6 +48,25 @@ class TestVocabularyBuilder:
         tokens = []
         with pytest.raises(ValueError, match="Cannot build vocabulary from empty tokens list"):
             vocabulary_builder.build_from_tokens(tokens)
+
+    def test_special_tokens_in_vocabulary(self):
+        """Test that special tokens (UNK, END_OF_TEXT) are properly added to vocabulary."""
+        training_tokens = ["hello", "world", "test"]
+
+        vocab_builder = VocabularyBuilder()
+        vocab = vocab_builder.build_from_tokens(training_tokens)
+
+        # Verify special tokens are present
+        assert UNK_TOKEN in vocab
+        assert END_OF_TEXT_TOKEN in vocab
+
+        # Verify they have valid IDs
+        assert isinstance(vocab[UNK_TOKEN], int)
+        assert isinstance(vocab[END_OF_TEXT_TOKEN], int)
+
+        # Verify all original tokens are also present
+        for token in training_tokens:
+            assert token in vocab
 
 
 class TestVocabularyManager:

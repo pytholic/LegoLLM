@@ -10,6 +10,14 @@ setup:
 
 .PHONY: install
 install:
+	uv sync
+
+.PHONY: install-dev
+install-dev:
+	uv sync --group dev
+
+.PHONY: install-dev-docs
+install-dev-docs:
 	uv sync --group dev --group docs
 
 .PHONY: run
@@ -31,10 +39,6 @@ lint:
 .PHONY: format
 format:
 	uv run ruff format .
-
-.PHONY: type-check
-type-check:
-	uv run mypy src/
 
 .PHONY: docs-build
 docs-build:

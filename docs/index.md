@@ -8,5 +8,5 @@ This project was generated from the Modern Python Project Template. It provides 
 
 ## Getting Started
 
--   **[Quick Start](getting-started.md)** - Learn how to use this project.
--   **[API Reference](reference/core.md)** - Explore the project's API.
+- **[Quick Start](getting-started.md)** - Learn how to use this project.
+- **[API Reference](api-reference/core.md)** - Explore the project's API.
