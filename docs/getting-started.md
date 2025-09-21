@@ -1,52 +1,59 @@
 # Getting Started
 
-This guide explains how to start developing your project.
+This guide explains how to run this project.
 
 ## Development Environment
 
-1.  **Create and activate a virtual environment:**
+1. **Create and activate a virtual environment:**
 
-    ```bash
-    uv venv
-    source .venv/bin/activate
-    ```
+   ```bash
+   uv venv
+   source .venv/bin/activate
+   ```
 
-2.  **Install dependencies:**
+2. **Install dependencies:**
 
-    ```bash
-    uv pip install -e ".[dev,docs]"
-    or
-    uv sync --group dev --group docs
-    ```
+   Install runtime dependencies:
+
+   ```bash
+   make install
+   ```
+
+   Install all:
+
+   ```bash
+   make install-dev-docs
+   ```
 
 ## Running Tests
 
 To run the full test suite:
 
 ```bash
-pytest
+make test
 ```
 
 ## Code Quality
 
--   **Linting:**
+- **Linting:**
 
-    ```bash
-    ruff check .
-    ```
+  ```bash
+  ruff check .
+  ```
 
--   **Formatting:**
+- **Formatting:**
 
-    ```bash
-    ruff format .
-    ```
+  ```bash
+  ruff format .
+  ```
 
 ## Documentation
 
 To build and serve the documentation locally:
 
 ```bash
-mkdocs serve
+make docs-build
+make docs-serve
 ```
 
 Then, open your browser to `http://127.0.0.1:8000`.

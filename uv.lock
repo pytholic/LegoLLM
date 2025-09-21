@@ -260,6 +260,53 @@ wheels = [
 ]
 
 [[package]]
+name = "legollm"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "python-dotenv" },
+    { name = "rich" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-mock" },
+    { name = "ruff" },
+]
+docs = [
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+    { name = "mkdocstrings", extra = ["python"] },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.7.0,<3.0.0" },
+    { name = "pydantic-settings", specifier = ">=2.0.0,<3.0.0" },
+    { name = "python-dotenv", specifier = ">=1.0.0,<2.0.0" },
+    { name = "rich", specifier = ">=13.7.0,<14.0.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pre-commit", specifier = ">=3.7.0,<4.0.0" },
+    { name = "pytest", specifier = ">=8.0.0,<9.0.0" },
+    { name = "pytest-cov", specifier = ">=5.0.0,<6.0.0" },
+    { name = "pytest-mock", specifier = ">=3.14.0,<4.0.0" },
+    { name = "ruff", specifier = ">=0.11.13,<1.0.0" },
+]
+docs = [
+    { name = "mkdocs", specifier = ">=1.6.0,<2.0.0" },
+    { name = "mkdocs-material", specifier = ">=9.5.0,<10.0.0" },
+    { name = "mkdocstrings", extras = ["python"], specifier = ">=0.25.0,<1.0.0" },
+]
+
+[[package]]
 name = "markdown"
 version = "3.9"
 source = { registry = "https://pypi.org/simple" }
@@ -780,53 +827,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050 },
-]
-
-[[package]]
-name = "tmpl-python-project"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "pydantic" },
-    { name = "pydantic-settings" },
-    { name = "python-dotenv" },
-    { name = "rich" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "pytest-mock" },
-    { name = "ruff" },
-]
-docs = [
-    { name = "mkdocs" },
-    { name = "mkdocs-material" },
-    { name = "mkdocstrings", extra = ["python"] },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2.7.0,<3.0.0" },
-    { name = "pydantic-settings", specifier = ">=2.0.0,<3.0.0" },
-    { name = "python-dotenv", specifier = ">=1.0.0,<2.0.0" },
-    { name = "rich", specifier = ">=13.7.0,<14.0.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "pre-commit", specifier = ">=3.7.0,<4.0.0" },
-    { name = "pytest", specifier = ">=8.0.0,<9.0.0" },
-    { name = "pytest-cov", specifier = ">=5.0.0,<6.0.0" },
-    { name = "pytest-mock", specifier = ">=3.14.0,<4.0.0" },
-    { name = "ruff", specifier = ">=0.11.13,<1.0.0" },
-]
-docs = [
-    { name = "mkdocs", specifier = ">=1.6.0,<2.0.0" },
-    { name = "mkdocs-material", specifier = ">=9.5.0,<10.0.0" },
-    { name = "mkdocstrings", extras = ["python"], specifier = ">=0.25.0,<1.0.0" },
 ]
 
 [[package]]

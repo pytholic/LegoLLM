@@ -1,6 +1,9 @@
-site_name: {{PROJECT_NAME}}
-site_description: A modern Python project template.
+site_name: LegoLLM
+site_description: >
+  A complete LLM development framework from first principles, designed as modular 'Lego pieces' that
+  can be combined, swapped, and extended.
 site_url: https://your-docs-url.com
+docs_dir: docs
 
 theme:
   name: material
