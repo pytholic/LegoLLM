@@ -5,9 +5,9 @@ tokenization, vocabulary management, and encoding.
 """
 
 from .interfaces import Tokenizer
-from .tokenization.tokenizer import WhitespaceTokenizer
+from .tokenization.tokenizer import SimpleTokenizer
 
 __all__ = [
+    "SimpleTokenizer",
     "Tokenizer",
-    "WhitespaceTokenizer",
 ]

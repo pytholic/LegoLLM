@@ -33,15 +33,17 @@ class VocabularyBuilder:
 class VocabularyManager:
     """Handles saving/loading vocabularies."""
 
-    def save(self, vocab: dict[str, int], path: Path) -> None:
+    def save(self, vocab: dict[str, int], path: str | Path) -> None:
         """Saves vocabulary to a file."""
+        path = Path(path)
         if not path.parent.exists():
             raise FileNotFoundError(f"Parent directory {path.parent} does not exist")
         with open(path, "w") as f:
             json.dump(vocab, f)
 
-    def load(self, path: Path) -> dict[str, int]:
+    def load(self, path: str | Path) -> dict[str, int]:
         """Loads vocabulary from a file."""
+        path = Path(path)
         if not path.exists():
             raise FileNotFoundError(f"File {path} does not exist")
         with open(path) as f:
