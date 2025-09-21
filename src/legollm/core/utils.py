@@ -19,13 +19,3 @@ def read_file(filepath: str) -> str:
     """Read a file."""
     with open(filepath, encoding="utf-8") as file:
         return file.read()
-
-
-def build_vocabulary(tokens: list[str]) -> dict[str, int]:
-    """Build a vocabulary from a list of tokens."""
-    return {token: i for i, token in enumerate(tokens)}
-
-
-def remove_duplicates(tokens: list[str]) -> list[str]:
-    """Remove duplicates from a list of tokens."""
-    return list(set(tokens))

@@ -54,7 +54,7 @@ repos:
     rev: v2.1.0
     hooks:
       - id: codespell
-        args: ["--skip=*.lock"]
+        args: ["--skip=*.lock,*.json"]
 
   # yaml lint
   - repo: https://github.com/adrienverge/yamllint

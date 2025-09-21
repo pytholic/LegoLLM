@@ -4,6 +4,7 @@ Created by @pytholic on 2025.09.21
 """
 
 import json
+from pathlib import Path
 
 
 class VocabularyBuilder:
@@ -19,18 +20,29 @@ class VocabularyBuilder:
         Args:
             tokens: List of tokens to build vocabulary from.
         """
+        tokens = self._remove_duplicates(tokens)
+        if not tokens:
+            raise ValueError("Cannot build vocabulary from empty tokens list")
         return {text: i for i, text in enumerate(tokens)}
+
+    def _remove_duplicates(self, tokens: list[str]) -> list[str]:
+        """Remove duplicates from a list of tokens."""
+        return sorted(set(tokens))
 
 
 class VocabularyManager:
     """Handles saving/loading vocabularies."""
 
-    def save(self, vocab: dict[str, int], path: str) -> None:
+    def save(self, vocab: dict[str, int], path: Path) -> None:
         """Saves vocabulary to a file."""
+        if not path.parent.exists():
+            raise FileNotFoundError(f"Parent directory {path.parent} does not exist")
         with open(path, "w") as f:
             json.dump(vocab, f)
 
-    def load(self, path: str) -> dict[str, int]:
+    def load(self, path: Path) -> dict[str, int]:
         """Loads vocabulary from a file."""
+        if not path.exists():
+            raise FileNotFoundError(f"File {path} does not exist")
         with open(path) as f:
             return json.load(f)

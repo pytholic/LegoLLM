@@ -5,10 +5,10 @@ Created by @pytholic on 2025.09.14
 
 import pytest
 
-from legollm.core.tokenizer import SimpleTokenizer
+from legollm.core.tokenization.tokenizer import WhitespaceTokenizer
 
 
-class TestSimpleTokenizer:
+class TestWhitespaceTokenizer:
     """Test the WhiteSpaceTokenizer class."""
 
     @pytest.mark.parametrize(
@@ -28,6 +28,6 @@ class TestSimpleTokenizer:
     )
     def test_tokenize(self, text: str, expected_tokens: list[str]) -> None:
         """Test the tokenize method."""
-        tokenizer = SimpleTokenizer()
+        tokenizer = WhitespaceTokenizer()
         tokens = tokenizer.tokenize(text)
         assert tokens == expected_tokens
