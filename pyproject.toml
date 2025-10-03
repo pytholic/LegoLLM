@@ -10,8 +10,6 @@ readme = "README.md"
 license = {text = "MIT"}
 dependencies = [
     "python-dotenv>=1.0.0,<2.0.0",
-    "pydantic>=2.7.0,<3.0.0",
-    "pydantic-settings>=2.0.0,<3.0.0",
     "rich>=13.7.0,<14.0.0",
 ]
 
@@ -37,7 +35,7 @@ build-backend = "hatchling.build"
 packages = ["src/legollm"]
 
 [tool.uv]
-package = false
+package = true
 
 [[tool.uv.index]]
 name = "pypi"

@@ -1,7 +1,7 @@
 # Tokenization Foundation
 
-**Date**: 2025.09.14 ~
-**Goal**: Build a production-ready tokenizer from scratch to understand the foundation of LLM text processing
+**Date**: 2025.09.14 ~ 2025.09.22
+**Goal**: Build a base tokenizer from scratch to understand the foundation of LLM text processing
 
 ## Tokenization in Language Models
 
@@ -9,12 +9,15 @@ Language models process text by converting it into sequences of integer token ID
 
 ### Purpose of Tokenization
 
-Tokenization breaks down raw text into discrete units (tokens) that the model can process. These tokens can represent:
+Tokenizer acts as a conversion layer between raw test and token sequence. It breaks down raw text into discrete units (tokens) that the model can process. These tokens can represent:
 
 - Individual characters
 - Subword units (e.g., "playing" → "play" + "##ing")
 - Complete words
 - Special symbols
+
+> [!Note]
+> Keep in mind that the Tokenizer is a separate entity from the LLM, and it warrants its own separate training data. This data may or may not be same as the data used for LLM training.
 
 ## 🎯 Quick Start
 

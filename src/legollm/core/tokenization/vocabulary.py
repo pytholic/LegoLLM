@@ -16,7 +16,7 @@ class VocabularyBuilder:
     """Builds vocabulary from tokens using different strategies."""
 
     def build_from_tokens(self, tokens: list[str]) -> dict[str, int]:
-        """Builds vocabulary from tokens.
+        """Builds vocabulary from tokens (word-level).
 
         Args:
             tokens: List of tokens to build vocabulary from.
