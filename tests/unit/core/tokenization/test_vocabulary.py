@@ -2,7 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from core.tokenization.vocabulary import (
+from legollm.core.exceptions import TokenizerError
+from legollm.core.tokenization.vocabulary import (
     END_OF_TEXT_TOKEN,
     UNK_TOKEN,
     VocabularyBuilder,
@@ -46,7 +47,7 @@ class TestVocabularyBuilder:
     ):
         """Test the build_from_tokens method with an empty list."""
         tokens = []
-        with pytest.raises(ValueError, match="Cannot build vocabulary from empty tokens list"):
+        with pytest.raises(TokenizerError, match="Cannot build vocabulary from empty tokens list"):
             vocabulary_builder.build_from_tokens(tokens)
 
     def test_special_tokens_in_vocabulary(self):

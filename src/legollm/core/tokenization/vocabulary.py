@@ -6,6 +6,8 @@ Created by @pytholic on 2025.09.21
 import json
 from pathlib import Path
 
+from legollm.core.exceptions import TokenizerError
+
 UNK_TOKEN = "<|UNK|>"
 END_OF_TEXT_TOKEN = "<|endoftext|>"
 
@@ -23,10 +25,10 @@ class VocabularyBuilder:
             Dictionary mapping tokens (strings) to their integer IDs.
 
         Raises:
-            ValueError: If the tokens list is empty.
+            TokenizerError: If the tokens list is empty.
         """
         if not tokens:
-            raise ValueError("Cannot build vocabulary from empty tokens list")
+            raise TokenizerError("Cannot build vocabulary from empty tokens list")
 
         tokens = self._remove_duplicates(tokens)
         tokens.extend([UNK_TOKEN, END_OF_TEXT_TOKEN])

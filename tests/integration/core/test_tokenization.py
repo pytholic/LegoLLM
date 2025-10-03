@@ -8,8 +8,9 @@ Created by @pytholic on 2025.09.21
 
 import pytest
 
-from core.tokenization.tokenizer import SimpleTokenizer
-from core.tokenization.vocabulary import UNK_TOKEN, VocabularyBuilder
+from legollm.core.exceptions import TokenizerError
+from legollm.core.tokenization.tokenizer import SimpleTokenizer
+from legollm.core.tokenization.vocabulary import UNK_TOKEN, VocabularyBuilder
 
 
 class TestTokenizationIntegration:
@@ -109,7 +110,9 @@ class TestTokenizationIntegration:
 
         # Test with empty tokens list should raise error
         if should_raise:
-            with pytest.raises(ValueError, match="Cannot build vocabulary from empty tokens list"):
+            with pytest.raises(
+                TokenizerError, match="Cannot build vocabulary from empty tokens list"
+            ):
                 vocab_builder.build_from_tokens(edge_case_vocab)
 
         else:

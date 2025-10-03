@@ -5,7 +5,7 @@ Created by @pytholic on 2025.09.14
 
 import pytest
 
-from core.tokenization.tokenizer import SimpleTokenizer
+from legollm.core.tokenization.tokenizer import SimpleTokenizer
 
 
 class TestSimpleTokenizer:

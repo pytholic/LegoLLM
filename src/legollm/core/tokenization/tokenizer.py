@@ -5,7 +5,8 @@ Created by @pytholic on 2025.09.14
 
 import re
 
-from core.tokenization.vocabulary import UNK_TOKEN
+from legollm.core.exceptions import TokenizerError
+from legollm.core.tokenization.vocabulary import UNK_TOKEN
 
 PUNCTUATION = frozenset(r".,!?;:-()[]{}\"")
 
@@ -47,15 +48,15 @@ class SimpleTokenizer:
             A list of integer token IDs.
 
         Raises:
-            ValueError: If the vocabulary is not provided.
+            TokenizerError: If the vocabulary is not provided.
         """
         if not self.vocab:
-            raise ValueError("Cannot encode without vocabulary. Train tokenizer first.")
+            raise TokenizerError("Cannot encode without vocabulary. Train tokenizer first.")
 
         tokens = self.tokenize(text)
         unk_id = self.str_to_int.get(UNK_TOKEN)
         if unk_id is None:
-            raise ValueError(f"Vocabulary must contain {UNK_TOKEN} for unknown token handling")
+            raise TokenizerError(f"Vocabulary must contain {UNK_TOKEN} for unknown token handling")
         return [self.str_to_int.get(token, unk_id) for token in tokens]
 
     def decode(self, tokens: list[int]) -> str:
