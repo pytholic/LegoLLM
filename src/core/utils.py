@@ -1,6 +1,6 @@
 import urllib.request
 
-from legollm import logger
+from core.logging import logger
 
 
 def download_file_from_url(url: str, filepath: str) -> None:

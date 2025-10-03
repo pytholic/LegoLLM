@@ -8,8 +8,8 @@ Created by @pytholic on 2025.09.21
 
 import pytest
 
-from legollm.core.tokenization.tokenizer import SimpleTokenizer
-from legollm.core.tokenization.vocabulary import UNK_TOKEN, VocabularyBuilder
+from core.tokenization.tokenizer import SimpleTokenizer
+from core.tokenization.vocabulary import UNK_TOKEN, VocabularyBuilder
 
 
 class TestTokenizationIntegration:

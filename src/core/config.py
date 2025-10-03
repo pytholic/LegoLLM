@@ -1,4 +1,5 @@
 """Configuration settings for the project."""
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

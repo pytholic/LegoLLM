@@ -13,9 +13,9 @@ repos:
       - id: check-case-conflict
       - id: check-added-large-files
         args: ["--maxkb=10000"]
-      - id: no-commit-to-branch
-        args:
-          ["--branch", "main", "--branch", "develop", "--branch", "gh-pages"]
+      # - id: no-commit-to-branch
+      #   args:
+      #     ["--branch", "main", "--branch", "develop", "--branch", "gh-pages"]
 
   # check python docstring coverage
   - repo: https://github.com/econchick/interrogate

@@ -1,4 +1,5 @@
 """Logger configuration for the project."""
+
 import logging
 
 from rich.logging import RichHandler

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from legollm.core.tokenization.vocabulary import (
+from core.tokenization.vocabulary import (
     END_OF_TEXT_TOKEN,
     UNK_TOKEN,
     VocabularyBuilder,

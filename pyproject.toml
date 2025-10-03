@@ -34,7 +34,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]
-packages = ["src/legollm"]
+packages = ["src"]
 
 [tool.uv]
 package = false

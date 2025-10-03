@@ -5,7 +5,7 @@ Created by @pytholic on 2025.09.14
 
 import re
 
-from legollm.core.tokenization.vocabulary import UNK_TOKEN
+from core.tokenization.vocabulary import UNK_TOKEN
 
 PUNCTUATION = frozenset(r".,!?;:-()[]{}\"")
 
@@ -25,6 +25,7 @@ class SimpleTokenizer:
 
     def tokenize(self, text: str) -> list[str]:
         """Pure tokenization logic - no vocab needed.
+        This is used to build the vocabulary.
 
         Args:
             text: The input text to tokenize.
