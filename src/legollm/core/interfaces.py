@@ -50,7 +50,7 @@ class TrainableTokenizer(Tokenizer, Protocol):
 
     def train(
         self,
-        texts: str | list[str],
+        text: str,
         vocab_size: int,
         *,  # Force keyword-only
         min_frequency: int = 1,
@@ -60,8 +60,8 @@ class TrainableTokenizer(Tokenizer, Protocol):
         """Train the tokenizer on corpus to learn merges/vocabulary.
 
         Args:
-            texts: Training corpus (single text or list of texts).
-            vocab_size: Target vocabulary size.
+            text: Training corpus.
+            vocab_size: Target vocabulary size after training.
             min_frequency: Minimum frequency for a token to be included in vocabulary.
             special_tokens: Additional special tokens to include.
             verbose: Whether to print verbose output.
@@ -92,7 +92,8 @@ class TrainableTokenizer(Tokenizer, Protocol):
             FileNotFoundError: If the file doesn't exist.
             TokenizerError: If the file is corrupted or incompatible.
         """
-        ...
+
+    ...
 
 
 class PreTokenizable(Protocol):
