@@ -81,7 +81,8 @@ class TestSimpleTokenizer:
         """Test the encode method raises an error on no vocabulary."""
         tokenizer = SimpleTokenizer()
         with pytest.raises(
-            TokenizerError, match="Cannot encode without vocabulary. Train tokenizer first."
+            TokenizerError,
+            match="Cannot encode without vocabulary. Initialize with vocab or use from_corpus",
         ):
             tokenizer.encode("Hello world! This, is-- a test.")
 
