@@ -1,40 +1,33 @@
 """Naive BPE tokenizer for educational purposes.
 
 This is a simple, straightforward implementation of Byte-Pair Encoding
-to demonstrate the core concepts. For production use, see bpe.py.
+to demonstrate the core concepts. For production use, see regex_bpe_tokenizer.py.
 
 Created by @pytholic on 2025.10.06
 """
 
-import base64
-import json
 import logging
-from collections import Counter, deque
-from itertools import pairwise
 
-import regex as rex
 from tqdm import tqdm
 
 from legollm.core.exceptions import TokenizerError
 from legollm.core.logging import logger
+from legollm.core.tokenization.base_bpe import BaseBPETokenizer
 
 logger.setLevel(logging.DEBUG)
 
 
-class NaiveBPETokenizer:
+class NaiveBPETokenizer(BaseBPETokenizer):
     """Byte-Pair Encoding tokenizer - requires training.
 
     This is a naive implementation for educational purposes.
     It demonstrates the core BPE algorithm without optimizations.
+
+    Inherits all common functionality from BaseBPETokenizer:
+    - vocab, merges, _is_trained state
+    - save(), load() methods
+    - Helper methods: _compute_pair_freq(), _find_most_freq_pair(), _merge_pair()
     """
-
-    INITIAL_VOCAB_SIZE = 256
-
-    def __init__(self) -> None:
-        """Initialize the tokenizer."""
-        self.vocab: dict[int, bytes] = {}
-        self.merges: dict[tuple[int, int], int] = {}
-        self._is_trained = False
 
     def train(
         self,
@@ -143,109 +136,3 @@ class NaiveBPETokenizer:
         token_bytes = b"".join(self.vocab[idx] for idx in token_ids)
         text = token_bytes.decode("utf-8", errors="replace")
         return text
-
-    def save(self, path: str) -> None:
-        """Save vocab and merges to file.
-
-        Args:
-            path: File path to save the tokenizer state to.
-
-        Raises:
-            TokenizerError: If tokenizer is not trained.
-        """
-        if not self._is_trained:
-            raise TokenizerError("Tokenizer must be trained before saving. Call train() first.")
-
-        save_data = {
-            "vocab": {
-                str(idx): base64.b64encode(token_bytes).decode("ascii")
-                for idx, token_bytes in self.vocab.items()
-            },
-            "merges": {f"{p0},{p1}": v for (p0, p1), v in self.merges.items()},
-        }
-        with open(path, "w") as f:
-            json.dump(save_data, f)
-
-    def save_readable(self, path: str) -> None:
-        """Save vocab and merges to file in a human readable format."""
-        if not self._is_trained:
-            raise TokenizerError("Tokenizer must be trained before saving. Call train() first.")
-
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(f"BPE Tokenizer - {len(self.vocab)} tokens\n")
-            f.write("=" * 50 + "\n\n")
-
-            f.write("Base vocabulary (bytes 0-255):\n")
-            f.write("-" * 50 + "\n")
-            for idx in range(self.INITIAL_VOCAB_SIZE):
-                if idx in self.vocab:
-                    rendered = self._render_token(self.vocab[idx])
-                    f.write(f"{idx:3d}: {rendered}\n")
-
-            f.write("\n" + "=" * 50 + "\n")
-            f.write(f"Learned merges ({len(self.merges)} tokens):\n")
-            f.write("-" * 50 + "\n")
-            for (p0, p1), idx in self.merges.items():
-                merged = self._render_token(self.vocab[idx])
-                f.write(f"[{p0}] + [{p1}] -> [{merged}] (token {idx})\n")
-
-    def _render_token(self, token_bytes: bytes) -> str:
-        """Render token, escaping control chars."""
-        s = token_bytes.decode("utf-8", errors="replace")
-
-        if "�" in s:
-            return " ".join(f"\\x{b:02x}" for b in token_bytes)
-
-        s = rex.sub(r"\p{C}", lambda m: f"\\u{ord(m.group(0)):04x}", s)
-
-        return s
-
-    def load(self, path: str) -> None:
-        """Load vocab and merges from file.
-
-        Args:
-            path: File path to load the tokenizer state from.
-
-        Raises:
-            FileNotFoundError: If file doesn't exist.
-        """
-        with open(path) as f:
-            data = json.load(f)
-
-        self.vocab = {
-            int(idx): base64.b64decode(token_b64) for idx, token_b64 in data["vocab"].items()
-        }
-        self.merges = {tuple(map(int, k.split(","))): int(idx) for k, idx in data["merges"].items()}
-        self._is_trained = True
-
-    def _compute_pair_freq(self, token_ids: list[int]) -> list[tuple[tuple[int, int], int]] | None:
-        """Compute frequency of each consecutive pair in the text."""
-        pair_counts = Counter(pairwise(token_ids))
-        if not pair_counts:
-            return None
-
-        return pair_counts.most_common()
-
-    def _find_most_freq_pair(
-        self, pair_freq: list[tuple[tuple[int, int], int]] | None
-    ) -> tuple[tuple[int, int] | None, int | None]:
-        """Find the pair ID from the list of pair frequencies."""
-        if not pair_freq:
-            return None, None
-        pair_id, occurrences = pair_freq[0]
-        return pair_id, occurrences
-
-    def _merge_pair(self, token_ids: list[int], pair: tuple[int, int], new_id: int) -> list[int]:
-        """Merge the given pair ID with a new token ID."""
-        dq = deque(token_ids)
-        replaced_token_ids: list[int] = []
-
-        while dq:
-            current = dq.popleft()
-            if dq and (current, dq[0]) == pair:
-                replaced_token_ids.append(new_id)
-                dq.popleft()
-            else:
-                replaced_token_ids.append(current)
-
-        return replaced_token_ids
