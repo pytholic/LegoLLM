@@ -6,10 +6,12 @@ Created by @pytholic on 2025.09.14
 import base64
 import json
 import logging
-import re
+
+#   import unicodedata
 from collections import Counter, deque
 from itertools import pairwise
 
+import regex as rex
 from tqdm import tqdm
 
 from legollm.core.exceptions import TokenizerError
@@ -61,7 +63,7 @@ class SimpleTokenizer:
             ["Hello", ",", "world", "!"]
         """
         pattern = r"\w+(?:'\w+)*|[^\w\s]"
-        tokens = re.findall(pattern, text)
+        tokens = rex.findall(pattern, text)  # pyright: ignore
         return [token for token in tokens if token.strip()]
 
     def encode(self, text: str) -> list[int]:
@@ -332,6 +334,44 @@ class NaiveBPETokenizer:
         }
         with open(path, "w") as f:
             json.dump(save_data, f)
+
+    def save_readable(self, path: str) -> None:
+        """Save vocab and merges to file in a human readable format."""
+        if not self._is_trained:
+            raise TokenizerError("Tokenizer must be trained before saving. Call train() first.")
+
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(f"BPE Tokenizer - {len(self.vocab)} tokens\n")
+            f.write("=" * 50 + "\n\n")
+
+            # Base tokens
+            f.write("Base vocabulary (bytes 0-255):\n")
+            f.write("-" * 50 + "\n")
+            for idx in range(self.INITIAL_VOCAB_SIZE):
+                if idx in self.vocab:
+                    rendered = self._render_token(self.vocab[idx])
+                    f.write(f"{idx:3d}: {rendered}\n")
+
+            # Merges
+            f.write("\n" + "=" * 50 + "\n")
+            f.write(f"Learned merges ({len(self.merges)} tokens):\n")
+            f.write("-" * 50 + "\n")
+            for (p0, p1), idx in self.merges.items():
+                merged = self._render_token(self.vocab[idx])
+                f.write(f"[{p0}] + [{p1}] -> [{merged}] (token {idx})\n")
+
+    def _render_token(self, token_bytes: bytes) -> str:
+        """Render token, escaping control chars (minbpe-style)."""
+        # Decode with replacement
+        s = token_bytes.decode("utf-8", errors="replace")
+
+        # If decode failed (contains �), show as hex
+        if "�" in s:
+            return " ".join(f"\\x{b:02x}" for b in token_bytes)
+
+        s = rex.sub(r"\p{C}", lambda m: f"\\u{ord(m.group(0)):04x}", s)
+
+        return s
 
     def load(self, path: str) -> None:
         """Load vocab and merges from file.

@@ -1,7 +1,6 @@
 """Main entry point for the application."""
 
 import logging
-from pprint import pformat
 
 import tiktoken
 
@@ -20,9 +19,8 @@ def main() -> None:
     # let's train the tokenizer
     tokenizer.train(text, vocab_size=276, verbose=True)
     tokenizer.save("data/bpe_tokenizer.json")
+    tokenizer.save_readable("data/bpe_tokenizer_readable.txt")
     tokenizer.load("data/bpe_tokenizer.json")
-    logger.info(pformat(f"Vocab: {tokenizer.vocab}"))
-    logger.info(pformat(f"Merges: {tokenizer.merges}"))
     logger.debug(tokenizer.decode(tokenizer.encode(text)) == text)
 
 
