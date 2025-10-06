@@ -1,4 +1,4 @@
-"""Test the tokenizer module.
+"""Test the SimpleTokenizer.
 
 Created by @pytholic on 2025.09.14
 """
@@ -6,7 +6,7 @@ Created by @pytholic on 2025.09.14
 import pytest
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.tokenization.tokenizer import SimpleTokenizer
+from legollm.core.tokenization import SimpleTokenizer
 
 
 class TestSimpleTokenizer:

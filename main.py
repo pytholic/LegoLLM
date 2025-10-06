@@ -5,7 +5,7 @@ import logging
 import tiktoken
 
 from legollm.core.logging import logger
-from legollm.core.tokenization.tokenizer import NaiveBPETokenizer
+from legollm.core.tokenization import NaiveBPETokenizer
 from legollm.core.utils import read_file
 
 logger.setLevel(logging.DEBUG)
