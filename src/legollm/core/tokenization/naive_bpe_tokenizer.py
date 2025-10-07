@@ -34,11 +34,26 @@ class NaiveBPETokenizer(BaseBPETokenizer):
         text: str,
         vocab_size: int,
         *,
-        min_frequency: int = 1,
-        special_tokens: list[str] | None = None,
+        special_tokens: dict[str, int] | None = None,
         verbose: bool = False,
     ) -> None:
-        """Train the tokenizer on corpus to learn merges/vocabulary."""
+        """Train the tokenizer on corpus to learn merges/vocabulary.
+
+        Args:
+            text: Training corpus.
+            vocab_size: Target vocabulary size after training.
+            special_tokens: Additional special tokens to include.
+            verbose: Whether to print verbose output.
+
+        Raises:
+            TokenizerError: If training fails or parameters are invalid.
+
+        Example:
+            >>> tokenizer = NaiveBPETokenizer()
+            >>> tokenizer.train(text="Hello world!", vocab_size=300)
+            >>> tokenizer.encode("Hello world!")
+            [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33]
+        """
         num_merges = vocab_size - self.INITIAL_VOCAB_SIZE
         token_ids = list(text.encode("utf-8"))
         merges = {}

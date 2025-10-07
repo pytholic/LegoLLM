@@ -43,8 +43,7 @@ class BaseBPETokenizer(ABC):
         text: str,
         vocab_size: int,
         *,
-        min_frequency: int = 1,
-        special_tokens: list[str] | None = None,
+        special_tokens: dict[str, int] | None = None,
         verbose: bool = False,
     ) -> None:
         """Train the tokenizer on corpus to learn merges/vocabulary."""
@@ -166,12 +165,14 @@ class BaseBPETokenizer(ABC):
             f.write(f"BPE Tokenizer - {len(self.vocab)} tokens\n")
             f.write("=" * 50 + "\n\n")
 
+            f.write("Vocabulary:\n")
+            f.write("-" * 50 + "\n")
+
             for idx in range(len(self.vocab)):
                 rendered = self._render_token(self.vocab[idx])
                 f.write(f"{idx:3d}: {rendered}\n")
 
-            f.write("\n" + "=" * 50 + "\n")
-            f.write(f"Learned merges ({len(self.merges)} tokens):\n")
+            f.write(f"\nLearned merges ({len(self.merges)} tokens):\n")
             f.write("-" * 50 + "\n")
             for (p0, p1), idx in self.merges.items():
                 merged = self._render_token(self.vocab[idx])

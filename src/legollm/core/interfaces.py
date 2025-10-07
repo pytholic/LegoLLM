@@ -53,8 +53,7 @@ class TrainableTokenizer(Tokenizer, Protocol):
         text: str,
         vocab_size: int,
         *,  # Force keyword-only
-        min_frequency: int = 1,
-        special_tokens: list[str] | None = None,
+        special_tokens: dict[str, int] | None = None,
         verbose: bool = False,
     ) -> None:
         """Train the tokenizer on corpus to learn merges/vocabulary.
@@ -62,7 +61,6 @@ class TrainableTokenizer(Tokenizer, Protocol):
         Args:
             text: Training corpus.
             vocab_size: Target vocabulary size after training.
-            min_frequency: Minimum frequency for a token to be included in vocabulary.
             special_tokens: Additional special tokens to include.
             verbose: Whether to print verbose output.
 

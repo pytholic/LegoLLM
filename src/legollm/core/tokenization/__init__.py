@@ -10,6 +10,7 @@ Example:
 """
 
 from legollm.core.tokenization.naive_bpe_tokenizer import NaiveBPETokenizer
+from legollm.core.tokenization.regex_bpe_tokenizer import RegexBPETokenizer
 from legollm.core.tokenization.simple_tokenizer import PUNCTUATION, SimpleTokenizer
 from legollm.core.tokenization.vocabulary import (
     END_OF_TEXT_TOKEN,
@@ -24,6 +25,7 @@ __all__ = [
     "PUNCTUATION",
     "UNK_TOKEN",
     "NaiveBPETokenizer",
+    "RegexBPETokenizer",
     "SimpleTokenizer",
     "build_vocab_from_tokens",
     "load_vocab",

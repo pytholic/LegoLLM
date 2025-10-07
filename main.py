@@ -5,7 +5,7 @@ import logging
 import tiktoken
 
 from legollm.core.logging import logger
-from legollm.core.tokenization import NaiveBPETokenizer
+from legollm.core.tokenization import RegexBPETokenizer
 from legollm.core.utils import read_file
 
 logger.setLevel(logging.DEBUG)
@@ -14,7 +14,8 @@ logger.setLevel(logging.DEBUG)
 def main() -> None:
     """Main function."""
     text = read_file("data/blog.txt")
-    tokenizer = NaiveBPETokenizer()
+    tokenizer = RegexBPETokenizer()
+    # tokenizer = NaiveBPETokenizer()
 
     # let's train the tokenizer
     tokenizer.train(text, vocab_size=276, verbose=True)
