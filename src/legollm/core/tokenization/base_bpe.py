@@ -166,12 +166,9 @@ class BaseBPETokenizer(ABC):
             f.write(f"BPE Tokenizer - {len(self.vocab)} tokens\n")
             f.write("=" * 50 + "\n\n")
 
-            f.write("Base vocabulary (bytes 0-255):\n")
-            f.write("-" * 50 + "\n")
-            for idx in range(self.INITIAL_VOCAB_SIZE):
-                if idx in self.vocab:
-                    rendered = self._render_token(self.vocab[idx])
-                    f.write(f"{idx:3d}: {rendered}\n")
+            for idx in range(len(self.vocab)):
+                rendered = self._render_token(self.vocab[idx])
+                f.write(f"{idx:3d}: {rendered}\n")
 
             f.write("\n" + "=" * 50 + "\n")
             f.write(f"Learned merges ({len(self.merges)} tokens):\n")
