@@ -1,4 +1,4 @@
-"""Test the tokenizer module.
+"""Test the SimpleTokenizer.
 
 Created by @pytholic on 2025.09.14
 """
@@ -6,7 +6,7 @@ Created by @pytholic on 2025.09.14
 import pytest
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.tokenization.tokenizer import SimpleTokenizer
+from legollm.core.tokenization import SimpleTokenizer
 
 
 class TestSimpleTokenizer:
@@ -81,7 +81,8 @@ class TestSimpleTokenizer:
         """Test the encode method raises an error on no vocabulary."""
         tokenizer = SimpleTokenizer()
         with pytest.raises(
-            TokenizerError, match="Cannot encode without vocabulary. Train tokenizer first."
+            TokenizerError,
+            match="Cannot encode without vocabulary. Initialize with vocab or use from_corpus",
         ):
             tokenizer.encode("Hello world! This, is-- a test.")
 

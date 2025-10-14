@@ -1,3 +1,8 @@
+"""Test vocabulary utility functions.
+
+Created by @pytholic on 2025.09.21
+"""
+
 from pathlib import Path
 
 import pytest
@@ -6,56 +11,58 @@ from legollm.core.exceptions import TokenizerError
 from legollm.core.tokenization.vocabulary import (
     END_OF_TEXT_TOKEN,
     UNK_TOKEN,
-    VocabularyBuilder,
-    VocabularyManager,
+    build_vocab_from_tokens,
+    load_vocab,
+    save_vocab,
 )
 
 
-@pytest.fixture
-def vocabulary_builder() -> VocabularyBuilder:
-    """Fixture for the VocabularyBuilder class."""
-    return VocabularyBuilder()
+class TestBuildVocabFromTokens:
+    """Test the build_vocab_from_tokens utility function."""
 
-
-@pytest.fixture
-def vocabulary_manager() -> VocabularyManager:
-    """Fixture for the VocabularyManager class."""
-    return VocabularyManager()
-
-
-class TestVocabularyBuilder:
-    """Test the VocabularyBuilder class."""
-
-    def test_build_from_tokens_success(self, vocabulary_builder: VocabularyBuilder):
-        """Test the build_from_tokens method."""
+    def test_build_from_tokens_success(self):
+        """Test building vocabulary from tokens."""
         tokens = ["hello", "world", "!"]
-        vocabulary = vocabulary_builder.build_from_tokens(tokens)
+        vocabulary = build_vocab_from_tokens(tokens)
         # Should include original tokens + special tokens
         expected = {"!": 0, "hello": 1, "world": 2, UNK_TOKEN: 3, END_OF_TEXT_TOKEN: 4}
         assert vocabulary == expected
 
-    def test_build_from_tokens_remove_duplicates(self, vocabulary_builder: VocabularyBuilder):
-        """Test the build_from_tokens method removes duplicates."""
+    def test_build_from_tokens_remove_duplicates(self):
+        """Test that duplicate tokens are removed."""
         tokens = ["hello", "world", "hello"]
-        vocabulary = vocabulary_builder.build_from_tokens(tokens)
+        vocabulary = build_vocab_from_tokens(tokens)
         # Should include deduplicated tokens + special tokens
         expected = {"hello": 0, "world": 1, UNK_TOKEN: 2, END_OF_TEXT_TOKEN: 3}
         assert vocabulary == expected
 
-    def test_build_from_tokens_raise_error_on_empty_list(
-        self, vocabulary_builder: VocabularyBuilder
-    ):
-        """Test the build_from_tokens method with an empty list."""
+    def test_build_from_tokens_with_min_frequency(self):
+        """Test building vocabulary with minimum frequency filter."""
+        tokens = ["hello", "hello", "world", "test"]
+        vocabulary = build_vocab_from_tokens(tokens, min_frequency=2)
+        # Only "hello" appears twice, others filtered out
+        expected = {"hello": 0, UNK_TOKEN: 1, END_OF_TEXT_TOKEN: 2}
+        assert vocabulary == expected
+
+    def test_build_from_tokens_with_custom_special_tokens(self):
+        """Test building vocabulary with custom special tokens."""
+        tokens = ["hello", "world"]
+        special_tokens = ["<pad>", "<eos>"]
+        vocabulary = build_vocab_from_tokens(tokens, special_tokens=special_tokens)
+        # Should include original tokens + custom special tokens
+        expected = {"hello": 0, "world": 1, "<pad>": 2, "<eos>": 3}
+        assert vocabulary == expected
+
+    def test_build_from_tokens_raise_error_on_empty_list(self):
+        """Test that empty token list raises an error."""
         tokens = []
         with pytest.raises(TokenizerError, match="Cannot build vocabulary from empty tokens list"):
-            vocabulary_builder.build_from_tokens(tokens)
+            build_vocab_from_tokens(tokens)
 
     def test_special_tokens_in_vocabulary(self):
-        """Test that special tokens (UNK, END_OF_TEXT) are properly added to vocabulary."""
+        """Test that special tokens are properly added to vocabulary."""
         training_tokens = ["hello", "world", "test"]
-
-        vocab_builder = VocabularyBuilder()
-        vocab = vocab_builder.build_from_tokens(training_tokens)
+        vocab = build_vocab_from_tokens(training_tokens)
 
         # Verify special tokens are present
         assert UNK_TOKEN in vocab
@@ -70,28 +77,26 @@ class TestVocabularyBuilder:
             assert token in vocab
 
 
-class TestVocabularyManager:
-    """Test the VocabularyManager class."""
+class TestSaveAndLoadVocab:
+    """Test the save_vocab and load_vocab utility functions."""
 
-    def test_save_and_load(self, vocabulary_manager: VocabularyManager, tmp_path: Path):
-        """Test the save and load methods."""
+    def test_save_and_load(self, tmp_path: Path):
+        """Test saving and loading vocabulary."""
         vocabulary = {"!": 0, "hello": 1, "world": 2}
-        vocabulary_manager.save(vocabulary, tmp_path / "test_vocabulary.json")
-        loaded_vocabulary = vocabulary_manager.load(tmp_path / "test_vocabulary.json")
+        save_vocab(vocabulary, tmp_path / "test_vocabulary.json")
+        loaded_vocabulary = load_vocab(tmp_path / "test_vocabulary.json")
         assert loaded_vocabulary == vocabulary
 
-    def test_load_raise_error_on_invalid_path(self, vocabulary_manager: VocabularyManager):
-        """Test the load method raises an error on an invalid path."""
+    def test_load_raise_error_on_invalid_path(self):
+        """Test that loading from invalid path raises an error."""
         file_name = "invalid_path.json"
         path = Path(file_name)
         expected_match = f"File {file_name} does not exist"
         with pytest.raises(FileNotFoundError, match=expected_match):
-            vocabulary_manager.load(path)
+            load_vocab(path)
 
-    def test_save_raise_error_on_invalid_path(
-        self, vocabulary_manager: VocabularyManager, tmp_path: Path
-    ):
-        """Test the save method raises an error when parent directory doesn't exist."""
+    def test_save_raise_error_on_invalid_path(self, tmp_path: Path):
+        """Test that saving to invalid path raises an error."""
         file_name = "vocabulary.json"
         path = tmp_path / "non_existent_dir" / file_name
         vocabulary = {"!": 0, "hello": 1, "world": 2}
@@ -99,4 +104,4 @@ class TestVocabularyManager:
         with pytest.raises(
             FileNotFoundError, match=f"Parent directory {path.parent} does not exist"
         ):
-            vocabulary_manager.save(vocabulary, path)
+            save_vocab(vocabulary, path)

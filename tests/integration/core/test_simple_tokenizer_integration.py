@@ -1,7 +1,5 @@
 """Integration tests for tokenization components.
 
-Tests the interaction between VocabularyBuilder and SimpleTokenizer
-to ensure they work together correctly.
 
 Created by @pytholic on 2025.09.21
 """
@@ -9,11 +7,10 @@ Created by @pytholic on 2025.09.21
 import pytest
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.tokenization.tokenizer import SimpleTokenizer
-from legollm.core.tokenization.vocabulary import UNK_TOKEN, VocabularyBuilder
+from legollm.core.tokenization import UNK_TOKEN, SimpleTokenizer, build_vocab_from_tokens
 
 
-class TestTokenizationIntegration:
+class TestSimpleTokenizer:
     """Integration tests for tokenization workflow."""
 
     def test_vocabulary_builder_with_tokenizer_basic_workflow(self):
@@ -26,8 +23,7 @@ class TestTokenizationIntegration:
         training_tokens = tokenizer.tokenize(training_text)
 
         # Step 2: Build vocabulary from tokens
-        vocab_builder = VocabularyBuilder()
-        vocab = vocab_builder.build_from_tokens(training_tokens)
+        vocab = build_vocab_from_tokens(training_tokens)
 
         # Step 3: Create tokenizer with vocabulary
         trained_tokenizer = SimpleTokenizer(vocab)
@@ -41,6 +37,52 @@ class TestTokenizationIntegration:
         assert isinstance(encoded, list)
         assert all(isinstance(token_id, int) for token_id in encoded)
 
+    def test_from_corpus_classmethod(self):
+        """Test the from_corpus convenience method."""
+        training_text = "Hello world! This is a test. How are you doing today?"
+
+        # Use the convenience method
+        tokenizer = SimpleTokenizer.from_corpus(training_text)
+
+        # Test encoding and decoding
+        encoded = tokenizer.encode(training_text)
+        decoded = tokenizer.decode(encoded)
+
+        # Verify the roundtrip works
+        assert decoded == training_text
+        assert isinstance(encoded, list)
+        assert all(isinstance(token_id, int) for token_id in encoded)
+
+    @pytest.mark.parametrize(
+        "corpus",
+        [
+            "What is the capital of France?",
+            "The quick brown fox jumps over the lazy dog.",
+        ],
+    )
+    def test_from_corpus_with_multiple_texts(self, corpus: str):
+        """Test from_corpus with list of texts."""
+        tokenizer = SimpleTokenizer.from_corpus(corpus)
+
+        # Test that all texts can be encoded/decoded
+        encoded = tokenizer.encode(corpus)
+        decoded = tokenizer.decode(encoded)
+        assert decoded == corpus
+
+    def test_from_corpus_with_min_frequency(self):
+        """Test from_corpus with minimum frequency filter."""
+        corpus = ["hello hello world test"]
+
+        # Only "hello" appears twice
+        tokenizer = SimpleTokenizer.from_corpus(corpus, min_frequency=2)
+
+        # "hello" should be in vocab, "world" and "test" should be UNK
+        encoded = tokenizer.encode("hello world test")
+        decoded = tokenizer.decode(encoded)
+
+        assert "hello" in decoded
+        assert "<|UNK|>" in decoded
+
     def test_unknown_token_handling_integration(self):
         """Test that unknown tokens are properly handled in the full workflow."""
         # Training text (limited vocabulary)
@@ -53,9 +95,7 @@ class TestTokenizationIntegration:
         # Build vocabulary from limited training text
         tokenizer = SimpleTokenizer()
         training_tokens = tokenizer.tokenize(training_text)
-
-        vocab_builder = VocabularyBuilder()
-        vocab = vocab_builder.build_from_tokens(training_tokens)
+        vocab = build_vocab_from_tokens(training_tokens)
 
         # Create tokenizer with limited vocabulary
         trained_tokenizer = SimpleTokenizer(vocab)
@@ -79,9 +119,7 @@ class TestTokenizationIntegration:
         # Build vocabulary
         tokenizer = SimpleTokenizer()
         training_tokens = tokenizer.tokenize(training_text)
-
-        vocab_builder = VocabularyBuilder()
-        vocab = vocab_builder.build_from_tokens(training_tokens)
+        vocab = build_vocab_from_tokens(training_tokens)
 
         trained_tokenizer = SimpleTokenizer(vocab)
 
@@ -106,18 +144,16 @@ class TestTokenizationIntegration:
     )
     def test_empty_and_edge_cases(self, edge_case_vocab: list[str], should_raise: bool):
         """Test edge cases in the integration workflow."""
-        vocab_builder = VocabularyBuilder()
-
         # Test with empty tokens list should raise error
         if should_raise:
             with pytest.raises(
                 TokenizerError, match="Cannot build vocabulary from empty tokens list"
             ):
-                vocab_builder.build_from_tokens(edge_case_vocab)
+                build_vocab_from_tokens(edge_case_vocab)
 
         else:
             # Test with single token
-            single_token_vocab = vocab_builder.build_from_tokens(edge_case_vocab)
+            single_token_vocab = build_vocab_from_tokens(edge_case_vocab)
             tokenizer = SimpleTokenizer(single_token_vocab)
 
             # Should work with known token
