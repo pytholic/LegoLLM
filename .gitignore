@@ -5,7 +5,6 @@ tmp/
 .ruff_cache/
 .mypy_cache/
 .cursor/
-*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
