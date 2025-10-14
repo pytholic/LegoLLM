@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 
 def main() -> None:
     """Main function."""
-    text = read_file("data/blog.txt")
+    text = read_file("data/the-verdict.txt")
     tokenizer = RegexBPETokenizer()
 
     tokenizer.train(text, vocab_size=276, verbose=True, special_tokens={"<|endoftext|>": 100257})
