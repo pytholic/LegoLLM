@@ -15,18 +15,13 @@ def main() -> None:
     """Main function."""
     text = read_file("data/blog.txt")
     tokenizer = RegexBPETokenizer()
-    # tokenizer = NaiveBPETokenizer()
 
-    # let's train the tokenizer
-    # tokenizer.train(text, vocab_size=276, verbose=True)
-    # tokenizer.save("data/bpe_tokenizer.json")
-    # tokenizer.save_readable("data/bpe_tokenizer_readable.txt")
+    tokenizer.train(text, vocab_size=276, verbose=True, special_tokens={"<|endoftext|>": 100257})
+    tokenizer.save("data/bpe_tokenizer.json")
+    tokenizer.save_readable("data/bpe_tokenizer_readable.txt")
     tokenizer.load("data/bpe_tokenizer.json")
     text = "안녕하세요 오늘은 날씨가 좋네안 😀 (Hello, today is a good day 😀)"
-
-    # logger.debug(tokenizer.encode(text))
-    # logger.debug(tokenizer.decode(tokenizer.encode(text)))
-    # logger.debug(tokenizer.decode(tokenizer.encode(text)) == text)
+    logger.debug(tokenizer.decode(tokenizer.encode(text)) == text)
     tiktoken_tokenizer = tiktoken_encode_decode(text)
     logger.debug(tiktoken_tokenizer)
     logger.debug(tokenizer.decode(tokenizer.encode(text)))
@@ -40,5 +35,4 @@ def tiktoken_encode_decode(text: str) -> None:
 
 
 if __name__ == "__main__":
-    # tiktoken_encode_decode("안녕하세요 오늘은 날씨가 좋네안 😀 (Hello, today is a good day 😀)")
     main()
