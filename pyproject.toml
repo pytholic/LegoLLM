@@ -23,6 +23,7 @@ dev = [
     "pytest-mock>=3.14.0,<4.0.0",
     "ruff>=0.11.13,<1.0.0",
     "tiktoken>=0.11.0",
+    "polars>=1.34.0",
 ]
 docs = [
     "mkdocs>=1.6.0,<2.0.0",
@@ -89,6 +90,7 @@ ignore = [
     "D400",  # First line should end with a period
     "D401",  # First line should be in imperative mood
     "D404",  # First word of the docstring should not be `This`
+    "T201",  # print statements check
 ]
 
 [tool.ruff.lint.per-file-ignores]
