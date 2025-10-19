@@ -14,14 +14,14 @@ logger.setLevel(logging.INFO)
 
 DATA_URLS = {
     "tiny_shakespeare": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/tiny_shakespeare/tiny_shakespeare.txt",
-    "the-verdict": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/the-verdict/the-verdict.txt",
+    "the_verdict": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/the-verdict/the-verdict.txt",
 }
 
 
 def main() -> None:
     """Main function."""
     parser = argparse.ArgumentParser(description="Download raw data from the web.")
-    parser.add_argument("data", type=str, help="['tiny_shakespeare', 'the-verdict']")
+    parser.add_argument("data", type=str, help="['tiny_shakespeare', 'the_verdict']")
     parser.add_argument("output_dir", type=str, help="Path to save the downloaded file.")
     args = parser.parse_args()
 

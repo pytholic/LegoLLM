@@ -4,16 +4,16 @@ import logging
 
 import tiktoken
 
-from data.utils import read_file
 from legollm.core.logging import logger
 from legollm.core.tokenization import RegexBPETokenizer
+from legollm.core.utils import read_text_file
 
 logger.setLevel(logging.DEBUG)
 
 
 def main() -> None:
     """Main function."""
-    text = read_file("data/the-verdict/raw/the-verdict.txt")
+    text = read_text_file("data/raw/the_verdict/the_verdict.txt")
     tokenizer = RegexBPETokenizer()
 
     tokenizer.train(text, vocab_size=276, verbose=True, special_tokens={"<|endoftext|>": 100257})

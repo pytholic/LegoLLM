@@ -1,0 +1,9 @@
+name: the_verdict
+raw_file: data/raw/the_verdict/the_verdict.txt
+processed_dir: data/processed/the_verdict
+tokenizer_type: bpe
+vocab_size: 300
+train_split: 0.9
+block_size: 256
+special_tokens:
+  "<|endoftext|>": 100257

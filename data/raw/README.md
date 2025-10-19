@@ -1,3 +1,13 @@
+## Download data
+
+Run:
+
+```shell
+data-download the-verdict ./data
+```
+
+## Print Summary
+
 To print the raw data summary:
 
 ```shell
