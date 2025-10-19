@@ -1,3 +1,8 @@
+"""Utility functions for the core module.
+
+Created by @pytholic on 2025.10.19
+"""
+
 import urllib.request
 
 from legollm.core.logging import logger
@@ -15,7 +20,7 @@ def download_file_from_url(url: str, filepath: str) -> None:
     logger.info("Data downloaded successfully.")
 
 
-def read_file(filepath: str) -> str:
-    """Read a file."""
+def read_text_file(filepath: str) -> str:
+    """Read a text file and return the content as a string."""
     with open(filepath, encoding="utf-8") as file:
         return file.read()
