@@ -1,11 +1,15 @@
 import argparse
 import random
 import re
+import sys
 from collections.abc import Iterator
 from pathlib import Path
 
 import polars as pl
-from tqdm import tqdm
+
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+from legollm.core.logging import progress_bar
 
 
 def find_text_files(path: str | Path) -> list[Path]:
@@ -24,16 +28,19 @@ def stream_documents(text_files: list[Path], min_length: int = 10) -> Iterator[s
     """Stream documents from text files without loading everything into memory.
     Yields one document at a time.
     """
-    for file_path in tqdm(text_files, desc="Processing files"):
-        content = file_path.read_text(encoding="utf-8", errors="replace")
+    with progress_bar("Processing files", total=len(text_files)) as (progress, task):
+        for file_path in text_files:
+            content = file_path.read_text(encoding="utf-8", errors="replace")
 
-        # Split on double newlines for document boundaries
-        documents = re.split(r"\n\s*\n", content)
+            # Split on double newlines for document boundaries
+            documents = re.split(r"\n\s*\n", content)
 
-        for doc in documents:
-            doc = doc.strip()
-            if len(doc) >= min_length:
-                yield doc
+            for doc in documents:
+                doc = doc.strip()
+                if len(doc) >= min_length:
+                    yield doc
+
+            progress.update(task, advance=1)
 
 
 def create_shards(
@@ -104,21 +111,25 @@ def create_shards(
     print(f"Writing ~{docs_per_shard:,} docs per shard...")
 
     shard_num = 0
-    for i in tqdm(range(0, total_docs, docs_per_shard), desc="Writing shards"):
-        shard_docs = documents[i : i + docs_per_shard]
+    num_iterations = (total_docs + docs_per_shard - 1) // docs_per_shard
 
-        # Store each document as a separate row (better for DataLoaders)
-        df = pl.DataFrame(
-            {
-                "text": shard_docs,
-                "length": [len(doc) for doc in shard_docs],
-            }
-        )
+    with progress_bar("Writing shards", total=num_iterations) as (progress, task):
+        for i in range(0, total_docs, docs_per_shard):
+            shard_docs = documents[i : i + docs_per_shard]
 
-        output_path = output_dir / f"shard_{shard_num:04d}.parquet"
-        df.write_parquet(output_path)
+            # Store each document as a separate row (better for DataLoaders)
+            df = pl.DataFrame(
+                {
+                    "text": shard_docs,
+                    "length": [len(doc) for doc in shard_docs],
+                }
+            )
 
-        shard_num += 1
+            output_path = output_dir / f"shard_{shard_num:04d}.parquet"
+            df.write_parquet(output_path)
+
+            shard_num += 1
+            progress.update(task, advance=1)
 
     print(f"\n{'=' * 50}")
     print(f"✓ Created {shard_num} shards in '{output_dir}'")

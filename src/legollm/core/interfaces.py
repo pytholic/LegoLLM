@@ -3,7 +3,6 @@
 Created by @pytholic on 2025.09.14
 """
 
-from pathlib import Path
 from typing import Protocol
 
 
@@ -69,7 +68,7 @@ class TrainableTokenizer(Tokenizer, Protocol):
         """
         ...
 
-    def save(self, path: str | Path) -> None:
+    def save(self, path: str) -> None:
         """Save trained tokenizer state (vocabulary, merges, config, etc.).
 
         Args:
@@ -80,7 +79,18 @@ class TrainableTokenizer(Tokenizer, Protocol):
         """
         ...
 
-    def load(self, path: str | Path) -> None:
+    def save_readable(self, path: str) -> None:
+        """Save trained tokenizer state (vocabulary, merges, config, etc.) in a human readable format.
+
+        Args:
+            path: File path to save the tokenizer state in a human readable format.
+
+        Raises:
+            TokenizerError: If tokenizer is not trained or save fails.
+        """
+        ...
+
+    def load(self, path: str) -> None:
         """Load trained tokenizer state from file.
 
         Args:

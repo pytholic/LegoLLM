@@ -5,10 +5,10 @@ Created by @pytholic on 2025.10.19
 
 import argparse
 import logging
+import urllib.request
 from pathlib import Path
 
 from legollm.core.logging import logger
-from legollm.core.utils import download_file_from_url
 
 logger.setLevel(logging.INFO)
 
@@ -38,6 +38,18 @@ def main() -> None:
     logger.info(f"Downloading file from {url} to {output_dir / file_name}.")
     download_file_from_url(url, output_dir / file_name)
     logger.info(f"Downloaded file {file_name} to {output_dir}.")
+
+
+def download_file_from_url(url: str, filepath: str | Path) -> None:
+    """Download data from a URL.
+
+    Args:
+        url: The URL to download data from.
+        filepath: The path to save the downloaded file.
+    """
+    logger.info(f"Downloading data from {url}...")
+    urllib.request.urlretrieve(url, filepath)
+    logger.info("Data downloaded successfully.")
 
 
 if __name__ == "__main__":

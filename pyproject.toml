@@ -9,10 +9,10 @@ requires-python = ">=3.12"
 readme = "README.md"
 license = {text = "MIT"}
 dependencies = [
+    "numpy>=2.3.4",
     "python-dotenv>=1.0.0,<2.0.0",
     "regex>=2025.9.18",
     "rich>=13.7.0,<14.0.0",
-    "tqdm>=4.67.1",
 ]
 
 [dependency-groups]
