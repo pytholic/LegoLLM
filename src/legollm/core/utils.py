@@ -4,11 +4,12 @@ Created by @pytholic on 2025.10.19
 """
 
 import urllib.request
+from pathlib import Path
 
 from legollm.core.logging import logger
 
 
-def download_file_from_url(url: str, filepath: str) -> None:
+def download_file_from_url(url: str, filepath: str | Path) -> None:
     """Download data from a URL.
 
     Args:
