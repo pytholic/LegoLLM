@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.tokenization.base_bpe import BaseBPETokenizer
+from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
 
 
 class ConcreteBPETokenizer(BaseBPETokenizer):

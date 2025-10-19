@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from legollm.core.tokenization.regex_bpe_tokenizer import RegexBPETokenizer
+from legollm.core.tokenization.bpe.regex_bpe_tokenizer import RegexBPETokenizer
 
 
 @pytest.fixture

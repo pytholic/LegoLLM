@@ -337,16 +337,6 @@ make type-check
 make check
 ```
 
-### Building Documentation
-
-```bash
-# Serve docs locally
-make docs-serve
-
-# Build docs
-make docs-build
-```
-
 ______________________________________________________________________
 
 ## Contributing

@@ -6,7 +6,7 @@ Created by @pytholic on 2025.09.14
 import regex as rex
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.tokenization.vocabulary import UNK_TOKEN, build_vocab_from_tokens
+from legollm.core.tokenization.simple.vocabulary import UNK_TOKEN, build_vocab_from_tokens
 
 PUNCTUATION = frozenset(r".,!?;:-()[]{}\"")
 

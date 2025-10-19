@@ -1,4 +1,26 @@
-"""Regex-based BPE tokenizer.
+"""Regex-based Byte Pair Encoding (BPE) tokenizer implementation.
+
+This implements the BPE algorithm as described in Sennrich et al. (2016).
+BPE iteratively merges the most frequent pair of bytes/characters to build
+a vocabulary of subword units.
+
+Key Design Decisions:
+    - Uses regex pre-tokenization pattern (GPT-4 style) to prevent merging
+      across certain boundaries (e.g., don't merge across spaces in contractions)
+    - Special tokens handled separately from merge vocabulary
+    - Supports both training from scratch and loading pretrained vocab
+
+References:
+    - Sennrich et al. (2016): https://arxiv.org/abs/1508.07909
+    - OpenAI tiktoken: https://github.com/openai/tiktoken
+
+Example:
+    >>> tokenizer = RegexBPETokenizer()
+    >>> tokenizer.train(text="Hello world!", vocab_size=300)
+    >>> tokenizer.encode("Hello<|endoftext|>world")
+    [72, 101, 108, 108, 111, 100257, 119, 111, 114, 108, 100]
+    >>> tokenizer.decode([72, 101, 108, 108, 111, 100257, 119, 111, 114, 108, 100])
+    "Hello<|endoftext|>world"
 
 Created by @pytholic on 2025.10.06
 """
@@ -11,7 +33,7 @@ from tqdm import tqdm
 
 from legollm.core.exceptions import TokenizerError
 from legollm.core.logging import logger
-from legollm.core.tokenization.base_bpe import BaseBPETokenizer
+from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
 
 
 class RegexBPETokenizer(BaseBPETokenizer):

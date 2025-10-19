@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from legollm.core.exceptions import TokenizerError
 from legollm.core.logging import logger
-from legollm.core.tokenization.base_bpe import BaseBPETokenizer
+from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
 
 logger.setLevel(logging.DEBUG)
 

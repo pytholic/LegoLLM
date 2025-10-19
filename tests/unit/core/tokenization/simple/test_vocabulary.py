@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.tokenization.vocabulary import (
+from legollm.core.tokenization.simple.vocabulary import (
     END_OF_TEXT_TOKEN,
     UNK_TOKEN,
     build_vocab_from_tokens,
