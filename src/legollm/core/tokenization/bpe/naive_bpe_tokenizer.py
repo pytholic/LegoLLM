@@ -8,10 +8,8 @@ Created by @pytholic on 2025.10.06
 
 import logging
 
-from tqdm import tqdm
-
 from legollm.core.exceptions import TokenizerError
-from legollm.core.logging import logger
+from legollm.core.logging import logger, progress_bar
 from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
 
 logger.setLevel(logging.DEBUG)
@@ -59,22 +57,24 @@ class NaiveBPETokenizer(BaseBPETokenizer):
         merges = {}
         vocab = {idx: bytes([idx]) for idx in range(self.INITIAL_VOCAB_SIZE)}
 
-        for i in tqdm(range(num_merges), desc="Training BPE tokenizer"):
-            pair_freq = self._compute_pair_freq(token_ids)
-            pair_id, occurrences = self._find_most_freq_pair(pair_freq)
+        with progress_bar("Training BPE tokenizer", total=num_merges) as (progress, task):
+            for i in range(num_merges):
+                pair_freq = self._compute_pair_freq(token_ids)
+                pair_id, occurrences = self._find_most_freq_pair(pair_freq)
 
-            if pair_id is None:
-                break
+                if pair_id is None:
+                    break
 
-            idx = self.INITIAL_VOCAB_SIZE + i
-            merges[pair_id] = idx
-            token_ids = self._merge_pair(token_ids, pair_id, idx)
-            vocab[idx] = vocab[pair_id[0]] + vocab[pair_id[1]]
+                idx = self.INITIAL_VOCAB_SIZE + i
+                merges[pair_id] = idx
+                token_ids = self._merge_pair(token_ids, pair_id, idx)
+                vocab[idx] = vocab[pair_id[0]] + vocab[pair_id[1]]
 
-            if verbose:
-                logger.info(
-                    f"merge {i + 1}/{num_merges}: {pair_id} -> {idx} ({vocab[idx]} had {occurrences} occurrences)"
-                )
+                progress.update(task, advance=1)
+                if verbose:
+                    logger.info(
+                        f"merge {i + 1}/{num_merges}: {pair_id} -> {idx} ({vocab[idx]} had {occurrences} occurrences)"
+                    )
 
         self.merges = merges
         self.vocab = vocab

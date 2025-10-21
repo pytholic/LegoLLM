@@ -1,0 +1,9 @@
+name: tiny_shakespeare
+raw_file: data/raw/tiny_shakespeare/tiny_shakespeare.txt
+processed_dir: data/processed/tiny_shakespeare
+tokenizer_type: regex_bpe
+vocab_size: 2048
+train_split: 0.9
+block_size: 256
+special_tokens:
+  "<|endoftext|>": 100257

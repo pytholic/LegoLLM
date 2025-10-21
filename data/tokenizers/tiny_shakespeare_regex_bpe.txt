@@ -1,0 +1,3848 @@
+BPE Tokenizer - 2048 tokens
+==================================================
+
+Vocabulary:
+--------------------------------------------------
+  0: \u0000
+  1: \u0001
+  2: \u0002
+  3: \u0003
+  4: \u0004
+  5: \u0005
+  6: \u0006
+  7: \u0007
+  8: \u0008
+  9: \u0009
+ 10: \u000a
+ 11: \u000b
+ 12: \u000c
+ 13: \u000d
+ 14: \u000e
+ 15: \u000f
+ 16: \u0010
+ 17: \u0011
+ 18: \u0012
+ 19: \u0013
+ 20: \u0014
+ 21: \u0015
+ 22: \u0016
+ 23: \u0017
+ 24: \u0018
+ 25: \u0019
+ 26: \u001a
+ 27: \u001b
+ 28: \u001c
+ 29: \u001d
+ 30: \u001e
+ 31: \u001f
+ 32:
+ 33: !
+ 34: "
+ 35: #
+ 36: $
+ 37: %
+ 38: &
+ 39: '
+ 40: (
+ 41: )
+ 42: *
+ 43: +
+ 44: ,
+ 45: -
+ 46: .
+ 47: /
+ 48: 0
+ 49: 1
+ 50: 2
+ 51: 3
+ 52: 4
+ 53: 5
+ 54: 6
+ 55: 7
+ 56: 8
+ 57: 9
+ 58: :
+ 59: ;
+ 60: <
+ 61: =
+ 62: >
+ 63: ?
+ 64: @
+ 65: A
+ 66: B
+ 67: C
+ 68: D
+ 69: E
+ 70: F
+ 71: G
+ 72: H
+ 73: I
+ 74: J
+ 75: K
+ 76: L
+ 77: M
+ 78: N
+ 79: O
+ 80: P
+ 81: Q
+ 82: R
+ 83: S
+ 84: T
+ 85: U
+ 86: V
+ 87: W
+ 88: X
+ 89: Y
+ 90: Z
+ 91: [
+ 92: \
+ 93: ]
+ 94: ^
+ 95: _
+ 96: `
+ 97: a
+ 98: b
+ 99: c
+100: d
+101: e
+102: f
+103: g
+104: h
+105: i
+106: j
+107: k
+108: l
+109: m
+110: n
+111: o
+112: p
+113: q
+114: r
+115: s
+116: t
+117: u
+118: v
+119: w
+120: x
+121: y
+122: z
+123: {
+124: |
+125: }
+126: ~
+127: \u007f
+128: \x80
+129: \x81
+130: \x82
+131: \x83
+132: \x84
+133: \x85
+134: \x86
+135: \x87
+136: \x88
+137: \x89
+138: \x8a
+139: \x8b
+140: \x8c
+141: \x8d
+142: \x8e
+143: \x8f
+144: \x90
+145: \x91
+146: \x92
+147: \x93
+148: \x94
+149: \x95
+150: \x96
+151: \x97
+152: \x98
+153: \x99
+154: \x9a
+155: \x9b
+156: \x9c
+157: \x9d
+158: \x9e
+159: \x9f
+160: \xa0
+161: \xa1
+162: \xa2
+163: \xa3
+164: \xa4
+165: \xa5
+166: \xa6
+167: \xa7
+168: \xa8
+169: \xa9
+170: \xaa
+171: \xab
+172: \xac
+173: \xad
+174: \xae
+175: \xaf
+176: \xb0
+177: \xb1
+178: \xb2
+179: \xb3
+180: \xb4
+181: \xb5
+182: \xb6
+183: \xb7
+184: \xb8
+185: \xb9
+186: \xba
+187: \xbb
+188: \xbc
+189: \xbd
+190: \xbe
+191: \xbf
+192: \xc0
+193: \xc1
+194: \xc2
+195: \xc3
+196: \xc4
+197: \xc5
+198: \xc6
+199: \xc7
+200: \xc8
+201: \xc9
+202: \xca
+203: \xcb
+204: \xcc
+205: \xcd
+206: \xce
+207: \xcf
+208: \xd0
+209: \xd1
+210: \xd2
+211: \xd3
+212: \xd4
+213: \xd5
+214: \xd6
+215: \xd7
+216: \xd8
+217: \xd9
+218: \xda
+219: \xdb
+220: \xdc
+221: \xdd
+222: \xde
+223: \xdf
+224: \xe0
+225: \xe1
+226: \xe2
+227: \xe3
+228: \xe4
+229: \xe5
+230: \xe6
+231: \xe7
+232: \xe8
+233: \xe9
+234: \xea
+235: \xeb
+236: \xec
+237: \xed
+238: \xee
+239: \xef
+240: \xf0
+241: \xf1
+242: \xf2
+243: \xf3
+244: \xf4
+245: \xf5
+246: \xf6
+247: \xf7
+248: \xf8
+249: \xf9
+250: \xfa
+251: \xfb
+252: \xfc
+253: \xfd
+254: \xfe
+255: \xff
+256:  t
+257: he
+258:  a
+259: ou
+260:  s
+261:  m
+262: in
+263:  w
+264: re
+265: ha
+266: :\u000a
+267: nd
+268:  the
+269:  b
+270: is
+271: or
+272: \u000a\u000a
+273:  f
+274: er
+275: ll
+276: it
+277: on
+278: ,\u000a
+279:  d
+280:  c
+281: es
+282: en
+283:  n
+284:  l
+285:  y
+286: .\u000a\u000a
+287:  th
+288: ar
+289:  h
+290:  o
+291:  to
+292:  you
+293:  p
+294: hat
+295:  I
+296:  he
+297: ve
+298: ot
+299: st
+300:  and
+301: ow
+302: ing
+303: an
+304:  of
+305: om
+306:  g
+307: at
+308:  be
+309: se
+310:  my
+311:  in
+312: ce
+313:  ha
+314: le
+315: ay
+316: ld
+317: ir
+318: et
+319: ed
+320: ut
+321:  me
+322: im
+323: ith
+324: 's
+325:  not
+326: ch
+327:  that
+328:  is
+329: gh
+330: And
+331:  for
+332: ke
+333:  u
+334: our
+335:  we
+336: oo
+337: ill
+338:  e
+339: her
+340: ;\u000a
+341:  with
+342: .\u000a
+343: ent
+344:  it
+345:  your
+346: ad
+347: ri
+348:  thou
+349:  st
+350: 'd
+351:  k
+352: ome
+353:  his
+354: ght
+355: EN
+356: ord
+357: id
+358: as
+359: The
+360:  re
+361:  have
+362: IN
+363: ly
+364: ra
+365:  li
+366: ?\u000a\u000a
+367:  him
+368: ur
+369:  this
+370: al
+371: IO
+372:  so
+373:  as
+374:  de
+375:  on
+376: ore
+377: ro
+378: AR
+379: hi
+380: ould
+381: ood
+382: ck
+383: ain
+384: ver
+385: est
+386:  thy
+387:  sha
+388: ess
+389: ea
+390:  do
+391:  will
+392: am
+393:  no
+394:  but
+395: us
+396: and
+397: US
+398: if
+399:  se
+400: ge
+401:  all
+402: Th
+403:  su
+404: ake
+405: To
+406:  her
+407: ru
+408: ion
+409: th
+410:  an
+411: ter
+412: ard
+413:  lo
+414: han
+415: ell
+416: ear
+417:  sp
+418:  thee
+419:  our
+420:  fa
+421:  shall
+422:  by
+423: UC
+424: il
+425:  are
+426: ING
+427:  C
+428:  ne
+429: rom
+430: ho
+431:  kn
+432: AN
+433:  R
+434: That
+435:  v
+436: ER
+437: ast
+438: OR
+439: ct
+440: ous
+441:  what
+442: ight
+443:  sh
+444: !\u000a
+445: ul
+446:  '
+447: ET
+448: ant
+449: ES
+450:  up
+451: sel
+452: qu
+453: But
+454: art
+455:  good
+456: !\u000a\u000a
+457: row
+458: ath
+459: ine
+460:  lord
+461: hich
+462: nt
+463: ust
+464: 'll
+465: one
+466:  pr
+467:  com
+468:  at
+469:  man
+470:  M
+471: What
+472:  whe
+473:  E
+474: KING
+475:  am
+476: end
+477: ic
+478:  con
+479: ble
+480: ry
+481: ?\u000a
+482: ong
+483: ie
+484: ive
+485:  from
+486:  bl
+487: ven
+488:  G
+489: For
+490:  she
+491: em
+492:  go
+493: are
+494:  more
+495:  them
+496: out
+497: IC
+498:  was
+499: au
+500: other
+501: oth
+502: He
+503:  sir
+504: ol
+505:  now
+506:  L
+507:  hat
+508:  if
+509: ost
+510: LO
+511: ind
+512:  there
+513:  know
+514:  would
+515:  can
+516: ers
+517: IUS
+518: ep
+519: self
+520: ARD
+521: ather
+522: fe
+523: ond
+524: res
+525: ate
+526:  say
+527:  here
+528:  love
+529:  their
+530:  sw
+531:  br
+532: pp
+533:  or
+534: all
+535: --
+536:  S
+537:  than
+538:  king
+539:  then
+540:  us
+541:  O
+542:  they
+543:  B
+544:  ar
+545: od
+546: My
+547:  let
+548:  un
+549: ig
+550:  wor
+551: ure
+552: ink
+553:  H
+554: ort
+555: hy
+556: ame
+557:  V
+558: fore
+559: As
+560:  may
+561: el
+562:  come
+563:  qu
+564: ook
+565: Whe
+566: ish
+567: LI
+568:  well
+569: KE
+570: ves
+571:  j
+572:  one
+573:  hath
+574: irst
+575: You
+576:  make
+577: reat
+578: gain
+579: ak
+580:  must
+581: ound
+582: ng
+583:  gra
+584:  were
+585:  ho
+586: ci
+587:  see
+588:  like
+589: ue
+590: eak
+591:  should
+592: TIO
+593: ity
+594:  pro
+595:  mad
+596:  sa
+597:  P
+598: um
+599:  pl
+600:  father
+601: RO
+602: AU
+603:  had
+604:  did
+605: pe
+606: ime
+607:  upon
+608: ice
+609:  too
+610: ON
+611: ence
+612:  W
+613: ward
+614: ist
+615:  death
+616: own
+617:  en
+618: ose
+619: man
+620: un
+621: ful
+622: IS
+623: nce
+624:  speak
+625:  r
+626:  po
+627: de
+628: entle
+629:  out
+630: io
+631:  which
+632: pt
+633: ICH
+634:  fri
+635: OL
+636:  again
+637: DU
+638: DUKE
+639:  how
+640: EL
+641:  A
+642:  heart
+643:  tru
+644: ick
+645:  hand
+646:  yet
+647: CA
+648: very
+649: ICHARD
+650: Thou
+651: ENTIO
+652: With
+653: ign
+654: ance
+655:  some
+656:  who
+657: Which
+658: If
+659:  when
+660: ies
+661:  mar
+662: ire
+663:  hon
+664:  mine
+665: orn
+666: har
+667:  off
+668: ince
+669: INC
+670: ack
+671: In
+672:  Y
+673:  dis
+674:  son
+675:  al
+676: 't
+677: We
+678: wn
+679:  hea
+680: uch
+681: First
+682: oy
+683:  hear
+684:  time
+685: ec
+686:  such
+687: AB
+688: ness
+689:  brother
+690: LA
+691: Of
+692:  blood
+693: ither
+694:  ab
+695:  these
+696: Why
+697: UE
+698: No
+699:  give
+700:  fo
+701:  day
+702:  ear
+703:  RICHARD
+704:  II
+705: ise
+706:  ex
+707:  ro
+708:  life
+709: EST
+710:  tell
+711: eet
+712:  think
+713: So
+714:  look
+715: UCH
+716:  word
+717:  where
+718:  ey
+719: This
+720: oul
+721: ther
+722: age
+723: ag
+724: een
+725:  friend
+726:  take
+727: GLO
+728: GLOUC
+729: GLOUCEST
+730: GLOUCESTER
+731: ef
+732: erv
+733: ady
+734: rown
+735: ings
+736:  des
+737: not
+738: ave
+739: urse
+740:  gentle
+741:  ri
+742: How
+743: RY
+744: ase
+745: way
+746: QUE
+747: QUEEN
+748: INCENTIO
+749:  lea
+750: tis
+751:  OF
+752:  art
+753:  most
+754: Where
+755:  honour
+756:  much
+757: LAN
+758:  sl
+759:  war
+760:  fl
+761: urn
+762:  made
+763: ment
+764: Now
+765:  hast
+766:  fear
+767:  tw
+768:  T
+769:  bet
+770: aught
+771: ENRY
+772: Is
+773: ff
+774: ough
+775: ber
+776:  God
+777: LE
+778: ved
+779:  bre
+780: cc
+781:  never
+782: ower
+783:  VINCENTIO
+784: Be
+785: ap
+786: igh
+787:  great
+788:  fair
+789:  K
+790:  cou
+791:  men
+792: itt
+793: Who
+794: ee
+795:  Rome
+796:  new
+797: aster
+798: orrow
+799: uke
+800: iz
+801: old
+802: ORK
+803:  part
+804: ation
+805: INIUS
+806: ide
+807: ree
+808: ss
+809: 'er
+810: Or
+811:  call
+812:  any
+813: ple
+814:  heaven
+815:  ad
+816:  comm
+817:  cannot
+818: Your
+819: It
+820:  stand
+821:  true
+822: 'T
+823:  been
+824: ears
+825:  name
+826: DW
+827: DWARD
+828:  cl
+829:  pre
+830:  sweet
+831:  pray
+832: ,--
+833:  doth
+834: hing
+835:  noble
+836: UM
+837: PET
+838:  own
+839: MEN
+840:  ple
+841: ass
+842: TH
+843: LUC
+844: ouse
+845:  per
+846:  D
+847: Come
+848: There
+849: Ay
+850: ull
+851:  done
+852: ife
+853:  wr
+854:  tr
+855: aw
+856:  way
+857:  other
+858:  head
+859:  mean
+860: li
+861: When
+862: red
+863:  nor
+864: dward
+865:  sc
+866:  pres
+867:  soul
+868: ROM
+869: ROME
+870: ROMEO
+871: MENEN
+872: MENENIUS
+873:  bear
+874:  world
+875: ace
+876: aint
+877:  night
+878: ving
+879:  Cl
+880: ause
+881: ger
+882:  before
+883:  both
+884:  queen
+885: per
+886: aughter
+887:  chi
+888:  mo
+889: Here
+890: Then
+891: PETR
+892: PETRUCH
+893: PETRUCHIO
+894:  very
+895: able
+896: OM
+897:  dead
+898: TES
+899:  ra
+900: ite
+901: By
+902: to
+903: the
+904:  ke
+905: les
+906: ab
+907: Than
+908:  down
+909:  F
+910:  cont
+911:  app
+912:  myself
+913:  arm
+914:  rem
+915:  wh
+916:  Lord
+917: HA
+918: GR
+919:  thus
+920: ilt
+921: ORIO
+922: ORIOLAN
+923: ORIOLANUS
+924: Sec
+925: Second
+926:  leave
+927: CORIOLANUS
+928:  being
+929: ction
+930: lo
+931:  Edward
+932:  unt
+933: sw
+934:  grace
+935: Nor
+936: ress
+937:  eyes
+938: less
+939:  beg
+940:  mother
+941: land
+942: led
+943: BA
+944: ran
+945:  old
+946:  ma
+947:  im
+948:  EDWARD
+949: INA
+950: itiz
+951: itizen
+952:  Mar
+953:  ever
+954: ps
+955:  long
+956:  live
+957:  child
+958: Let
+959:  wife
+960: me
+961:  away
+962:  rep
+963: She
+964:  III
+965:  poor
+966:  friends
+967:  wom
+968:  might
+969: come
+970:  af
+971: for
+972: wick
+973:  stay
+974: nder
+975: eace
+976:  die
+977: oud
+978: ks
+979: atch
+980:  comes
+981:  ru
+982:  J
+983:  cons
+984: arwick
+985:  many
+986: ows
+987:  crown
+988:  pe
+989:  le
+990: hall
+991: ison
+992:  YORK
+993:  rest
+994:  thought
+995: iss
+996: uck
+997:  har
+998:  house
+999: ISAB
+1000: ISABEL
+1001: ISABELLA
+1002:  cour
+1003: ian
+1004:  ent
+1005:  lie
+1006: RAN
+1007:  set
+1008: che
+1009: atter
+1010: ors
+1011: erc
+1012: :\u000a\u000a
+1013: well
+1014:  Warwick
+1015: JU
+1016: JULI
+1017: JULIET
+1018: LEON
+1019: LEONTES
+1020: Nay
+1021: ittle
+1022: int
+1023:  gone
+1024:  daughter
+1025:  better
+1026: rant
+1027: ought
+1028:  prince
+1029: MI
+1030:  tong
+1031: His
+1032:  nothing
+1033: DY
+1034: VOL
+1035: ENC
+1036: ENCE
+1037: LADY
+1038: ied
+1039:  keep
+1040: BR
+1041: TA
+1042:  wit
+1043:  res
+1044: ious
+1045: Well
+1046: ces
+1047: os
+1048: Go
+1049:  news
+1050: hard
+1051:  sle
+1052: ft
+1053: ont
+1054: ier
+1055: ret
+1056:  tri
+1057: SIC
+1058: SICINIUS
+1059: ool
+1060: une
+1061:  those
+1062:  gri
+1063:  against
+1064:  little
+1065: Not
+1066:  lords
+1067: akes
+1068:  best
+1069:  hence
+1070:  hour
+1071: ardon
+1072: ford
+1073:  acc
+1074: ult
+1075: sed
+1076:  foll
+1077: lse
+1078:  face
+1079: On
+1080:  end
+1081: ud
+1082: ark
+1083: ew
+1084:  young
+1085: ield
+1086:  kind
+1087:  thing
+1088:  still
+1089: ork
+1090:  pri
+1091: alk
+1092:  pur
+1093:  comp
+1094: Thy
+1095: ST
+1096: LUCIO
+1097: ale
+1098: ins
+1099:  power
+1100:  put
+1101:  two
+1102: ichard
+1103:  IV
+1104:  himself
+1105:  cha
+1106: ert
+1107:  gu
+1108:  dear
+1109:  first
+1110: iness
+1111:  peace
+1112:  else
+1113: cl
+1114: Pro
+1115: ried
+1116: cious
+1117: hile
+1118:  unto
+1119: Sir
+1120: ail
+1121:  sub
+1122: ason
+1123:  till
+1124:  sm
+1125: ile
+1126: -m
+1127: ray
+1128: uty
+1129: ect
+1130:  count
+1131:  co
+1132:  back
+1133:  words
+1134:  hus
+1135:  bid
+1136:  therefore
+1137:  earth
+1138:  tra
+1139:  dre
+1140: RI
+1141:  ELI
+1142:  ELIZ
+1143:  ELIZAB
+1144:  ELIZABET
+1145:  ELIZABETH
+1146: ius
+1147: ople
+1148:  could
+1149: Have
+1150:  tongue
+1151:  find
+1152: band
+1153: yal
+1154: ty
+1155:  need
+1156:  thine
+1157:  lady
+1158: orse
+1159:  York
+1160: ren
+1161:  fell
+1162:  high
+1163:  forth
+1164: get
+1165: tw
+1166:  hope
+1167: enry
+1168: HENRY
+1169:  hel
+1170: men
+1171: St
+1172: eech
+1173:  home
+1174:  seem
+1175:  husband
+1176: eth
+1177: vere
+1178: MER
+1179:  Romeo
+1180:  right
+1181: CL
+1182:  duke
+1183: uth
+1184:  though
+1185:  What
+1186: rer
+1187: fort
+1188:  ban
+1189:  VI
+1190: GE
+1191: WAR
+1192: WARW
+1193: WARWIC
+1194: WARWICK
+1195:  people
+1196:  char
+1197: ister
+1198:  bra
+1199: ach
+1200:  mind
+1201: hip
+1202: UT
+1203: ix
+1204:  che
+1205:  HENRY
+1206:  Citizen
+1207: ds
+1208: --\u000a
+1209: ged
+1210: Nurse
+1211:  tre
+1212:  Henry
+1213: HAM
+1214:  show
+1215: They
+1216: eed
+1217:  chan
+1218:  conf
+1219:  bri
+1220: -d
+1221:  law
+1222:  hands
+1223:  Richard
+1224: PU
+1225: PUL
+1226: PULET
+1227: IAN
+1228:  why
+1229:  imp
+1230:  once
+1231:  said
+1232:  gl
+1233: be
+1234:  cause
+1235:  master
+1236: EY
+1237:  bod
+1238:  joy
+1239:  none
+1240: Good
+1241: ervant
+1242: ousin
+1243: MIO
+1244: All
+1245:  fort
+1246: Shall
+1247: bt
+1248:  bring
+1249: Yet
+1250:  every
+1251: ates
+1252: BRUT
+1253: BRUTUS
+1254:  dou
+1255: UCKING
+1256: UCKINGHAM
+1257: From
+1258:  pass
+1259: ird
+1260:  light
+1261: iet
+1262:  mist
+1263: BUCKINGHAM
+1264: ESS
+1265:  BOL
+1266:  BOLING
+1267:  BOLINGB
+1268:  BOLINGBRO
+1269:  BOLINGBROKE
+1270: TRAN
+1271: TRANIO
+1272:  nat
+1273: Will
+1274: swer
+1275:  thr
+1276: lt
+1277: Do
+1278:  royal
+1279:  wo
+1280: vost
+1281: its
+1282:  whose
+1283:  please
+1284:  came
+1285: cle
+1286:  tears
+1287:  MAR
+1288: ary
+1289: PER
+1290: TIS
+1291: ory
+1292: roke
+1293: vy
+1294: lf
+1295:  pardon
+1296:  An
+1297:  heard
+1298: pose
+1299:  dev
+1300:  just
+1301: arry
+1302:  bes
+1303: -b
+1304:  present
+1305:  boy
+1306:  full
+1307: Cl
+1308:  wrong
+1309:  happ
+1310: NE
+1311:  MARG
+1312:  MARGAR
+1313:  MARGARET
+1314:  mis
+1315:  ere
+1316:  state
+1317:  since
+1318: eel
+1319:  place
+1320: ens
+1321:  last
+1322:  land
+1323: MIL
+1324: ATH
+1325:  kill
+1326: sand
+1327: mb
+1328: ock
+1329:  meet
+1330:  after
+1331:  under
+1332: ition
+1333:  care
+1334:  thousand
+1335:  hold
+1336: esty
+1337: cent
+1338:  sorrow
+1339: ORD
+1340: GRE
+1341: ANGE
+1342: ANGELO
+1343: HOR
+1344:  help
+1345: Our
+1346:  follow
+1347:  whom
+1348: arence
+1349: CU
+1350: ARINA
+1351: cius
+1352:  enem
+1353: irt
+1354: selves
+1355:  eye
+1356:  about
+1357: ceive
+1358:  hither
+1359:  less
+1360:  far
+1361:  weep
+1362:  shame
+1363: KATH
+1364: KATHARINA
+1365:  pat
+1366: ons
+1367:  answer
+1368:  sun
+1369: iol
+1370:  fool
+1371:  fal
+1372: urde
+1373: asure
+1374: air
+1375:  fall
+1376:  maid
+1377:  ch
+1378: ount
+1379: thy
+1380:  bus
+1381:  hate
+1382: Up
+1383:  gentleman
+1384:  gracious
+1385: Un
+1386:  grief
+1387:  cousin
+1388:  King
+1389: ESCA
+1390: ESCAL
+1391: ESCALUS
+1392: ject
+1393:  makes
+1394:  stri
+1395: ove
+1396: imes
+1397:  into
+1398: An
+1399: ild
+1400:  stre
+1401: iv
+1402: Hath
+1403:  woman
+1404:  Eng
+1405:  hum
+1406: ices
+1407: ling
+1408:  coun
+1409:  court
+1410:  comfort
+1411:  turn
+1412:  sleep
+1413:  dost
+1414: alt
+1415: urderer
+1416:  Duke
+1417: DUCH
+1418: DUCHESS
+1419:  talk
+1420:  body
+1421:  bel
+1422: '\u000a
+1423:  over
+1424: pher
+1425: itor
+1426: Lord
+1427:  Marcius
+1428: deed
+1429: ute
+1430:  bu
+1431:  gr
+1432:  wilt
+1433: gelo
+1434: ieve
+1435:  fault
+1436:  att
+1437: ience
+1438:  i
+1439: IA
+1440:  bed
+1441:  play
+1442:  prove
+1443: ised
+1444:  Clarence
+1445: CAMIL
+1446: CAMILLO
+1447: ans
+1448:  deed
+1449: ily
+1450:  inst
+1451:  ret
+1452:  wel
+1453:  thank
+1454: ere
+1455:  sound
+1456:  dra
+1457: ade
+1458: omet
+1459: God
+1460: -s
+1461:  indeed
+1462:  ser
+1463:  sword
+1464:  fight
+1465: hold
+1466:  false
+1467:  bo
+1468:  vo
+1469: illain
+1470:  Angelo
+1471: HORT
+1472: HORTEN
+1473: HORTENS
+1474:  even
+1475:  fellow
+1476: Sh
+1477:  grave
+1478: Upon
+1479:  another
+1480:  use
+1481:  adv
+1482:  sovere
+1483: FRI
+1484: FRIAR
+1485: Provost
+1486: HORTENSIO
+1487:  has
+1488:  cur
+1489: ury
+1490:  fortune
+1491: pect
+1492: eal
+1493:  banish
+1494: BAP
+1495: BAPTIS
+1496: BAPTISTA
+1497:  rather
+1498:  reven
+1499:  country
+1500:  matter
+1501:  want
+1502: mp
+1503:  send
+1504: ouch
+1505: COM
+1506: COMINIUS
+1507:  doubt
+1508:  ass
+1509: pen
+1510: fect
+1511:  prison
+1512:  merc
+1513: AUT
+1514: AUTOL
+1515: AUTOLY
+1516: AUTOLYC
+1517: AUTOLYCUS
+1518:  virt
+1519:  only
+1520: Even
+1521:  wish
+1522: More
+1523:  lies
+1524:  truth
+1525:  years
+1526: Are
+1527: Third
+1528:  reason
+1529: -morrow
+1530: ARENCE
+1531: Would
+1532:  breath
+1533:  arms
+1534: ms
+1535: of
+1536: ior
+1537:  pers
+1538:  But
+1539: any
+1540:  dan
+1541: pherd
+1542: rance
+1543:  dream
+1544: CLARENCE
+1545:  business
+1546:  disc
+1547: ener
+1548: MAR
+1549:  sent
+1550: dd
+1551:  gi
+1552:  stra
+1553:  shalt
+1554: NOR
+1555: BEN
+1556: BENVOL
+1557: BENVOLIO
+1558: Clown
+1559:  enough
+1560:  sen
+1561: hed
+1562: At
+1563:  prom
+1564:  command
+1565: Al
+1566: erving
+1567:  holy
+1568: der
+1569: GRUM
+1570: GRUMIO
+1571: PRO
+1572: PROS
+1573: PROSPER
+1574: PROSPERO
+1575:  content
+1576:  proud
+1577:  cra
+1578:  sold
+1579:  lay
+1580:  hang
+1581:  stran
+1582: ator
+1583: ia
+1584:  swear
+1585:  pity
+1586:  fare
+1587:  wind
+1588:  spir
+1589: ken
+1590:  sea
+1591: ars
+1592:  bea
+1593:  Murderer
+1594: MERCU
+1595: MERCUTIO
+1596: gainst
+1597:  nature
+1598: ike
+1599: eter
+1600:  remem
+1601: by
+1602:  dep
+1603:  welcome
+1604:  sec
+1605:  dare
+1606:  lives
+1607:  villain
+1608:  Kate
+1609: LUCENTIO
+1610:  gods
+1611:  int
+1612:  get
+1613: unt
+1614:  madam
+1615: com
+1616:  saw
+1617:  Come
+1618:  within
+1619:  gre
+1620: ester
+1621:  free
+1622:  sovereign
+1623:  kiss
+1624: ham
+1625:  tend
+1626:  happy
+1627: LAND
+1628: POM
+1629: POMP
+1630:  serv
+1631:  city
+1632: vers
+1633:  beseech
+1634: Were
+1635:  somet
+1636: hal
+1637: apt
+1638:  sister
+1639:  foul
+1640: PAU
+1641: PAUL
+1642: PAULINA
+1643:  yield
+1644: ery
+1645: ,--\u000a\u000a
+1646: att
+1647:  break
+1648:  means
+1649: gether
+1650: onder
+1651:  yours
+1652:  three
+1653: use
+1654: ient
+1655: ague
+1656:  subject
+1657:  den
+1658:  oath
+1659: YORK
+1660: POMPEY
+1661: GREMIO
+1662:  while
+1663:  aw
+1664: ,'
+1665:  things
+1666:  born
+1667:  mer
+1668: VOLUM
+1669: VOLUMN
+1670: VOLUMNIA
+1671: like
+1672:  bloody
+1673:  horse
+1674: ches
+1675: eft
+1676:  looks
+1677: anc
+1678: usic
+1679:  Nor
+1680: yb
+1681: ybalt
+1682: PO
+1683: POLI
+1684: POLIX
+1685: POLIXEN
+1686: POLIXENES
+1687: ANT
+1688: rong
+1689: up
+1690:  win
+1691: ues
+1692:  fire
+1693: enger
+1694:  yourself
+1695:  spo
+1696:  wound
+1697:  maj
+1698: Her
+1699:  faith
+1700:  tem
+1701:  supp
+1702:  traitor
+1703:  Serving
+1704:  Servingman
+1705: STING
+1706: STINGS
+1707: centio
+1708: GON
+1709:  ob
+1710:  common
+1711:  mark
+1712: essenger
+1713:  dru
+1714:  children
+1715: Say
+1716: ertain
+1717:  lam
+1718: rem
+1719:  mistress
+1720: HASTINGS
+1721: broke
+1722:  LAU
+1723:  LAUR
+1724:  LAURENCE
+1725:  def
+1726:  val
+1727: form
+1728:  beat
+1729:  cond
+1730: Therefore
+1731:  requ
+1732:  majesty
+1733: BY
+1734:  uncle
+1735: BER
+1736:  aff
+1737:  late
+1738:  told
+1739:  sin
+1740: Was
+1741:  days
+1742:  save
+1743:  met
+1744:  seen
+1745:  left
+1746: Look
+1747:  soon
+1748:  tender
+1749:  England
+1750: CLI
+1751: CLIF
+1752: CLIFF
+1753:  woe
+1754: NORTH
+1755: NORTHUM
+1756: NORTHUMBER
+1757: NORTHUMBERLAND
+1758:  gener
+1759: .'
+1760: ring
+1761: ides
+1762: ID
+1763: Take
+1764:  return
+1765:  does
+1766:  farewell
+1767: ever
+1768:  mercy
+1769:  sight
+1770:  mon
+1771: -day
+1772: idow
+1773: pl
+1774:  purpose
+1775:  through
+1776: hes
+1777:  sit
+1778: unes
+1779: dom
+1780: Though
+1781: ten
+1782:  warrant
+1783:  danger
+1784:  deep
+1785:  foot
+1786: ac
+1787:  gold
+1788: ters
+1789:  heavy
+1790:  sad
+1791: rel
+1792:  marry
+1793:  AN
+1794:  ANNE
+1795:  Jul
+1796: ict
+1797: vent
+1798: und
+1799: ours
+1800: ments
+1801: Did
+1802:  deser
+1803:  cho
+1804:  together
+1805: Give
+1806:  ill
+1807:  grow
+1808: earn
+1809:  nurse
+1810:  sure
+1811: aim
+1812:  cold
+1813: ifford
+1814: Ah
+1815: PR
+1816: PRINC
+1817: PRINCE
+1818: CAPULET
+1819: ignior
+1820: ceed
+1821: mer
+1822: oriol
+1823: arewell
+1824:  pluck
+1825: az
+1826:  report
+1827: ca
+1828: so
+1829:  spirit
+1830:  believe
+1831:  ask
+1832: -f
+1833:  without
+1834: ush
+1835:  times
+1836: enty
+1837: aid
+1838:  lost
+1839: ross
+1840: oint
+1841:  liege
+1842: oling
+1843: olingbroke
+1844: One
+1845:  says
+1846: outh
+1847:  strange
+1848: ains
+1849:  air
+1850: ets
+1851: ift
+1852:  age
+1853:  wat
+1854:  loss
+1855:  thyself
+1856:  heir
+1857: Whose
+1858: xt
+1859: -w
+1860:  Bolingbroke
+1861:  Mont
+1862:  suff
+1863: Should
+1864:  cry
+1865: aking
+1866:  ears
+1867: Had
+1868:  entreat
+1869:  person
+1870: no
+1871:  haste
+1872: ced
+1873: ial
+1874:  devil
+1875: ner
+1876:  ground
+1877:  learn
+1878:  Clifford
+1879:  Juliet
+1880: ALO
+1881: night
+1882: oman
+1883: Like
+1884:  ag
+1885:  remember
+1886:  point
+1887:  justice
+1888:  disp
+1889: Wh
+1890:  betw
+1891:  vis
+1892:  fast
+1893:  mur
+1894: ined
+1895:  fly
+1896:  toward
+1897: ixt
+1898:  straight
+1899:  past
+1900: let
+1901:  slain
+1902:  France
+1903:  Lu
+1904:  friar
+1905: aud
+1906:  strong
+1907:  curse
+1908:  instru
+1909:  trust
+1910:  worthy
+1911:  bold
+1912: AUF
+1913: AUFID
+1914: AUFIDIUS
+1915: These
+1916:  alone
+1917: Some
+1918:  quick
+1919:  sil
+1920: May
+1921: -t
+1922: ution
+1923:  desire
+1924:  service
+1925:  near
+1926:  ord
+1927: entleman
+1928:  beauty
+1929:  CA
+1930:  CAPULET
+1931: ina
+1932: FL
+1933: FLOR
+1934: FLORI
+1935: FLORIZ
+1936: FLORIZEL
+1937:  enemy
+1938:  revenge
+1939: --\u000a\u000a
+1940:  general
+1941:  run
+1942:  ready
+1943: gs
+1944:  brought
+1945:  found
+1946: adam
+1947: ning
+1948: ithe
+1949:  hard
+1950: ured
+1951: with
+1952:  touch
+1953:  Is
+1954:  poss
+1955: Can
+1956: VER
+1957:  Tybalt
+1958: SE
+1959: ION
+1960: audio
+1961: ub
+1962: aunt
+1963:  inf
+1964:  nob
+1965:  grant
+1966:  Sen
+1967:  Senator
+1968: inks
+1969:  lose
+1970: ship
+1971: ible
+1972:  thoughts
+1973:  charge
+1974:  knows
+1975:  woo
+1976: umber
+1977: Ha
+1978:  itself
+1979: cept
+1980: vo
+1981:  Here
+1982:  married
+1983:  canst
+1984:  duty
+1985: amill
+1986: Sp
+1987: Against
+1988:  You
+1989:  deli
+1990: Bec
+1991: CIUS
+1992:  marri
+1993:  quar
+1994:  iss
+1995:  prof
+1996: ched
+1997:  speed
+1998:  streng
+1999: ithee
+2000:  stands
+2001:  hours
+2002: ,--\u000a
+2003:  morn
+2004:  twenty
+2005:  wear
+2006:  confess
+2007:  read
+2008: eep
+2009: lou
+2010: louc
+2011: ua
+2012: RICHARD
+2013: Shepherd
+2014: SEBA
+2015: SEBAST
+2016: SEBASTIAN
+2017:  fur
+2018: fection
+2019:  inc
+2020:  counsel
+2021:  fore
+2022: oop
+2023: gu
+2024:  half
+2025:  field
+2026:  youth
+2027:  hell
+2028: els
+2029:  car
+2030:  mock
+2031: ump
+2032:  post
+2033:  exec
+2034:  jud
+2035:  div
+2036:  N
+2037: Tell
+2038:  fearful
+2039: ones
+2040:  Hast
+2041: ucking
+2042:  Ri
+2043: olk
+2044: OW
+2045: amillo
+2046:  resol
+2047: itizens
+
+Learned merges (1792 tokens):
+--------------------------------------------------
+[32] + [116] -> [ t] (token 256)
+[104] + [101] -> [he] (token 257)
+[32] + [97] -> [ a] (token 258)
+[111] + [117] -> [ou] (token 259)
+[32] + [115] -> [ s] (token 260)
+[32] + [109] -> [ m] (token 261)
+[105] + [110] -> [in] (token 262)
+[32] + [119] -> [ w] (token 263)
+[114] + [101] -> [re] (token 264)
+[104] + [97] -> [ha] (token 265)
+[58] + [10] -> [:\u000a] (token 266)
+[110] + [100] -> [nd] (token 267)
+[256] + [257] -> [ the] (token 268)
+[32] + [98] -> [ b] (token 269)
+[105] + [115] -> [is] (token 270)
+[111] + [114] -> [or] (token 271)
+[10] + [10] -> [\u000a\u000a] (token 272)
+[32] + [102] -> [ f] (token 273)
+[101] + [114] -> [er] (token 274)
+[108] + [108] -> [ll] (token 275)
+[105] + [116] -> [it] (token 276)
+[111] + [110] -> [on] (token 277)
+[44] + [10] -> [,\u000a] (token 278)
+[32] + [100] -> [ d] (token 279)
+[32] + [99] -> [ c] (token 280)
+[101] + [115] -> [es] (token 281)
+[101] + [110] -> [en] (token 282)
+[32] + [110] -> [ n] (token 283)
+[32] + [108] -> [ l] (token 284)
+[32] + [121] -> [ y] (token 285)
+[46] + [272] -> [.\u000a\u000a] (token 286)
+[256] + [104] -> [ th] (token 287)
+[97] + [114] -> [ar] (token 288)
+[32] + [104] -> [ h] (token 289)
+[32] + [111] -> [ o] (token 290)
+[256] + [111] -> [ to] (token 291)
+[285] + [259] -> [ you] (token 292)
+[32] + [112] -> [ p] (token 293)
+[265] + [116] -> [hat] (token 294)
+[32] + [73] -> [ I] (token 295)
+[32] + [257] -> [ he] (token 296)
+[118] + [101] -> [ve] (token 297)
+[111] + [116] -> [ot] (token 298)
+[115] + [116] -> [st] (token 299)
+[258] + [267] -> [ and] (token 300)
+[111] + [119] -> [ow] (token 301)
+[262] + [103] -> [ing] (token 302)
+[97] + [110] -> [an] (token 303)
+[290] + [102] -> [ of] (token 304)
+[111] + [109] -> [om] (token 305)
+[32] + [103] -> [ g] (token 306)
+[97] + [116] -> [at] (token 307)
+[269] + [101] -> [ be] (token 308)
+[115] + [101] -> [se] (token 309)
+[261] + [121] -> [ my] (token 310)
+[32] + [262] -> [ in] (token 311)
+[99] + [101] -> [ce] (token 312)
+[32] + [265] -> [ ha] (token 313)
+[108] + [101] -> [le] (token 314)
+[97] + [121] -> [ay] (token 315)
+[108] + [100] -> [ld] (token 316)
+[105] + [114] -> [ir] (token 317)
+[101] + [116] -> [et] (token 318)
+[101] + [100] -> [ed] (token 319)
+[117] + [116] -> [ut] (token 320)
+[261] + [101] -> [ me] (token 321)
+[105] + [109] -> [im] (token 322)
+[276] + [104] -> [ith] (token 323)
+[39] + [115] -> ['s] (token 324)
+[283] + [298] -> [ not] (token 325)
+[99] + [104] -> [ch] (token 326)
+[256] + [294] -> [ that] (token 327)
+[32] + [270] -> [ is] (token 328)
+[103] + [104] -> [gh] (token 329)
+[65] + [267] -> [And] (token 330)
+[273] + [271] -> [ for] (token 331)
+[107] + [101] -> [ke] (token 332)
+[32] + [117] -> [ u] (token 333)
+[259] + [114] -> [our] (token 334)
+[263] + [101] -> [ we] (token 335)
+[111] + [111] -> [oo] (token 336)
+[105] + [275] -> [ill] (token 337)
+[32] + [101] -> [ e] (token 338)
+[257] + [114] -> [her] (token 339)
+[59] + [10] -> [;\u000a] (token 340)
+[263] + [323] -> [ with] (token 341)
+[46] + [10] -> [.\u000a] (token 342)
+[282] + [116] -> [ent] (token 343)
+[32] + [276] -> [ it] (token 344)
+[292] + [114] -> [ your] (token 345)
+[97] + [100] -> [ad] (token 346)
+[114] + [105] -> [ri] (token 347)
+[287] + [259] -> [ thou] (token 348)
+[260] + [116] -> [ st] (token 349)
+[39] + [100] -> ['d] (token 350)
+[32] + [107] -> [ k] (token 351)
+[305] + [101] -> [ome] (token 352)
+[289] + [270] -> [ his] (token 353)
+[329] + [116] -> [ght] (token 354)
+[69] + [78] -> [EN] (token 355)
+[271] + [100] -> [ord] (token 356)
+[105] + [100] -> [id] (token 357)
+[97] + [115] -> [as] (token 358)
+[84] + [257] -> [The] (token 359)
+[32] + [264] -> [ re] (token 360)
+[313] + [297] -> [ have] (token 361)
+[73] + [78] -> [IN] (token 362)
+[108] + [121] -> [ly] (token 363)
+[114] + [97] -> [ra] (token 364)
+[284] + [105] -> [ li] (token 365)
+[63] + [272] -> [?\u000a\u000a] (token 366)
+[289] + [322] -> [ him] (token 367)
+[117] + [114] -> [ur] (token 368)
+[287] + [270] -> [ this] (token 369)
+[97] + [108] -> [al] (token 370)
+[73] + [79] -> [IO] (token 371)
+[260] + [111] -> [ so] (token 372)
+[258] + [115] -> [ as] (token 373)
+[279] + [101] -> [ de] (token 374)
+[32] + [277] -> [ on] (token 375)
+[111] + [264] -> [ore] (token 376)
+[114] + [111] -> [ro] (token 377)
+[65] + [82] -> [AR] (token 378)
+[104] + [105] -> [hi] (token 379)
+[259] + [316] -> [ould] (token 380)
+[336] + [100] -> [ood] (token 381)
+[99] + [107] -> [ck] (token 382)
+[97] + [262] -> [ain] (token 383)
+[118] + [274] -> [ver] (token 384)
+[281] + [116] -> [est] (token 385)
+[287] + [121] -> [ thy] (token 386)
+[260] + [265] -> [ sha] (token 387)
+[281] + [115] -> [ess] (token 388)
+[101] + [97] -> [ea] (token 389)
+[279] + [111] -> [ do] (token 390)
+[263] + [337] -> [ will] (token 391)
+[97] + [109] -> [am] (token 392)
+[283] + [111] -> [ no] (token 393)
+[269] + [320] -> [ but] (token 394)
+[117] + [115] -> [us] (token 395)
+[97] + [267] -> [and] (token 396)
+[85] + [83] -> [US] (token 397)
+[105] + [102] -> [if] (token 398)
+[260] + [101] -> [ se] (token 399)
+[103] + [101] -> [ge] (token 400)
+[258] + [275] -> [ all] (token 401)
+[84] + [104] -> [Th] (token 402)
+[260] + [117] -> [ su] (token 403)
+[97] + [332] -> [ake] (token 404)
+[84] + [111] -> [To] (token 405)
+[296] + [114] -> [ her] (token 406)
+[114] + [117] -> [ru] (token 407)
+[105] + [277] -> [ion] (token 408)
+[116] + [104] -> [th] (token 409)
+[258] + [110] -> [ an] (token 410)
+[116] + [274] -> [ter] (token 411)
+[288] + [100] -> [ard] (token 412)
+[284] + [111] -> [ lo] (token 413)
+[265] + [110] -> [han] (token 414)
+[101] + [275] -> [ell] (token 415)
+[101] + [288] -> [ear] (token 416)
+[260] + [112] -> [ sp] (token 417)
+[268] + [101] -> [ thee] (token 418)
+[32] + [334] -> [ our] (token 419)
+[273] + [97] -> [ fa] (token 420)
+[387] + [275] -> [ shall] (token 421)
+[269] + [121] -> [ by] (token 422)
+[85] + [67] -> [UC] (token 423)
+[105] + [108] -> [il] (token 424)
+[258] + [264] -> [ are] (token 425)
+[362] + [71] -> [ING] (token 426)
+[32] + [67] -> [ C] (token 427)
+[283] + [101] -> [ ne] (token 428)
+[114] + [305] -> [rom] (token 429)
+[104] + [111] -> [ho] (token 430)
+[351] + [110] -> [ kn] (token 431)
+[65] + [78] -> [AN] (token 432)
+[32] + [82] -> [ R] (token 433)
+[84] + [294] -> [That] (token 434)
+[32] + [118] -> [ v] (token 435)
+[69] + [82] -> [ER] (token 436)
+[97] + [299] -> [ast] (token 437)
+[79] + [82] -> [OR] (token 438)
+[99] + [116] -> [ct] (token 439)
+[259] + [115] -> [ous] (token 440)
+[263] + [294] -> [ what] (token 441)
+[105] + [354] -> [ight] (token 442)
+[260] + [104] -> [ sh] (token 443)
+[33] + [10] -> [!\u000a] (token 444)
+[117] + [108] -> [ul] (token 445)
+[32] + [39] -> [ '] (token 446)
+[69] + [84] -> [ET] (token 447)
+[303] + [116] -> [ant] (token 448)
+[69] + [83] -> [ES] (token 449)
+[333] + [112] -> [ up] (token 450)
+[309] + [108] -> [sel] (token 451)
+[113] + [117] -> [qu] (token 452)
+[66] + [320] -> [But] (token 453)
+[288] + [116] -> [art] (token 454)
+[306] + [381] -> [ good] (token 455)
+[33] + [272] -> [!\u000a\u000a] (token 456)
+[114] + [301] -> [row] (token 457)
+[307] + [104] -> [ath] (token 458)
+[262] + [101] -> [ine] (token 459)
+[284] + [356] -> [ lord] (token 460)
+[379] + [326] -> [hich] (token 461)
+[110] + [116] -> [nt] (token 462)
+[117] + [299] -> [ust] (token 463)
+[39] + [275] -> ['ll] (token 464)
+[277] + [101] -> [one] (token 465)
+[293] + [114] -> [ pr] (token 466)
+[280] + [305] -> [ com] (token 467)
+[258] + [116] -> [ at] (token 468)
+[261] + [303] -> [ man] (token 469)
+[32] + [77] -> [ M] (token 470)
+[87] + [294] -> [What] (token 471)
+[263] + [257] -> [ whe] (token 472)
+[32] + [69] -> [ E] (token 473)
+[75] + [426] -> [KING] (token 474)
+[258] + [109] -> [ am] (token 475)
+[101] + [267] -> [end] (token 476)
+[105] + [99] -> [ic] (token 477)
+[280] + [277] -> [ con] (token 478)
+[98] + [314] -> [ble] (token 479)
+[114] + [121] -> [ry] (token 480)
+[63] + [10] -> [?\u000a] (token 481)
+[277] + [103] -> [ong] (token 482)
+[105] + [101] -> [ie] (token 483)
+[105] + [297] -> [ive] (token 484)
+[273] + [429] -> [ from] (token 485)
+[269] + [108] -> [ bl] (token 486)
+[118] + [282] -> [ven] (token 487)
+[32] + [71] -> [ G] (token 488)
+[70] + [271] -> [For] (token 489)
+[260] + [257] -> [ she] (token 490)
+[101] + [109] -> [em] (token 491)
+[306] + [111] -> [ go] (token 492)
+[97] + [264] -> [are] (token 493)
+[261] + [376] -> [ more] (token 494)
+[268] + [109] -> [ them] (token 495)
+[259] + [116] -> [out] (token 496)
+[73] + [67] -> [IC] (token 497)
+[263] + [358] -> [ was] (token 498)
+[97] + [117] -> [au] (token 499)
+[298] + [339] -> [other] (token 500)
+[298] + [104] -> [oth] (token 501)
+[72] + [101] -> [He] (token 502)
+[260] + [317] -> [ sir] (token 503)
+[111] + [108] -> [ol] (token 504)
+[283] + [301] -> [ now] (token 505)
+[32] + [76] -> [ L] (token 506)
+[32] + [294] -> [ hat] (token 507)
+[32] + [398] -> [ if] (token 508)
+[111] + [299] -> [ost] (token 509)
+[76] + [79] -> [LO] (token 510)
+[262] + [100] -> [ind] (token 511)
+[268] + [264] -> [ there] (token 512)
+[431] + [301] -> [ know] (token 513)
+[263] + [380] -> [ would] (token 514)
+[280] + [303] -> [ can] (token 515)
+[274] + [115] -> [ers] (token 516)
+[73] + [397] -> [IUS] (token 517)
+[101] + [112] -> [ep] (token 518)
+[451] + [102] -> [self] (token 519)
+[378] + [68] -> [ARD] (token 520)
+[307] + [339] -> [ather] (token 521)
+[102] + [101] -> [fe] (token 522)
+[111] + [267] -> [ond] (token 523)
+[264] + [115] -> [res] (token 524)
+[307] + [101] -> [ate] (token 525)
+[260] + [315] -> [ say] (token 526)
+[296] + [264] -> [ here] (token 527)
+[413] + [297] -> [ love] (token 528)
+[268] + [317] -> [ their] (token 529)
+[260] + [119] -> [ sw] (token 530)
+[269] + [114] -> [ br] (token 531)
+[112] + [112] -> [pp] (token 532)
+[32] + [271] -> [ or] (token 533)
+[97] + [275] -> [all] (token 534)
+[45] + [45] -> [--] (token 535)
+[32] + [83] -> [ S] (token 536)
+[256] + [414] -> [ than] (token 537)
+[351] + [302] -> [ king] (token 538)
+[268] + [110] -> [ then] (token 539)
+[333] + [115] -> [ us] (token 540)
+[32] + [79] -> [ O] (token 541)
+[268] + [121] -> [ they] (token 542)
+[32] + [66] -> [ B] (token 543)
+[258] + [114] -> [ ar] (token 544)
+[111] + [100] -> [od] (token 545)
+[77] + [121] -> [My] (token 546)
+[284] + [318] -> [ let] (token 547)
+[333] + [110] -> [ un] (token 548)
+[105] + [103] -> [ig] (token 549)
+[263] + [271] -> [ wor] (token 550)
+[117] + [264] -> [ure] (token 551)
+[262] + [107] -> [ink] (token 552)
+[32] + [72] -> [ H] (token 553)
+[271] + [116] -> [ort] (token 554)
+[104] + [121] -> [hy] (token 555)
+[392] + [101] -> [ame] (token 556)
+[32] + [86] -> [ V] (token 557)
+[102] + [376] -> [fore] (token 558)
+[65] + [115] -> [As] (token 559)
+[261] + [315] -> [ may] (token 560)
+[101] + [108] -> [el] (token 561)
+[280] + [352] -> [ come] (token 562)
+[32] + [452] -> [ qu] (token 563)
+[336] + [107] -> [ook] (token 564)
+[87] + [257] -> [Whe] (token 565)
+[270] + [104] -> [ish] (token 566)
+[76] + [73] -> [LI] (token 567)
+[335] + [275] -> [ well] (token 568)
+[75] + [69] -> [KE] (token 569)
+[118] + [281] -> [ves] (token 570)
+[32] + [106] -> [ j] (token 571)
+[375] + [101] -> [ one] (token 572)
+[507] + [104] -> [ hath] (token 573)
+[317] + [299] -> [irst] (token 574)
+[89] + [259] -> [You] (token 575)
+[261] + [404] -> [ make] (token 576)
+[264] + [307] -> [reat] (token 577)
+[103] + [383] -> [gain] (token 578)
+[97] + [107] -> [ak] (token 579)
+[261] + [463] -> [ must] (token 580)
+[259] + [267] -> [ound] (token 581)
+[110] + [103] -> [ng] (token 582)
+[306] + [364] -> [ gra] (token 583)
+[335] + [264] -> [ were] (token 584)
+[289] + [111] -> [ ho] (token 585)
+[99] + [105] -> [ci] (token 586)
+[399] + [101] -> [ see] (token 587)
+[365] + [332] -> [ like] (token 588)
+[117] + [101] -> [ue] (token 589)
+[389] + [107] -> [eak] (token 590)
+[443] + [380] -> [ should] (token 591)
+[84] + [371] -> [TIO] (token 592)
+[276] + [121] -> [ity] (token 593)
+[293] + [377] -> [ pro] (token 594)
+[261] + [346] -> [ mad] (token 595)
+[260] + [97] -> [ sa] (token 596)
+[32] + [80] -> [ P] (token 597)
+[117] + [109] -> [um] (token 598)
+[293] + [108] -> [ pl] (token 599)
+[273] + [521] -> [ father] (token 600)
+[82] + [79] -> [RO] (token 601)
+[65] + [85] -> [AU] (token 602)
+[313] + [100] -> [ had] (token 603)
+[279] + [357] -> [ did] (token 604)
+[112] + [101] -> [pe] (token 605)
+[322] + [101] -> [ime] (token 606)
+[450] + [277] -> [ upon] (token 607)
+[105] + [312] -> [ice] (token 608)
+[291] + [111] -> [ too] (token 609)
+[79] + [78] -> [ON] (token 610)
+[282] + [312] -> [ence] (token 611)
+[32] + [87] -> [ W] (token 612)
+[119] + [412] -> [ward] (token 613)
+[270] + [116] -> [ist] (token 614)
+[374] + [458] -> [ death] (token 615)
+[301] + [110] -> [own] (token 616)
+[32] + [282] -> [ en] (token 617)
+[111] + [309] -> [ose] (token 618)
+[109] + [303] -> [man] (token 619)
+[117] + [110] -> [un] (token 620)
+[102] + [445] -> [ful] (token 621)
+[73] + [83] -> [IS] (token 622)
+[110] + [312] -> [nce] (token 623)
+[417] + [590] -> [ speak] (token 624)
+[32] + [114] -> [ r] (token 625)
+[293] + [111] -> [ po] (token 626)
+[100] + [101] -> [de] (token 627)
+[343] + [314] -> [entle] (token 628)
+[32] + [496] -> [ out] (token 629)
+[105] + [111] -> [io] (token 630)
+[263] + [461] -> [ which] (token 631)
+[112] + [116] -> [pt] (token 632)
+[497] + [72] -> [ICH] (token 633)
+[273] + [347] -> [ fri] (token 634)
+[79] + [76] -> [OL] (token 635)
+[258] + [578] -> [ again] (token 636)
+[68] + [85] -> [DU] (token 637)
+[637] + [569] -> [DUKE] (token 638)
+[289] + [301] -> [ how] (token 639)
+[69] + [76] -> [EL] (token 640)
+[32] + [65] -> [ A] (token 641)
+[296] + [454] -> [ heart] (token 642)
+[256] + [407] -> [ tru] (token 643)
+[105] + [382] -> [ick] (token 644)
+[313] + [267] -> [ hand] (token 645)
+[285] + [318] -> [ yet] (token 646)
+[67] + [65] -> [CA] (token 647)
+[384] + [121] -> [very] (token 648)
+[633] + [520] -> [ICHARD] (token 649)
+[402] + [259] -> [Thou] (token 650)
+[355] + [592] -> [ENTIO] (token 651)
+[87] + [323] -> [With] (token 652)
+[549] + [110] -> [ign] (token 653)
+[303] + [312] -> [ance] (token 654)
+[260] + [352] -> [ some] (token 655)
+[263] + [430] -> [ who] (token 656)
+[87] + [461] -> [Which] (token 657)
+[73] + [102] -> [If] (token 658)
+[472] + [110] -> [ when] (token 659)
+[105] + [281] -> [ies] (token 660)
+[261] + [288] -> [ mar] (token 661)
+[105] + [264] -> [ire] (token 662)
+[289] + [277] -> [ hon] (token 663)
+[261] + [459] -> [ mine] (token 664)
+[271] + [110] -> [orn] (token 665)
+[265] + [114] -> [har] (token 666)
+[304] + [102] -> [ off] (token 667)
+[262] + [312] -> [ince] (token 668)
+[362] + [67] -> [INC] (token 669)
+[97] + [382] -> [ack] (token 670)
+[73] + [110] -> [In] (token 671)
+[32] + [89] -> [ Y] (token 672)
+[279] + [270] -> [ dis] (token 673)
+[260] + [277] -> [ son] (token 674)
+[258] + [108] -> [ al] (token 675)
+[39] + [116] -> ['t] (token 676)
+[87] + [101] -> [We] (token 677)
+[119] + [110] -> [wn] (token 678)
+[296] + [97] -> [ hea] (token 679)
+[117] + [326] -> [uch] (token 680)
+[70] + [574] -> [First] (token 681)
+[111] + [121] -> [oy] (token 682)
+[296] + [288] -> [ hear] (token 683)
+[256] + [606] -> [ time] (token 684)
+[101] + [99] -> [ec] (token 685)
+[403] + [326] -> [ such] (token 686)
+[65] + [66] -> [AB] (token 687)
+[110] + [388] -> [ness] (token 688)
+[531] + [500] -> [ brother] (token 689)
+[76] + [65] -> [LA] (token 690)
+[79] + [102] -> [Of] (token 691)
+[486] + [381] -> [ blood] (token 692)
+[276] + [339] -> [ither] (token 693)
+[258] + [98] -> [ ab] (token 694)
+[268] + [309] -> [ these] (token 695)
+[87] + [555] -> [Why] (token 696)
+[85] + [69] -> [UE] (token 697)
+[78] + [111] -> [No] (token 698)
+[306] + [484] -> [ give] (token 699)
+[273] + [111] -> [ fo] (token 700)
+[279] + [315] -> [ day] (token 701)
+[338] + [288] -> [ ear] (token 702)
+[433] + [649] -> [ RICHARD] (token 703)
+[295] + [73] -> [ II] (token 704)
+[270] + [101] -> [ise] (token 705)
+[338] + [120] -> [ ex] (token 706)
+[32] + [377] -> [ ro] (token 707)
+[365] + [522] -> [ life] (token 708)
+[449] + [84] -> [EST] (token 709)
+[256] + [415] -> [ tell] (token 710)
+[101] + [318] -> [eet] (token 711)
+[287] + [552] -> [ think] (token 712)
+[83] + [111] -> [So] (token 713)
+[284] + [564] -> [ look] (token 714)
+[423] + [72] -> [UCH] (token 715)
+[263] + [356] -> [ word] (token 716)
+[472] + [264] -> [ where] (token 717)
+[338] + [121] -> [ ey] (token 718)
+[402] + [270] -> [This] (token 719)
+[259] + [108] -> [oul] (token 720)
+[116] + [339] -> [ther] (token 721)
+[97] + [400] -> [age] (token 722)
+[97] + [103] -> [ag] (token 723)
+[101] + [282] -> [een] (token 724)
+[634] + [476] -> [ friend] (token 725)
+[256] + [404] -> [ take] (token 726)
+[71] + [510] -> [GLO] (token 727)
+[727] + [423] -> [GLOUC] (token 728)
+[728] + [709] -> [GLOUCEST] (token 729)
+[729] + [436] -> [GLOUCESTER] (token 730)
+[101] + [102] -> [ef] (token 731)
+[274] + [118] -> [erv] (token 732)
+[346] + [121] -> [ady] (token 733)
+[457] + [110] -> [rown] (token 734)
+[302] + [115] -> [ings] (token 735)
+[279] + [281] -> [ des] (token 736)
+[110] + [298] -> [not] (token 737)
+[97] + [297] -> [ave] (token 738)
+[368] + [309] -> [urse] (token 739)
+[306] + [628] -> [ gentle] (token 740)
+[32] + [347] -> [ ri] (token 741)
+[72] + [301] -> [How] (token 742)
+[82] + [89] -> [RY] (token 743)
+[97] + [309] -> [ase] (token 744)
+[119] + [315] -> [way] (token 745)
+[81] + [697] -> [QUE] (token 746)
+[746] + [355] -> [QUEEN] (token 747)
+[669] + [651] -> [INCENTIO] (token 748)
+[284] + [389] -> [ lea] (token 749)
+[116] + [270] -> [tis] (token 750)
+[541] + [70] -> [ OF] (token 751)
+[544] + [116] -> [ art] (token 752)
+[261] + [509] -> [ most] (token 753)
+[565] + [264] -> [Where] (token 754)
+[663] + [334] -> [ honour] (token 755)
+[261] + [680] -> [ much] (token 756)
+[76] + [432] -> [LAN] (token 757)
+[260] + [108] -> [ sl] (token 758)
+[263] + [288] -> [ war] (token 759)
+[273] + [108] -> [ fl] (token 760)
+[368] + [110] -> [urn] (token 761)
+[595] + [101] -> [ made] (token 762)
+[109] + [343] -> [ment] (token 763)
+[78] + [301] -> [Now] (token 764)
+[313] + [299] -> [ hast] (token 765)
+[273] + [416] -> [ fear] (token 766)
+[256] + [119] -> [ tw] (token 767)
+[32] + [84] -> [ T] (token 768)
+[308] + [116] -> [ bet] (token 769)
+[499] + [354] -> [aught] (token 770)
+[355] + [743] -> [ENRY] (token 771)
+[73] + [115] -> [Is] (token 772)
+[102] + [102] -> [ff] (token 773)
+[259] + [329] -> [ough] (token 774)
+[98] + [274] -> [ber] (token 775)
+[488] + [545] -> [ God] (token 776)
+[76] + [69] -> [LE] (token 777)
+[297] + [100] -> [ved] (token 778)
+[269] + [264] -> [ bre] (token 779)
+[99] + [99] -> [cc] (token 780)
+[428] + [384] -> [ never] (token 781)
+[301] + [274] -> [ower] (token 782)
+[557] + [748] -> [ VINCENTIO] (token 783)
+[66] + [101] -> [Be] (token 784)
+[97] + [112] -> [ap] (token 785)
+[105] + [329] -> [igh] (token 786)
+[306] + [577] -> [ great] (token 787)
+[420] + [317] -> [ fair] (token 788)
+[32] + [75] -> [ K] (token 789)
+[280] + [259] -> [ cou] (token 790)
+[261] + [282] -> [ men] (token 791)
+[276] + [116] -> [itt] (token 792)
+[87] + [430] -> [Who] (token 793)
+[101] + [101] -> [ee] (token 794)
+[433] + [352] -> [ Rome] (token 795)
+[428] + [119] -> [ new] (token 796)
+[437] + [274] -> [aster] (token 797)
+[271] + [457] -> [orrow] (token 798)
+[117] + [332] -> [uke] (token 799)
+[105] + [122] -> [iz] (token 800)
+[111] + [316] -> [old] (token 801)
+[438] + [75] -> [ORK] (token 802)
+[293] + [454] -> [ part] (token 803)
+[307] + [408] -> [ation] (token 804)
+[362] + [517] -> [INIUS] (token 805)
+[357] + [101] -> [ide] (token 806)
+[264] + [101] -> [ree] (token 807)
+[115] + [115] -> [ss] (token 808)
+[39] + [274] -> ['er] (token 809)
+[79] + [114] -> [Or] (token 810)
+[280] + [534] -> [ call] (token 811)
+[410] + [121] -> [ any] (token 812)
+[112] + [314] -> [ple] (token 813)
+[679] + [487] -> [ heaven] (token 814)
+[258] + [100] -> [ ad] (token 815)
+[467] + [109] -> [ comm] (token 816)
+[515] + [737] -> [ cannot] (token 817)
+[89] + [334] -> [Your] (token 818)
+[73] + [116] -> [It] (token 819)
+[349] + [396] -> [ stand] (token 820)
+[643] + [101] -> [ true] (token 821)
+[39] + [84] -> ['T] (token 822)
+[308] + [282] -> [ been] (token 823)
+[416] + [115] -> [ears] (token 824)
+[283] + [556] -> [ name] (token 825)
+[68] + [87] -> [DW] (token 826)
+[826] + [520] -> [DWARD] (token 827)
+[280] + [108] -> [ cl] (token 828)
+[293] + [264] -> [ pre] (token 829)
+[530] + [711] -> [ sweet] (token 830)
+[466] + [315] -> [ pray] (token 831)
+[44] + [535] -> [,--] (token 832)
+[279] + [501] -> [ doth] (token 833)
+[104] + [302] -> [hing] (token 834)
+[393] + [479] -> [ noble] (token 835)
+[85] + [77] -> [UM] (token 836)
+[80] + [447] -> [PET] (token 837)
+[290] + [678] -> [ own] (token 838)
+[77] + [355] -> [MEN] (token 839)
+[293] + [314] -> [ ple] (token 840)
+[358] + [115] -> [ass] (token 841)
+[84] + [72] -> [TH] (token 842)
+[76] + [423] -> [LUC] (token 843)
+[259] + [309] -> [ouse] (token 844)
+[293] + [274] -> [ per] (token 845)
+[32] + [68] -> [ D] (token 846)
+[67] + [352] -> [Come] (token 847)
+[359] + [264] -> [There] (token 848)
+[65] + [121] -> [Ay] (token 849)
+[117] + [275] -> [ull] (token 850)
+[279] + [465] -> [ done] (token 851)
+[398] + [101] -> [ife] (token 852)
+[263] + [114] -> [ wr] (token 853)
+[256] + [114] -> [ tr] (token 854)
+[97] + [119] -> [aw] (token 855)
+[263] + [315] -> [ way] (token 856)
+[290] + [721] -> [ other] (token 857)
+[296] + [346] -> [ head] (token 858)
+[321] + [303] -> [ mean] (token 859)
+[108] + [105] -> [li] (token 860)
+[565] + [110] -> [When] (token 861)
+[264] + [100] -> [red] (token 862)
+[283] + [271] -> [ nor] (token 863)
+[100] + [613] -> [dward] (token 864)
+[260] + [99] -> [ sc] (token 865)
+[293] + [524] -> [ pres] (token 866)
+[260] + [720] -> [ soul] (token 867)
+[601] + [77] -> [ROM] (token 868)
+[868] + [69] -> [ROME] (token 869)
+[869] + [79] -> [ROMEO] (token 870)
+[839] + [355] -> [MENEN] (token 871)
+[871] + [517] -> [MENENIUS] (token 872)
+[308] + [288] -> [ bear] (token 873)
+[550] + [316] -> [ world] (token 874)
+[97] + [312] -> [ace] (token 875)
+[383] + [116] -> [aint] (token 876)
+[283] + [442] -> [ night] (token 877)
+[118] + [302] -> [ving] (token 878)
+[427] + [108] -> [ Cl] (token 879)
+[499] + [309] -> [ause] (token 880)
+[103] + [274] -> [ger] (token 881)
+[308] + [558] -> [ before] (token 882)
+[269] + [501] -> [ both] (token 883)
+[563] + [724] -> [ queen] (token 884)
+[112] + [274] -> [per] (token 885)
+[770] + [274] -> [aughter] (token 886)
+[280] + [379] -> [ chi] (token 887)
+[261] + [111] -> [ mo] (token 888)
+[502] + [264] -> [Here] (token 889)
+[359] + [110] -> [Then] (token 890)
+[837] + [82] -> [PETR] (token 891)
+[891] + [715] -> [PETRUCH] (token 892)
+[892] + [371] -> [PETRUCHIO] (token 893)
+[32] + [648] -> [ very] (token 894)
+[97] + [479] -> [able] (token 895)
+[79] + [77] -> [OM] (token 896)
+[374] + [346] -> [ dead] (token 897)
+[84] + [449] -> [TES] (token 898)
+[32] + [364] -> [ ra] (token 899)
+[276] + [101] -> [ite] (token 900)
+[66] + [121] -> [By] (token 901)
+[116] + [111] -> [to] (token 902)
+[116] + [257] -> [the] (token 903)
+[32] + [332] -> [ ke] (token 904)
+[108] + [281] -> [les] (token 905)
+[97] + [98] -> [ab] (token 906)
+[84] + [414] -> [Than] (token 907)
+[279] + [616] -> [ down] (token 908)
+[32] + [70] -> [ F] (token 909)
+[478] + [116] -> [ cont] (token 910)
+[258] + [532] -> [ app] (token 911)
+[310] + [519] -> [ myself] (token 912)
+[544] + [109] -> [ arm] (token 913)
+[360] + [109] -> [ rem] (token 914)
+[263] + [104] -> [ wh] (token 915)
+[506] + [356] -> [ Lord] (token 916)
+[72] + [65] -> [HA] (token 917)
+[71] + [82] -> [GR] (token 918)
+[287] + [395] -> [ thus] (token 919)
+[424] + [116] -> [ilt] (token 920)
+[438] + [371] -> [ORIO] (token 921)
+[921] + [757] -> [ORIOLAN] (token 922)
+[922] + [397] -> [ORIOLANUS] (token 923)
+[83] + [685] -> [Sec] (token 924)
+[924] + [523] -> [Second] (token 925)
+[749] + [297] -> [ leave] (token 926)
+[67] + [923] -> [CORIOLANUS] (token 927)
+[308] + [302] -> [ being] (token 928)
+[439] + [408] -> [ction] (token 929)
+[108] + [111] -> [lo] (token 930)
+[473] + [864] -> [ Edward] (token 931)
+[333] + [462] -> [ unt] (token 932)
+[115] + [119] -> [sw] (token 933)
+[583] + [312] -> [ grace] (token 934)
+[78] + [271] -> [Nor] (token 935)
+[524] + [115] -> [ress] (token 936)
+[718] + [281] -> [ eyes] (token 937)
+[108] + [388] -> [less] (token 938)
+[308] + [103] -> [ beg] (token 939)
+[261] + [500] -> [ mother] (token 940)
+[108] + [396] -> [land] (token 941)
+[314] + [100] -> [led] (token 942)
+[66] + [65] -> [BA] (token 943)
+[114] + [303] -> [ran] (token 944)
+[290] + [316] -> [ old] (token 945)
+[261] + [97] -> [ ma] (token 946)
+[32] + [322] -> [ im] (token 947)
+[473] + [827] -> [ EDWARD] (token 948)
+[362] + [65] -> [INA] (token 949)
+[276] + [800] -> [itiz] (token 950)
+[950] + [282] -> [itizen] (token 951)
+[470] + [288] -> [ Mar] (token 952)
+[338] + [384] -> [ ever] (token 953)
+[112] + [115] -> [ps] (token 954)
+[284] + [482] -> [ long] (token 955)
+[365] + [297] -> [ live] (token 956)
+[887] + [316] -> [ child] (token 957)
+[76] + [318] -> [Let] (token 958)
+[263] + [852] -> [ wife] (token 959)
+[109] + [101] -> [me] (token 960)
+[258] + [745] -> [ away] (token 961)
+[360] + [112] -> [ rep] (token 962)
+[83] + [257] -> [She] (token 963)
+[704] + [73] -> [ III] (token 964)
+[626] + [271] -> [ poor] (token 965)
+[725] + [115] -> [ friends] (token 966)
+[263] + [305] -> [ wom] (token 967)
+[261] + [442] -> [ might] (token 968)
+[99] + [352] -> [come] (token 969)
+[258] + [102] -> [ af] (token 970)
+[102] + [271] -> [for] (token 971)
+[119] + [644] -> [wick] (token 972)
+[349] + [315] -> [ stay] (token 973)
+[267] + [274] -> [nder] (token 974)
+[389] + [312] -> [eace] (token 975)
+[279] + [483] -> [ die] (token 976)
+[259] + [100] -> [oud] (token 977)
+[107] + [115] -> [ks] (token 978)
+[307] + [326] -> [atch] (token 979)
+[467] + [281] -> [ comes] (token 980)
+[32] + [407] -> [ ru] (token 981)
+[32] + [74] -> [ J] (token 982)
+[478] + [115] -> [ cons] (token 983)
+[288] + [972] -> [arwick] (token 984)
+[469] + [121] -> [ many] (token 985)
+[301] + [115] -> [ows] (token 986)
+[280] + [734] -> [ crown] (token 987)
+[293] + [101] -> [ pe] (token 988)
+[284] + [101] -> [ le] (token 989)
+[265] + [275] -> [hall] (token 990)
+[270] + [277] -> [ison] (token 991)
+[672] + [802] -> [ YORK] (token 992)
+[360] + [299] -> [ rest] (token 993)
+[348] + [354] -> [ thought] (token 994)
+[270] + [115] -> [iss] (token 995)
+[117] + [382] -> [uck] (token 996)
+[313] + [114] -> [ har] (token 997)
+[289] + [844] -> [ house] (token 998)
+[622] + [687] -> [ISAB] (token 999)
+[999] + [640] -> [ISABEL] (token 1000)
+[1000] + [690] -> [ISABELLA] (token 1001)
+[280] + [334] -> [ cour] (token 1002)
+[105] + [303] -> [ian] (token 1003)
+[32] + [343] -> [ ent] (token 1004)
+[365] + [101] -> [ lie] (token 1005)
+[82] + [432] -> [RAN] (token 1006)
+[260] + [318] -> [ set] (token 1007)
+[99] + [257] -> [che] (token 1008)
+[307] + [411] -> [atter] (token 1009)
+[271] + [115] -> [ors] (token 1010)
+[274] + [99] -> [erc] (token 1011)
+[266] + [10] -> [:\u000a\u000a] (token 1012)
+[119] + [415] -> [well] (token 1013)
+[612] + [984] -> [ Warwick] (token 1014)
+[74] + [85] -> [JU] (token 1015)
+[1015] + [567] -> [JULI] (token 1016)
+[1016] + [447] -> [JULIET] (token 1017)
+[777] + [610] -> [LEON] (token 1018)
+[1018] + [898] -> [LEONTES] (token 1019)
+[78] + [315] -> [Nay] (token 1020)
+[792] + [314] -> [ittle] (token 1021)
+[262] + [116] -> [int] (token 1022)
+[306] + [465] -> [ gone] (token 1023)
+[279] + [886] -> [ daughter] (token 1024)
+[769] + [411] -> [ better] (token 1025)
+[114] + [448] -> [rant] (token 1026)
+[259] + [354] -> [ought] (token 1027)
+[466] + [668] -> [ prince] (token 1028)
+[77] + [73] -> [MI] (token 1029)
+[256] + [482] -> [ tong] (token 1030)
+[72] + [270] -> [His] (token 1031)
+[325] + [834] -> [ nothing] (token 1032)
+[68] + [89] -> [DY] (token 1033)
+[86] + [635] -> [VOL] (token 1034)
+[355] + [67] -> [ENC] (token 1035)
+[1035] + [69] -> [ENCE] (token 1036)
+[690] + [1033] -> [LADY] (token 1037)
+[105] + [319] -> [ied] (token 1038)
+[904] + [518] -> [ keep] (token 1039)
+[66] + [82] -> [BR] (token 1040)
+[84] + [65] -> [TA] (token 1041)
+[263] + [276] -> [ wit] (token 1042)
+[360] + [115] -> [ res] (token 1043)
+[105] + [440] -> [ious] (token 1044)
+[87] + [415] -> [Well] (token 1045)
+[99] + [281] -> [ces] (token 1046)
+[111] + [115] -> [os] (token 1047)
+[71] + [111] -> [Go] (token 1048)
+[796] + [115] -> [ news] (token 1049)
+[666] + [100] -> [hard] (token 1050)
+[260] + [314] -> [ sle] (token 1051)
+[102] + [116] -> [ft] (token 1052)
+[277] + [116] -> [ont] (token 1053)
+[105] + [274] -> [ier] (token 1054)
+[264] + [116] -> [ret] (token 1055)
+[256] + [347] -> [ tri] (token 1056)
+[83] + [497] -> [SIC] (token 1057)
+[1057] + [805] -> [SICINIUS] (token 1058)
+[336] + [108] -> [ool] (token 1059)
+[620] + [101] -> [une] (token 1060)
+[287] + [618] -> [ those] (token 1061)
+[306] + [347] -> [ gri] (token 1062)
+[636] + [299] -> [ against] (token 1063)
+[284] + [1021] -> [ little] (token 1064)
+[78] + [298] -> [Not] (token 1065)
+[460] + [115] -> [ lords] (token 1066)
+[579] + [281] -> [akes] (token 1067)
+[269] + [385] -> [ best] (token 1068)
+[296] + [623] -> [ hence] (token 1069)
+[289] + [334] -> [ hour] (token 1070)
+[412] + [277] -> [ardon] (token 1071)
+[102] + [356] -> [ford] (token 1072)
+[258] + [780] -> [ acc] (token 1073)
+[445] + [116] -> [ult] (token 1074)
+[309] + [100] -> [sed] (token 1075)
+[700] + [275] -> [ foll] (token 1076)
+[108] + [309] -> [lse] (token 1077)
+[420] + [312] -> [ face] (token 1078)
+[79] + [110] -> [On] (token 1079)
+[338] + [267] -> [ end] (token 1080)
+[117] + [100] -> [ud] (token 1081)
+[288] + [107] -> [ark] (token 1082)
+[101] + [119] -> [ew] (token 1083)
+[292] + [582] -> [ young] (token 1084)
+[483] + [316] -> [ield] (token 1085)
+[351] + [511] -> [ kind] (token 1086)
+[287] + [302] -> [ thing] (token 1087)
+[349] + [337] -> [ still] (token 1088)
+[271] + [107] -> [ork] (token 1089)
+[293] + [347] -> [ pri] (token 1090)
+[370] + [107] -> [alk] (token 1091)
+[293] + [368] -> [ pur] (token 1092)
+[467] + [112] -> [ comp] (token 1093)
+[402] + [121] -> [Thy] (token 1094)
+[83] + [84] -> [ST] (token 1095)
+[843] + [371] -> [LUCIO] (token 1096)
+[97] + [314] -> [ale] (token 1097)
+[262] + [115] -> [ins] (token 1098)
+[293] + [782] -> [ power] (token 1099)
+[293] + [320] -> [ put] (token 1100)
+[767] + [111] -> [ two] (token 1101)
+[477] + [1050] -> [ichard] (token 1102)
+[295] + [86] -> [ IV] (token 1103)
+[367] + [519] -> [ himself] (token 1104)
+[280] + [265] -> [ cha] (token 1105)
+[274] + [116] -> [ert] (token 1106)
+[306] + [117] -> [ gu] (token 1107)
+[374] + [288] -> [ dear] (token 1108)
+[273] + [574] -> [ first] (token 1109)
+[262] + [388] -> [iness] (token 1110)
+[293] + [975] -> [ peace] (token 1111)
+[338] + [1077] -> [ else] (token 1112)
+[99] + [108] -> [cl] (token 1113)
+[80] + [377] -> [Pro] (token 1114)
+[347] + [319] -> [ried] (token 1115)
+[586] + [440] -> [cious] (token 1116)
+[379] + [314] -> [hile] (token 1117)
+[932] + [111] -> [ unto] (token 1118)
+[83] + [317] -> [Sir] (token 1119)
+[97] + [424] -> [ail] (token 1120)
+[403] + [98] -> [ sub] (token 1121)
+[358] + [277] -> [ason] (token 1122)
+[256] + [337] -> [ till] (token 1123)
+[260] + [109] -> [ sm] (token 1124)
+[105] + [314] -> [ile] (token 1125)
+[45] + [109] -> [-m] (token 1126)
+[114] + [315] -> [ray] (token 1127)
+[320] + [121] -> [uty] (token 1128)
+[101] + [439] -> [ect] (token 1129)
+[790] + [462] -> [ count] (token 1130)
+[280] + [111] -> [ co] (token 1131)
+[269] + [670] -> [ back] (token 1132)
+[716] + [115] -> [ words] (token 1133)
+[289] + [395] -> [ hus] (token 1134)
+[269] + [357] -> [ bid] (token 1135)
+[512] + [558] -> [ therefore] (token 1136)
+[702] + [409] -> [ earth] (token 1137)
+[256] + [364] -> [ tra] (token 1138)
+[279] + [264] -> [ dre] (token 1139)
+[82] + [73] -> [RI] (token 1140)
+[473] + [567] -> [ ELI] (token 1141)
+[1141] + [90] -> [ ELIZ] (token 1142)
+[1142] + [687] -> [ ELIZAB] (token 1143)
+[1143] + [447] -> [ ELIZABET] (token 1144)
+[1144] + [72] -> [ ELIZABETH] (token 1145)
+[105] + [395] -> [ius] (token 1146)
+[111] + [813] -> [ople] (token 1147)
+[280] + [380] -> [ could] (token 1148)
+[72] + [738] -> [Have] (token 1149)
+[1030] + [589] -> [ tongue] (token 1150)
+[273] + [511] -> [ find] (token 1151)
+[98] + [396] -> [band] (token 1152)
+[121] + [370] -> [yal] (token 1153)
+[116] + [121] -> [ty] (token 1154)
+[428] + [319] -> [ need] (token 1155)
+[287] + [459] -> [ thine] (token 1156)
+[284] + [733] -> [ lady] (token 1157)
+[271] + [309] -> [orse] (token 1158)
+[672] + [1089] -> [ York] (token 1159)
+[264] + [110] -> [ren] (token 1160)
+[273] + [415] -> [ fell] (token 1161)
+[289] + [786] -> [ high] (token 1162)
+[331] + [409] -> [ forth] (token 1163)
+[103] + [318] -> [get] (token 1164)
+[116] + [119] -> [tw] (token 1165)
+[585] + [605] -> [ hope] (token 1166)
+[282] + [480] -> [enry] (token 1167)
+[72] + [771] -> [HENRY] (token 1168)
+[296] + [108] -> [ hel] (token 1169)
+[109] + [282] -> [men] (token 1170)
+[83] + [116] -> [St] (token 1171)
+[794] + [326] -> [eech] (token 1172)
+[289] + [352] -> [ home] (token 1173)
+[399] + [491] -> [ seem] (token 1174)
+[1134] + [1152] -> [ husband] (token 1175)
+[318] + [104] -> [eth] (token 1176)
+[297] + [264] -> [vere] (token 1177)
+[77] + [436] -> [MER] (token 1178)
+[795] + [111] -> [ Romeo] (token 1179)
+[741] + [354] -> [ right] (token 1180)
+[67] + [76] -> [CL] (token 1181)
+[279] + [799] -> [ duke] (token 1182)
+[320] + [104] -> [uth] (token 1183)
+[348] + [329] -> [ though] (token 1184)
+[32] + [471] -> [ What] (token 1185)
+[264] + [114] -> [rer] (token 1186)
+[102] + [554] -> [fort] (token 1187)
+[269] + [303] -> [ ban] (token 1188)
+[557] + [73] -> [ VI] (token 1189)
+[71] + [69] -> [GE] (token 1190)
+[87] + [378] -> [WAR] (token 1191)
+[1191] + [87] -> [WARW] (token 1192)
+[1192] + [497] -> [WARWIC] (token 1193)
+[1193] + [75] -> [WARWICK] (token 1194)
+[988] + [1147] -> [ people] (token 1195)
+[280] + [666] -> [ char] (token 1196)
+[270] + [411] -> [ister] (token 1197)
+[269] + [364] -> [ bra] (token 1198)
+[97] + [326] -> [ach] (token 1199)
+[261] + [511] -> [ mind] (token 1200)
+[379] + [112] -> [hip] (token 1201)
+[85] + [84] -> [UT] (token 1202)
+[105] + [120] -> [ix] (token 1203)
+[280] + [257] -> [ che] (token 1204)
+[553] + [771] -> [ HENRY] (token 1205)
+[427] + [951] -> [ Citizen] (token 1206)
+[100] + [115] -> [ds] (token 1207)
+[535] + [10] -> [--\u000a] (token 1208)
+[103] + [319] -> [ged] (token 1209)
+[78] + [739] -> [Nurse] (token 1210)
+[256] + [264] -> [ tre] (token 1211)
+[553] + [1167] -> [ Henry] (token 1212)
+[917] + [77] -> [HAM] (token 1213)
+[443] + [301] -> [ show] (token 1214)
+[359] + [121] -> [They] (token 1215)
+[101] + [319] -> [eed] (token 1216)
+[280] + [414] -> [ chan] (token 1217)
+[478] + [102] -> [ conf] (token 1218)
+[269] + [347] -> [ bri] (token 1219)
+[45] + [100] -> [-d] (token 1220)
+[284] + [855] -> [ law] (token 1221)
+[645] + [115] -> [ hands] (token 1222)
+[433] + [1102] -> [ Richard] (token 1223)
+[80] + [85] -> [PU] (token 1224)
+[1224] + [76] -> [PUL] (token 1225)
+[1225] + [447] -> [PULET] (token 1226)
+[73] + [432] -> [IAN] (token 1227)
+[263] + [555] -> [ why] (token 1228)
+[947] + [112] -> [ imp] (token 1229)
+[375] + [312] -> [ once] (token 1230)
+[596] + [357] -> [ said] (token 1231)
+[306] + [108] -> [ gl] (token 1232)
+[98] + [101] -> [be] (token 1233)
+[280] + [880] -> [ cause] (token 1234)
+[261] + [797] -> [ master] (token 1235)
+[69] + [89] -> [EY] (token 1236)
+[269] + [545] -> [ bod] (token 1237)
+[571] + [682] -> [ joy] (token 1238)
+[283] + [465] -> [ none] (token 1239)
+[71] + [381] -> [Good] (token 1240)
+[732] + [448] -> [ervant] (token 1241)
+[440] + [262] -> [ousin] (token 1242)
+[77] + [371] -> [MIO] (token 1243)
+[65] + [275] -> [All] (token 1244)
+[331] + [116] -> [ fort] (token 1245)
+[83] + [990] -> [Shall] (token 1246)
+[98] + [116] -> [bt] (token 1247)
+[531] + [302] -> [ bring] (token 1248)
+[89] + [318] -> [Yet] (token 1249)
+[338] + [648] -> [ every] (token 1250)
+[307] + [281] -> [ates] (token 1251)
+[1040] + [1202] -> [BRUT] (token 1252)
+[1252] + [397] -> [BRUTUS] (token 1253)
+[279] + [259] -> [ dou] (token 1254)
+[423] + [474] -> [UCKING] (token 1255)
+[1255] + [1213] -> [UCKINGHAM] (token 1256)
+[70] + [429] -> [From] (token 1257)
+[293] + [841] -> [ pass] (token 1258)
+[317] + [100] -> [ird] (token 1259)
+[365] + [354] -> [ light] (token 1260)
+[105] + [318] -> [iet] (token 1261)
+[261] + [614] -> [ mist] (token 1262)
+[66] + [1256] -> [BUCKINGHAM] (token 1263)
+[449] + [83] -> [ESS] (token 1264)
+[543] + [635] -> [ BOL] (token 1265)
+[1265] + [426] -> [ BOLING] (token 1266)
+[1266] + [66] -> [ BOLINGB] (token 1267)
+[1267] + [601] -> [ BOLINGBRO] (token 1268)
+[1268] + [569] -> [ BOLINGBROKE] (token 1269)
+[84] + [1006] -> [TRAN] (token 1270)
+[1270] + [371] -> [TRANIO] (token 1271)
+[283] + [307] -> [ nat] (token 1272)
+[87] + [337] -> [Will] (token 1273)
+[933] + [274] -> [swer] (token 1274)
+[287] + [114] -> [ thr] (token 1275)
+[108] + [116] -> [lt] (token 1276)
+[68] + [111] -> [Do] (token 1277)
+[707] + [1153] -> [ royal] (token 1278)
+[263] + [111] -> [ wo] (token 1279)
+[118] + [509] -> [vost] (token 1280)
+[276] + [115] -> [its] (token 1281)
+[656] + [309] -> [ whose] (token 1282)
+[840] + [744] -> [ please] (token 1283)
+[280] + [556] -> [ came] (token 1284)
+[99] + [314] -> [cle] (token 1285)
+[256] + [824] -> [ tears] (token 1286)
+[470] + [378] -> [ MAR] (token 1287)
+[288] + [121] -> [ary] (token 1288)
+[80] + [436] -> [PER] (token 1289)
+[84] + [622] -> [TIS] (token 1290)
+[271] + [121] -> [ory] (token 1291)
+[377] + [332] -> [roke] (token 1292)
+[118] + [121] -> [vy] (token 1293)
+[108] + [102] -> [lf] (token 1294)
+[293] + [1071] -> [ pardon] (token 1295)
+[641] + [110] -> [ An] (token 1296)
+[296] + [412] -> [ heard] (token 1297)
+[112] + [618] -> [pose] (token 1298)
+[374] + [118] -> [ dev] (token 1299)
+[571] + [463] -> [ just] (token 1300)
+[288] + [480] -> [arry] (token 1301)
+[269] + [281] -> [ bes] (token 1302)
+[45] + [98] -> [-b] (token 1303)
+[866] + [343] -> [ present] (token 1304)
+[269] + [682] -> [ boy] (token 1305)
+[273] + [850] -> [ full] (token 1306)
+[67] + [108] -> [Cl] (token 1307)
+[853] + [482] -> [ wrong] (token 1308)
+[313] + [532] -> [ happ] (token 1309)
+[78] + [69] -> [NE] (token 1310)
+[1287] + [71] -> [ MARG] (token 1311)
+[1311] + [378] -> [ MARGAR] (token 1312)
+[1312] + [447] -> [ MARGARET] (token 1313)
+[261] + [270] -> [ mis] (token 1314)
+[338] + [264] -> [ ere] (token 1315)
+[349] + [525] -> [ state] (token 1316)
+[260] + [668] -> [ since] (token 1317)
+[101] + [561] -> [eel] (token 1318)
+[599] + [875] -> [ place] (token 1319)
+[282] + [115] -> [ens] (token 1320)
+[284] + [437] -> [ last] (token 1321)
+[284] + [396] -> [ land] (token 1322)
+[1029] + [76] -> [MIL] (token 1323)
+[65] + [842] -> [ATH] (token 1324)
+[351] + [337] -> [ kill] (token 1325)
+[115] + [396] -> [sand] (token 1326)
+[109] + [98] -> [mb] (token 1327)
+[111] + [382] -> [ock] (token 1328)
+[321] + [318] -> [ meet] (token 1329)
+[970] + [411] -> [ after] (token 1330)
+[333] + [974] -> [ under] (token 1331)
+[276] + [408] -> [ition] (token 1332)
+[280] + [493] -> [ care] (token 1333)
+[348] + [1326] -> [ thousand] (token 1334)
+[585] + [316] -> [ hold] (token 1335)
+[385] + [121] -> [esty] (token 1336)
+[99] + [343] -> [cent] (token 1337)
+[260] + [798] -> [ sorrow] (token 1338)
+[438] + [68] -> [ORD] (token 1339)
+[918] + [69] -> [GRE] (token 1340)
+[432] + [1190] -> [ANGE] (token 1341)
+[1341] + [510] -> [ANGELO] (token 1342)
+[72] + [438] -> [HOR] (token 1343)
+[1169] + [112] -> [ help] (token 1344)
+[79] + [368] -> [Our] (token 1345)
+[1076] + [301] -> [ follow] (token 1346)
+[915] + [305] -> [ whom] (token 1347)
+[493] + [623] -> [arence] (token 1348)
+[67] + [85] -> [CU] (token 1349)
+[378] + [949] -> [ARINA] (token 1350)
+[586] + [395] -> [cius] (token 1351)
+[617] + [491] -> [ enem] (token 1352)
+[317] + [116] -> [irt] (token 1353)
+[451] + [570] -> [selves] (token 1354)
+[718] + [101] -> [ eye] (token 1355)
+[694] + [496] -> [ about] (token 1356)
+[312] + [484] -> [ceive] (token 1357)
+[289] + [693] -> [ hither] (token 1358)
+[284] + [388] -> [ less] (token 1359)
+[273] + [288] -> [ far] (token 1360)
+[335] + [518] -> [ weep] (token 1361)
+[387] + [960] -> [ shame] (token 1362)
+[75] + [1324] -> [KATH] (token 1363)
+[1363] + [1350] -> [KATHARINA] (token 1364)
+[293] + [307] -> [ pat] (token 1365)
+[277] + [115] -> [ons] (token 1366)
+[410] + [1274] -> [ answer] (token 1367)
+[403] + [110] -> [ sun] (token 1368)
+[105] + [504] -> [iol] (token 1369)
+[273] + [1059] -> [ fool] (token 1370)
+[273] + [370] -> [ fal] (token 1371)
+[368] + [627] -> [urde] (token 1372)
+[358] + [551] -> [asure] (token 1373)
+[97] + [317] -> [air] (token 1374)
+[420] + [275] -> [ fall] (token 1375)
+[946] + [357] -> [ maid] (token 1376)
+[280] + [104] -> [ ch] (token 1377)
+[259] + [462] -> [ount] (token 1378)
+[409] + [121] -> [thy] (token 1379)
+[269] + [395] -> [ bus] (token 1380)
+[507] + [101] -> [ hate] (token 1381)
+[85] + [112] -> [Up] (token 1382)
+[740] + [619] -> [ gentleman] (token 1383)
+[583] + [1116] -> [ gracious] (token 1384)
+[85] + [110] -> [Un] (token 1385)
+[1062] + [731] -> [ grief] (token 1386)
+[280] + [1242] -> [ cousin] (token 1387)
+[789] + [302] -> [ King] (token 1388)
+[449] + [647] -> [ESCA] (token 1389)
+[1389] + [76] -> [ESCAL] (token 1390)
+[1390] + [397] -> [ESCALUS] (token 1391)
+[106] + [1129] -> [ject] (token 1392)
+[261] + [1067] -> [ makes] (token 1393)
+[349] + [347] -> [ stri] (token 1394)
+[111] + [297] -> [ove] (token 1395)
+[322] + [281] -> [imes] (token 1396)
+[311] + [902] -> [ into] (token 1397)
+[65] + [110] -> [An] (token 1398)
+[105] + [316] -> [ild] (token 1399)
+[349] + [264] -> [ stre] (token 1400)
+[105] + [118] -> [iv] (token 1401)
+[72] + [458] -> [Hath] (token 1402)
+[967] + [303] -> [ woman] (token 1403)
+[473] + [582] -> [ Eng] (token 1404)
+[289] + [598] -> [ hum] (token 1405)
+[477] + [281] -> [ices] (token 1406)
+[108] + [302] -> [ling] (token 1407)
+[790] + [110] -> [ coun] (token 1408)
+[1002] + [116] -> [ court] (token 1409)
+[467] + [1187] -> [ comfort] (token 1410)
+[256] + [761] -> [ turn] (token 1411)
+[1051] + [518] -> [ sleep] (token 1412)
+[390] + [299] -> [ dost] (token 1413)
+[370] + [116] -> [alt] (token 1414)
+[1372] + [1186] -> [urderer] (token 1415)
+[846] + [799] -> [ Duke] (token 1416)
+[68] + [715] -> [DUCH] (token 1417)
+[1417] + [1264] -> [DUCHESS] (token 1418)
+[256] + [1091] -> [ talk] (token 1419)
+[1237] + [121] -> [ body] (token 1420)
+[308] + [108] -> [ bel] (token 1421)
+[39] + [10] -> ['\u000a] (token 1422)
+[290] + [384] -> [ over] (token 1423)
+[112] + [339] -> [pher] (token 1424)
+[276] + [271] -> [itor] (token 1425)
+[76] + [356] -> [Lord] (token 1426)
+[952] + [1351] -> [ Marcius] (token 1427)
+[627] + [319] -> [deed] (token 1428)
+[320] + [101] -> [ute] (token 1429)
+[269] + [117] -> [ bu] (token 1430)
+[306] + [114] -> [ gr] (token 1431)
+[263] + [920] -> [ wilt] (token 1432)
+[400] + [930] -> [gelo] (token 1433)
+[483] + [297] -> [ieve] (token 1434)
+[420] + [1074] -> [ fault] (token 1435)
+[468] + [116] -> [ att] (token 1436)
+[105] + [611] -> [ience] (token 1437)
+[32] + [105] -> [ i] (token 1438)
+[73] + [65] -> [IA] (token 1439)
+[308] + [100] -> [ bed] (token 1440)
+[599] + [315] -> [ play] (token 1441)
+[594] + [297] -> [ prove] (token 1442)
+[270] + [319] -> [ised] (token 1443)
+[879] + [1348] -> [ Clarence] (token 1444)
+[647] + [1323] -> [CAMIL] (token 1445)
+[1445] + [510] -> [CAMILLO] (token 1446)
+[303] + [115] -> [ans] (token 1447)
+[374] + [319] -> [ deed] (token 1448)
+[105] + [363] -> [ily] (token 1449)
+[311] + [299] -> [ inst] (token 1450)
+[360] + [116] -> [ ret] (token 1451)
+[335] + [108] -> [ wel] (token 1452)
+[537] + [107] -> [ thank] (token 1453)
+[101] + [264] -> [ere] (token 1454)
+[260] + [581] -> [ sound] (token 1455)
+[279] + [364] -> [ dra] (token 1456)
+[346] + [101] -> [ade] (token 1457)
+[305] + [318] -> [omet] (token 1458)
+[71] + [545] -> [God] (token 1459)
+[45] + [115] -> [-s] (token 1460)
+[311] + [1428] -> [ indeed] (token 1461)
+[260] + [274] -> [ ser] (token 1462)
+[530] + [356] -> [ sword] (token 1463)
+[273] + [442] -> [ fight] (token 1464)
+[430] + [316] -> [hold] (token 1465)
+[1371] + [309] -> [ false] (token 1466)
+[269] + [111] -> [ bo] (token 1467)
+[435] + [111] -> [ vo] (token 1468)
+[337] + [383] -> [illain] (token 1469)
+[1296] + [1433] -> [ Angelo] (token 1470)
+[1343] + [84] -> [HORT] (token 1471)
+[1471] + [355] -> [HORTEN] (token 1472)
+[1472] + [83] -> [HORTENS] (token 1473)
+[338] + [487] -> [ even] (token 1474)
+[1161] + [301] -> [ fellow] (token 1475)
+[83] + [104] -> [Sh] (token 1476)
+[583] + [297] -> [ grave] (token 1477)
+[1382] + [277] -> [Upon] (token 1478)
+[410] + [500] -> [ another] (token 1479)
+[333] + [309] -> [ use] (token 1480)
+[815] + [118] -> [ adv] (token 1481)
+[372] + [1177] -> [ sovere] (token 1482)
+[70] + [1140] -> [FRI] (token 1483)
+[1483] + [378] -> [FRIAR] (token 1484)
+[1114] + [1280] -> [Provost] (token 1485)
+[1473] + [371] -> [HORTENSIO] (token 1486)
+[313] + [115] -> [ has] (token 1487)
+[280] + [368] -> [ cur] (token 1488)
+[368] + [121] -> [ury] (token 1489)
+[1245] + [1060] -> [ fortune] (token 1490)
+[605] + [439] -> [pect] (token 1491)
+[101] + [370] -> [eal] (token 1492)
+[1188] + [566] -> [ banish] (token 1493)
+[943] + [80] -> [BAP] (token 1494)
+[1494] + [1290] -> [BAPTIS] (token 1495)
+[1495] + [1041] -> [BAPTISTA] (token 1496)
+[625] + [521] -> [ rather] (token 1497)
+[360] + [487] -> [ reven] (token 1498)
+[1130] + [480] -> [ country] (token 1499)
+[261] + [1009] -> [ matter] (token 1500)
+[263] + [448] -> [ want] (token 1501)
+[109] + [112] -> [mp] (token 1502)
+[399] + [267] -> [ send] (token 1503)
+[259] + [326] -> [ouch] (token 1504)
+[67] + [896] -> [COM] (token 1505)
+[1505] + [805] -> [COMINIUS] (token 1506)
+[1254] + [1247] -> [ doubt] (token 1507)
+[373] + [115] -> [ ass] (token 1508)
+[112] + [282] -> [pen] (token 1509)
+[522] + [439] -> [fect] (token 1510)
+[466] + [991] -> [ prison] (token 1511)
+[261] + [1011] -> [ merc] (token 1512)
+[602] + [84] -> [AUT] (token 1513)
+[1513] + [635] -> [AUTOL] (token 1514)
+[1514] + [89] -> [AUTOLY] (token 1515)
+[1515] + [67] -> [AUTOLYC] (token 1516)
+[1516] + [397] -> [AUTOLYCUS] (token 1517)
+[435] + [1353] -> [ virt] (token 1518)
+[375] + [363] -> [ only] (token 1519)
+[69] + [487] -> [Even] (token 1520)
+[263] + [566] -> [ wish] (token 1521)
+[77] + [376] -> [More] (token 1522)
+[365] + [281] -> [ lies] (token 1523)
+[854] + [1183] -> [ truth] (token 1524)
+[285] + [824] -> [ years] (token 1525)
+[65] + [264] -> [Are] (token 1526)
+[402] + [1259] -> [Third] (token 1527)
+[360] + [1122] -> [ reason] (token 1528)
+[1126] + [798] -> [-morrow] (token 1529)
+[378] + [1036] -> [ARENCE] (token 1530)
+[87] + [380] -> [Would] (token 1531)
+[779] + [458] -> [ breath] (token 1532)
+[913] + [115] -> [ arms] (token 1533)
+[109] + [115] -> [ms] (token 1534)
+[111] + [102] -> [of] (token 1535)
+[105] + [271] -> [ior] (token 1536)
+[293] + [516] -> [ pers] (token 1537)
+[32] + [453] -> [ But] (token 1538)
+[303] + [121] -> [any] (token 1539)
+[279] + [303] -> [ dan] (token 1540)
+[1424] + [100] -> [pherd] (token 1541)
+[114] + [654] -> [rance] (token 1542)
+[1139] + [392] -> [ dream] (token 1543)
+[1181] + [1530] -> [CLARENCE] (token 1544)
+[1380] + [1110] -> [ business] (token 1545)
+[673] + [99] -> [ disc] (token 1546)
+[282] + [274] -> [ener] (token 1547)
+[77] + [378] -> [MAR] (token 1548)
+[260] + [343] -> [ sent] (token 1549)
+[100] + [100] -> [dd] (token 1550)
+[306] + [105] -> [ gi] (token 1551)
+[349] + [364] -> [ stra] (token 1552)
+[387] + [1276] -> [ shalt] (token 1553)
+[78] + [438] -> [NOR] (token 1554)
+[66] + [355] -> [BEN] (token 1555)
+[1555] + [1034] -> [BENVOL] (token 1556)
+[1556] + [371] -> [BENVOLIO] (token 1557)
+[1307] + [616] -> [Clown] (token 1558)
+[617] + [774] -> [ enough] (token 1559)
+[260] + [282] -> [ sen] (token 1560)
+[257] + [100] -> [hed] (token 1561)
+[65] + [116] -> [At] (token 1562)
+[293] + [429] -> [ prom] (token 1563)
+[816] + [396] -> [ command] (token 1564)
+[65] + [108] -> [Al] (token 1565)
+[732] + [302] -> [erving] (token 1566)
+[585] + [363] -> [ holy] (token 1567)
+[100] + [274] -> [der] (token 1568)
+[918] + [836] -> [GRUM] (token 1569)
+[1569] + [371] -> [GRUMIO] (token 1570)
+[80] + [601] -> [PRO] (token 1571)
+[1571] + [83] -> [PROS] (token 1572)
+[1572] + [1289] -> [PROSPER] (token 1573)
+[1573] + [79] -> [PROSPERO] (token 1574)
+[910] + [343] -> [ content] (token 1575)
+[466] + [977] -> [ proud] (token 1576)
+[280] + [364] -> [ cra] (token 1577)
+[372] + [316] -> [ sold] (token 1578)
+[284] + [315] -> [ lay] (token 1579)
+[313] + [582] -> [ hang] (token 1580)
+[349] + [944] -> [ stran] (token 1581)
+[307] + [271] -> [ator] (token 1582)
+[105] + [97] -> [ia] (token 1583)
+[530] + [416] -> [ swear] (token 1584)
+[293] + [593] -> [ pity] (token 1585)
+[420] + [264] -> [ fare] (token 1586)
+[263] + [511] -> [ wind] (token 1587)
+[417] + [317] -> [ spir] (token 1588)
+[107] + [282] -> [ken] (token 1589)
+[260] + [389] -> [ sea] (token 1590)
+[288] + [115] -> [ars] (token 1591)
+[308] + [97] -> [ bea] (token 1592)
+[470] + [1415] -> [ Murderer] (token 1593)
+[1178] + [1349] -> [MERCU] (token 1594)
+[1594] + [592] -> [MERCUTIO] (token 1595)
+[578] + [299] -> [gainst] (token 1596)
+[1272] + [551] -> [ nature] (token 1597)
+[105] + [332] -> [ike] (token 1598)
+[318] + [274] -> [eter] (token 1599)
+[914] + [491] -> [ remem] (token 1600)
+[98] + [121] -> [by] (token 1601)
+[374] + [112] -> [ dep] (token 1602)
+[1452] + [969] -> [ welcome] (token 1603)
+[399] + [99] -> [ sec] (token 1604)
+[279] + [493] -> [ dare] (token 1605)
+[365] + [570] -> [ lives] (token 1606)
+[435] + [1469] -> [ villain] (token 1607)
+[789] + [525] -> [ Kate] (token 1608)
+[843] + [651] -> [LUCENTIO] (token 1609)
+[492] + [1207] -> [ gods] (token 1610)
+[311] + [116] -> [ int] (token 1611)
+[306] + [318] -> [ get] (token 1612)
+[117] + [462] -> [unt] (token 1613)
+[595] + [392] -> [ madam] (token 1614)
+[99] + [305] -> [com] (token 1615)
+[596] + [119] -> [ saw] (token 1616)
+[427] + [352] -> [ Come] (token 1617)
+[341] + [262] -> [ within] (token 1618)
+[306] + [264] -> [ gre] (token 1619)
+[385] + [274] -> [ester] (token 1620)
+[273] + [807] -> [ free] (token 1621)
+[1482] + [653] -> [ sovereign] (token 1622)
+[351] + [995] -> [ kiss] (token 1623)
+[265] + [109] -> [ham] (token 1624)
+[256] + [476] -> [ tend] (token 1625)
+[1309] + [121] -> [ happy] (token 1626)
+[757] + [68] -> [LAND] (token 1627)
+[80] + [896] -> [POM] (token 1628)
+[1628] + [80] -> [POMP] (token 1629)
+[260] + [732] -> [ serv] (token 1630)
+[280] + [593] -> [ city] (token 1631)
+[384] + [115] -> [vers] (token 1632)
+[1302] + [1172] -> [ beseech] (token 1633)
+[677] + [264] -> [Were] (token 1634)
+[260] + [1458] -> [ somet] (token 1635)
+[265] + [108] -> [hal] (token 1636)
+[97] + [632] -> [apt] (token 1637)
+[260] + [1197] -> [ sister] (token 1638)
+[273] + [720] -> [ foul] (token 1639)
+[80] + [602] -> [PAU] (token 1640)
+[1640] + [76] -> [PAUL] (token 1641)
+[1641] + [949] -> [PAULINA] (token 1642)
+[285] + [1085] -> [ yield] (token 1643)
+[274] + [121] -> [ery] (token 1644)
+[832] + [272] -> [,--\u000a\u000a] (token 1645)
+[307] + [116] -> [att] (token 1646)
+[779] + [579] -> [ break] (token 1647)
+[859] + [115] -> [ means] (token 1648)
+[1164] + [339] -> [gether] (token 1649)
+[523] + [274] -> [onder] (token 1650)
+[345] + [115] -> [ yours] (token 1651)
+[287] + [807] -> [ three] (token 1652)
+[117] + [309] -> [use] (token 1653)
+[105] + [343] -> [ient] (token 1654)
+[723] + [589] -> [ague] (token 1655)
+[1121] + [1392] -> [ subject] (token 1656)
+[279] + [282] -> [ den] (token 1657)
+[290] + [458] -> [ oath] (token 1658)
+[89] + [802] -> [YORK] (token 1659)
+[1629] + [1236] -> [POMPEY] (token 1660)
+[1340] + [1243] -> [GREMIO] (token 1661)
+[263] + [1117] -> [ while] (token 1662)
+[258] + [119] -> [ aw] (token 1663)
+[44] + [39] -> [,'] (token 1664)
+[287] + [735] -> [ things] (token 1665)
+[269] + [665] -> [ born] (token 1666)
+[261] + [274] -> [ mer] (token 1667)
+[1034] + [836] -> [VOLUM] (token 1668)
+[1668] + [78] -> [VOLUMN] (token 1669)
+[1669] + [1439] -> [VOLUMNIA] (token 1670)
+[860] + [332] -> [like] (token 1671)
+[692] + [121] -> [ bloody] (token 1672)
+[289] + [1158] -> [ horse] (token 1673)
+[1008] + [115] -> [ches] (token 1674)
+[731] + [116] -> [eft] (token 1675)
+[714] + [115] -> [ looks] (token 1676)
+[303] + [99] -> [anc] (token 1677)
+[395] + [477] -> [usic] (token 1678)
+[32] + [935] -> [ Nor] (token 1679)
+[121] + [98] -> [yb] (token 1680)
+[1680] + [1414] -> [ybalt] (token 1681)
+[80] + [79] -> [PO] (token 1682)
+[1682] + [567] -> [POLI] (token 1683)
+[1683] + [88] -> [POLIX] (token 1684)
+[1684] + [355] -> [POLIXEN] (token 1685)
+[1685] + [449] -> [POLIXENES] (token 1686)
+[432] + [84] -> [ANT] (token 1687)
+[114] + [482] -> [rong] (token 1688)
+[117] + [112] -> [up] (token 1689)
+[263] + [262] -> [ win] (token 1690)
+[117] + [281] -> [ues] (token 1691)
+[273] + [662] -> [ fire] (token 1692)
+[282] + [881] -> [enger] (token 1693)
+[345] + [519] -> [ yourself] (token 1694)
+[417] + [111] -> [ spo] (token 1695)
+[263] + [581] -> [ wound] (token 1696)
+[946] + [106] -> [ maj] (token 1697)
+[72] + [274] -> [Her] (token 1698)
+[420] + [323] -> [ faith] (token 1699)
+[256] + [491] -> [ tem] (token 1700)
+[403] + [532] -> [ supp] (token 1701)
+[1138] + [1425] -> [ traitor] (token 1702)
+[536] + [1566] -> [ Serving] (token 1703)
+[1703] + [619] -> [ Servingman] (token 1704)
+[1095] + [426] -> [STING] (token 1705)
+[1705] + [83] -> [STINGS] (token 1706)
+[1337] + [630] -> [centio] (token 1707)
+[71] + [610] -> [GON] (token 1708)
+[290] + [98] -> [ ob] (token 1709)
+[816] + [277] -> [ common] (token 1710)
+[661] + [107] -> [ mark] (token 1711)
+[388] + [1693] -> [essenger] (token 1712)
+[279] + [407] -> [ dru] (token 1713)
+[957] + [1160] -> [ children] (token 1714)
+[83] + [315] -> [Say] (token 1715)
+[1106] + [383] -> [ertain] (token 1716)
+[284] + [392] -> [ lam] (token 1717)
+[264] + [109] -> [rem] (token 1718)
+[1262] + [936] -> [ mistress] (token 1719)
+[917] + [1706] -> [HASTINGS] (token 1720)
+[98] + [1292] -> [broke] (token 1721)
+[506] + [602] -> [ LAU] (token 1722)
+[1722] + [82] -> [ LAUR] (token 1723)
+[1723] + [1036] -> [ LAURENCE] (token 1724)
+[374] + [102] -> [ def] (token 1725)
+[435] + [370] -> [ val] (token 1726)
+[971] + [109] -> [form] (token 1727)
+[308] + [307] -> [ beat] (token 1728)
+[280] + [523] -> [ cond] (token 1729)
+[848] + [558] -> [Therefore] (token 1730)
+[360] + [452] -> [ requ] (token 1731)
+[1697] + [1336] -> [ majesty] (token 1732)
+[66] + [89] -> [BY] (token 1733)
+[548] + [1285] -> [ uncle] (token 1734)
+[66] + [436] -> [BER] (token 1735)
+[258] + [773] -> [ aff] (token 1736)
+[284] + [525] -> [ late] (token 1737)
+[291] + [316] -> [ told] (token 1738)
+[260] + [262] -> [ sin] (token 1739)
+[87] + [358] -> [Was] (token 1740)
+[701] + [115] -> [ days] (token 1741)
+[596] + [297] -> [ save] (token 1742)
+[261] + [318] -> [ met] (token 1743)
+[399] + [282] -> [ seen] (token 1744)
+[284] + [1675] -> [ left] (token 1745)
+[76] + [564] -> [Look] (token 1746)
+[372] + [277] -> [ soon] (token 1747)
+[1625] + [274] -> [ tender] (token 1748)
+[1404] + [941] -> [ England] (token 1749)
+[67] + [567] -> [CLI] (token 1750)
+[1750] + [70] -> [CLIF] (token 1751)
+[1751] + [70] -> [CLIFF] (token 1752)
+[1279] + [101] -> [ woe] (token 1753)
+[1554] + [842] -> [NORTH] (token 1754)
+[1754] + [836] -> [NORTHUM] (token 1755)
+[1755] + [1735] -> [NORTHUMBER] (token 1756)
+[1756] + [1627] -> [NORTHUMBERLAND] (token 1757)
+[306] + [1547] -> [ gener] (token 1758)
+[46] + [39] -> [.'] (token 1759)
+[114] + [302] -> [ring] (token 1760)
+[357] + [281] -> [ides] (token 1761)
+[73] + [68] -> [ID] (token 1762)
+[84] + [404] -> [Take] (token 1763)
+[1451] + [761] -> [ return] (token 1764)
+[390] + [281] -> [ does] (token 1765)
+[1586] + [1013] -> [ farewell] (token 1766)
+[101] + [384] -> [ever] (token 1767)
+[1512] + [121] -> [ mercy] (token 1768)
+[260] + [442] -> [ sight] (token 1769)
+[261] + [277] -> [ mon] (token 1770)
+[1220] + [315] -> [-day] (token 1771)
+[357] + [301] -> [idow] (token 1772)
+[112] + [108] -> [pl] (token 1773)
+[1092] + [1298] -> [ purpose] (token 1774)
+[1275] + [774] -> [ through] (token 1775)
+[257] + [115] -> [hes] (token 1776)
+[260] + [276] -> [ sit] (token 1777)
+[620] + [281] -> [unes] (token 1778)
+[100] + [305] -> [dom] (token 1779)
+[650] + [329] -> [Though] (token 1780)
+[116] + [282] -> [ten] (token 1781)
+[759] + [1026] -> [ warrant] (token 1782)
+[1540] + [881] -> [ danger] (token 1783)
+[374] + [518] -> [ deep] (token 1784)
+[700] + [298] -> [ foot] (token 1785)
+[97] + [99] -> [ac] (token 1786)
+[492] + [316] -> [ gold] (token 1787)
+[411] + [115] -> [ters] (token 1788)
+[679] + [1293] -> [ heavy] (token 1789)
+[260] + [346] -> [ sad] (token 1790)
+[264] + [108] -> [rel] (token 1791)
+[661] + [480] -> [ marry] (token 1792)
+[32] + [432] -> [ AN] (token 1793)
+[1793] + [1310] -> [ ANNE] (token 1794)
+[982] + [445] -> [ Jul] (token 1795)
+[105] + [439] -> [ict] (token 1796)
+[118] + [343] -> [vent] (token 1797)
+[117] + [267] -> [und] (token 1798)
+[334] + [115] -> [ours] (token 1799)
+[763] + [115] -> [ments] (token 1800)
+[68] + [357] -> [Did] (token 1801)
+[736] + [274] -> [ deser] (token 1802)
+[280] + [430] -> [ cho] (token 1803)
+[291] + [1649] -> [ together] (token 1804)
+[71] + [484] -> [Give] (token 1805)
+[32] + [337] -> [ ill] (token 1806)
+[306] + [457] -> [ grow] (token 1807)
+[416] + [110] -> [earn] (token 1808)
+[283] + [739] -> [ nurse] (token 1809)
+[403] + [264] -> [ sure] (token 1810)
+[97] + [322] -> [aim] (token 1811)
+[280] + [801] -> [ cold] (token 1812)
+[398] + [1072] -> [ifford] (token 1813)
+[65] + [104] -> [Ah] (token 1814)
+[80] + [82] -> [PR] (token 1815)
+[1815] + [669] -> [PRINC] (token 1816)
+[1816] + [69] -> [PRINCE] (token 1817)
+[647] + [1226] -> [CAPULET] (token 1818)
+[653] + [1536] -> [ignior] (token 1819)
+[312] + [319] -> [ceed] (token 1820)
+[109] + [274] -> [mer] (token 1821)
+[271] + [1369] -> [oriol] (token 1822)
+[493] + [1013] -> [arewell] (token 1823)
+[599] + [996] -> [ pluck] (token 1824)
+[97] + [122] -> [az] (token 1825)
+[962] + [554] -> [ report] (token 1826)
+[99] + [97] -> [ca] (token 1827)
+[115] + [111] -> [so] (token 1828)
+[1588] + [276] -> [ spirit] (token 1829)
+[1421] + [1434] -> [ believe] (token 1830)
+[373] + [107] -> [ ask] (token 1831)
+[45] + [102] -> [-f] (token 1832)
+[341] + [496] -> [ without] (token 1833)
+[395] + [104] -> [ush] (token 1834)
+[256] + [1396] -> [ times] (token 1835)
+[343] + [121] -> [enty] (token 1836)
+[97] + [357] -> [aid] (token 1837)
+[413] + [299] -> [ lost] (token 1838)
+[377] + [808] -> [ross] (token 1839)
+[111] + [1022] -> [oint] (token 1840)
+[1005] + [400] -> [ liege] (token 1841)
+[504] + [302] -> [oling] (token 1842)
+[1842] + [1721] -> [olingbroke] (token 1843)
+[1079] + [101] -> [One] (token 1844)
+[526] + [115] -> [ says] (token 1845)
+[259] + [409] -> [outh] (token 1846)
+[1581] + [400] -> [ strange] (token 1847)
+[383] + [115] -> [ains] (token 1848)
+[258] + [317] -> [ air] (token 1849)
+[318] + [115] -> [ets] (token 1850)
+[398] + [116] -> [ift] (token 1851)
+[258] + [400] -> [ age] (token 1852)
+[263] + [307] -> [ wat] (token 1853)
+[413] + [808] -> [ loss] (token 1854)
+[386] + [519] -> [ thyself] (token 1855)
+[296] + [317] -> [ heir] (token 1856)
+[793] + [309] -> [Whose] (token 1857)
+[120] + [116] -> [xt] (token 1858)
+[45] + [119] -> [-w] (token 1859)
+[543] + [1843] -> [ Bolingbroke] (token 1860)
+[470] + [1053] -> [ Mont] (token 1861)
+[403] + [773] -> [ suff] (token 1862)
+[1476] + [380] -> [Should] (token 1863)
+[280] + [480] -> [ cry] (token 1864)
+[579] + [302] -> [aking] (token 1865)
+[702] + [115] -> [ ears] (token 1866)
+[72] + [346] -> [Had] (token 1867)
+[1004] + [577] -> [ entreat] (token 1868)
+[1537] + [277] -> [ person] (token 1869)
+[110] + [111] -> [no] (token 1870)
+[765] + [101] -> [ haste] (token 1871)
+[312] + [100] -> [ced] (token 1872)
+[105] + [370] -> [ial] (token 1873)
+[1299] + [424] -> [ devil] (token 1874)
+[110] + [274] -> [ner] (token 1875)
+[1431] + [581] -> [ ground] (token 1876)
+[284] + [1808] -> [ learn] (token 1877)
+[879] + [1813] -> [ Clifford] (token 1878)
+[1795] + [1261] -> [ Juliet] (token 1879)
+[65] + [510] -> [ALO] (token 1880)
+[110] + [442] -> [night] (token 1881)
+[305] + [303] -> [oman] (token 1882)
+[76] + [1598] -> [Like] (token 1883)
+[258] + [103] -> [ ag] (token 1884)
+[1600] + [775] -> [ remember] (token 1885)
+[626] + [1022] -> [ point] (token 1886)
+[1300] + [608] -> [ justice] (token 1887)
+[673] + [112] -> [ disp] (token 1888)
+[87] + [104] -> [Wh] (token 1889)
+[769] + [119] -> [ betw] (token 1890)
+[435] + [270] -> [ vis] (token 1891)
+[420] + [299] -> [ fast] (token 1892)
+[261] + [368] -> [ mur] (token 1893)
+[262] + [319] -> [ined] (token 1894)
+[273] + [363] -> [ fly] (token 1895)
+[291] + [613] -> [ toward] (token 1896)
+[1203] + [116] -> [ixt] (token 1897)
+[1552] + [442] -> [ straight] (token 1898)
+[293] + [437] -> [ past] (token 1899)
+[314] + [116] -> [let] (token 1900)
+[758] + [383] -> [ slain] (token 1901)
+[909] + [1542] -> [ France] (token 1902)
+[506] + [117] -> [ Lu] (token 1903)
+[634] + [288] -> [ friar] (token 1904)
+[499] + [100] -> [aud] (token 1905)
+[349] + [1688] -> [ strong] (token 1906)
+[280] + [739] -> [ curse] (token 1907)
+[1450] + [407] -> [ instru] (token 1908)
+[643] + [299] -> [ trust] (token 1909)
+[550] + [1379] -> [ worthy] (token 1910)
+[269] + [801] -> [ bold] (token 1911)
+[602] + [70] -> [AUF] (token 1912)
+[1912] + [1762] -> [AUFID] (token 1913)
+[1913] + [517] -> [AUFIDIUS] (token 1914)
+[359] + [309] -> [These] (token 1915)
+[675] + [465] -> [ alone] (token 1916)
+[83] + [352] -> [Some] (token 1917)
+[563] + [644] -> [ quick] (token 1918)
+[260] + [424] -> [ sil] (token 1919)
+[77] + [315] -> [May] (token 1920)
+[45] + [116] -> [-t] (token 1921)
+[320] + [408] -> [ution] (token 1922)
+[736] + [662] -> [ desire] (token 1923)
+[1630] + [608] -> [ service] (token 1924)
+[283] + [416] -> [ near] (token 1925)
+[32] + [356] -> [ ord] (token 1926)
+[628] + [619] -> [entleman] (token 1927)
+[1592] + [1128] -> [ beauty] (token 1928)
+[427] + [65] -> [ CA] (token 1929)
+[1929] + [1226] -> [ CAPULET] (token 1930)
+[262] + [97] -> [ina] (token 1931)
+[70] + [76] -> [FL] (token 1932)
+[1932] + [438] -> [FLOR] (token 1933)
+[1933] + [73] -> [FLORI] (token 1934)
+[1934] + [90] -> [FLORIZ] (token 1935)
+[1935] + [640] -> [FLORIZEL] (token 1936)
+[1352] + [121] -> [ enemy] (token 1937)
+[1498] + [400] -> [ revenge] (token 1938)
+[535] + [272] -> [--\u000a\u000a] (token 1939)
+[1758] + [370] -> [ general] (token 1940)
+[981] + [110] -> [ run] (token 1941)
+[360] + [733] -> [ ready] (token 1942)
+[103] + [115] -> [gs] (token 1943)
+[531] + [1027] -> [ brought] (token 1944)
+[273] + [581] -> [ found] (token 1945)
+[346] + [392] -> [adam] (token 1946)
+[110] + [302] -> [ning] (token 1947)
+[276] + [257] -> [ithe] (token 1948)
+[997] + [100] -> [ hard] (token 1949)
+[551] + [100] -> [ured] (token 1950)
+[119] + [323] -> [with] (token 1951)
+[256] + [1504] -> [ touch] (token 1952)
+[295] + [115] -> [ Is] (token 1953)
+[626] + [808] -> [ poss] (token 1954)
+[67] + [303] -> [Can] (token 1955)
+[86] + [436] -> [VER] (token 1956)
+[768] + [1681] -> [ Tybalt] (token 1957)
+[83] + [69] -> [SE] (token 1958)
+[371] + [78] -> [ION] (token 1959)
+[1905] + [630] -> [audio] (token 1960)
+[117] + [98] -> [ub] (token 1961)
+[499] + [462] -> [aunt] (token 1962)
+[311] + [102] -> [ inf] (token 1963)
+[393] + [98] -> [ nob] (token 1964)
+[306] + [1026] -> [ grant] (token 1965)
+[536] + [282] -> [ Sen] (token 1966)
+[1966] + [1582] -> [ Senator] (token 1967)
+[552] + [115] -> [inks] (token 1968)
+[413] + [309] -> [ lose] (token 1969)
+[115] + [1201] -> [ship] (token 1970)
+[105] + [479] -> [ible] (token 1971)
+[994] + [115] -> [ thoughts] (token 1972)
+[1196] + [400] -> [ charge] (token 1973)
+[513] + [115] -> [ knows] (token 1974)
+[263] + [336] -> [ woo] (token 1975)
+[598] + [775] -> [umber] (token 1976)
+[72] + [97] -> [Ha] (token 1977)
+[344] + [519] -> [ itself] (token 1978)
+[312] + [632] -> [cept] (token 1979)
+[118] + [111] -> [vo] (token 1980)
+[32] + [889] -> [ Here] (token 1981)
+[661] + [1115] -> [ married] (token 1982)
+[515] + [299] -> [ canst] (token 1983)
+[279] + [1128] -> [ duty] (token 1984)
+[392] + [337] -> [amill] (token 1985)
+[83] + [112] -> [Sp] (token 1986)
+[65] + [1596] -> [Against] (token 1987)
+[32] + [575] -> [ You] (token 1988)
+[374] + [860] -> [ deli] (token 1989)
+[66] + [685] -> [Bec] (token 1990)
+[67] + [517] -> [CIUS] (token 1991)
+[661] + [347] -> [ marri] (token 1992)
+[563] + [288] -> [ quar] (token 1993)
+[328] + [115] -> [ iss] (token 1994)
+[594] + [102] -> [ prof] (token 1995)
+[1008] + [100] -> [ched] (token 1996)
+[417] + [1216] -> [ speed] (token 1997)
+[1400] + [582] -> [ streng] (token 1998)
+[1948] + [101] -> [ithee] (token 1999)
+[820] + [115] -> [ stands] (token 2000)
+[1070] + [115] -> [ hours] (token 2001)
+[832] + [10] -> [,--\u000a] (token 2002)
+[261] + [665] -> [ morn] (token 2003)
+[767] + [1836] -> [ twenty] (token 2004)
+[335] + [288] -> [ wear] (token 2005)
+[1218] + [388] -> [ confess] (token 2006)
+[360] + [346] -> [ read] (token 2007)
+[101] + [518] -> [eep] (token 2008)
+[108] + [259] -> [lou] (token 2009)
+[2009] + [99] -> [louc] (token 2010)
+[117] + [97] -> [ua] (token 2011)
+[82] + [649] -> [RICHARD] (token 2012)
+[963] + [1541] -> [Shepherd] (token 2013)
+[1958] + [943] -> [SEBA] (token 2014)
+[2014] + [1095] -> [SEBAST] (token 2015)
+[2015] + [1227] -> [SEBASTIAN] (token 2016)
+[273] + [368] -> [ fur] (token 2017)
+[522] + [929] -> [fection] (token 2018)
+[311] + [99] -> [ inc] (token 2019)
+[1408] + [451] -> [ counsel] (token 2020)
+[273] + [376] -> [ fore] (token 2021)
+[336] + [112] -> [oop] (token 2022)
+[103] + [117] -> [gu] (token 2023)
+[313] + [1294] -> [ half] (token 2024)
+[273] + [1085] -> [ field] (token 2025)
+[292] + [409] -> [ youth] (token 2026)
+[296] + [275] -> [ hell] (token 2027)
+[561] + [115] -> [els] (token 2028)
+[280] + [288] -> [ car] (token 2029)
+[888] + [382] -> [ mock] (token 2030)
+[598] + [112] -> [ump] (token 2031)
+[293] + [509] -> [ post] (token 2032)
+[706] + [685] -> [ exec] (token 2033)
+[571] + [1081] -> [ jud] (token 2034)
+[279] + [1401] -> [ div] (token 2035)
+[32] + [78] -> [ N] (token 2036)
+[84] + [415] -> [Tell] (token 2037)
+[766] + [621] -> [ fearful] (token 2038)
+[277] + [281] -> [ones] (token 2039)
+[553] + [437] -> [ Hast] (token 2040)
+[996] + [302] -> [ucking] (token 2041)
+[433] + [105] -> [ Ri] (token 2042)
+[504] + [107] -> [olk] (token 2043)
+[79] + [87] -> [OW] (token 2044)
+[1985] + [111] -> [amillo] (token 2045)
+[1043] + [504] -> [ resol] (token 2046)
+[951] + [115] -> [itizens] (token 2047)

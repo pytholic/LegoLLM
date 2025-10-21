@@ -1,0 +1,15 @@
+{
+  "dataset_name": "tiny_shakespeare",
+  "raw_file": "data/raw/tiny_shakespeare/tiny_shakespeare.txt",
+  "processed_dir": "data/processed/tiny_shakespeare",
+  "total_characters": 1115390,
+  "vocab_size": 2048,
+  "tokenizer_type": "regex_bpe",
+  "tokenizer_path": "data/tokenizers/tiny_shakespeare_regex_bpe.json",
+  "total_tokens": 355655,
+  "characters_per_token": 3.14,
+  "train_tokens": 320089,
+  "val_tokens": 35566,
+  "train_split": 0.9,
+  "block_size": 256
+}

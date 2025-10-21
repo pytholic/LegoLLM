@@ -29,10 +29,9 @@ from collections import Counter
 from typing import Final
 
 import regex as rex
-from tqdm import tqdm
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.logging import logger
+from legollm.core.logging import logger, progress_bar
 from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
 
 
@@ -115,7 +114,7 @@ class RegexBPETokenizer(BaseBPETokenizer):
                 tokenizer.load("data/bpe_tokenizer.json")
             ```
         """
-        if vocab_size <= self.INITIAL_VOCAB_SIZE:
+        if vocab_size < self.INITIAL_VOCAB_SIZE:
             raise TokenizerError(
                 f"vocab_size must be at least {self.INITIAL_VOCAB_SIZE}, got {vocab_size}"
             )
@@ -133,26 +132,28 @@ class RegexBPETokenizer(BaseBPETokenizer):
         merges = {}
 
         # Step 4: Iteratively merge the most common pairs
-        for i in tqdm(range(num_merges), desc="Training BPE tokenizer", disable=not verbose):
-            pair_freq = self._compute_pair_freq_chunks(token_ids)
-            pair_id, occurrences = self._find_most_freq_pair(pair_freq)
+        with progress_bar("Training BPE tokenizer", total=num_merges) as (progress, train_task):
+            for i in range(num_merges):
+                pair_freq = self._compute_pair_freq_chunks(token_ids)
+                pair_id, occurrences = self._find_most_freq_pair(pair_freq)
 
-            if pair_id is None:
-                break
+                if pair_id is None:
+                    break
 
-            idx = self.INITIAL_VOCAB_SIZE + i
+                idx = self.INITIAL_VOCAB_SIZE + i
 
-            # merge this pair in ALL chunks
-            token_ids = [self._merge_pair(chunk_ids, pair_id, idx) for chunk_ids in token_ids]
+                # merge this pair in ALL chunks
+                token_ids = [self._merge_pair(chunk_ids, pair_id, idx) for chunk_ids in token_ids]
 
-            # record merge and update vocab
-            merges[pair_id] = idx
-            vocab[idx] = vocab[pair_id[0]] + vocab[pair_id[1]]
+                # record merge and update vocab
+                merges[pair_id] = idx
+                vocab[idx] = vocab[pair_id[0]] + vocab[pair_id[1]]
 
-            if verbose:
-                logger.info(
-                    f"merge {i + 1}/{num_merges}: {pair_id} -> {idx} ({vocab[idx]} had {occurrences} occurrences)"
-                )
+                progress.update(train_task, advance=1)
+                if verbose:
+                    logger.info(
+                        f"merge {i + 1}/{num_merges}: {pair_id} -> {idx} ({vocab[idx]} had {occurrences} occurrences)"
+                    )
 
         self.vocab = vocab
         self.merges = merges
@@ -213,8 +214,12 @@ class RegexBPETokenizer(BaseBPETokenizer):
         while len(token_ids) >= 2:
             pair_freq = self._compute_pair_freq(token_ids)
 
+            if not pair_freq:
+                break
+
             # Find the pair with the lowest merge index (earliest learned)
-            pair_id = min(pair_freq, key=lambda p: self.merges.get(p, float("inf")))  # pyright: ignore
+            # pair_freq is list of ((pair), frequency), so extract pair with p[0]
+            pair_id = min(pair_freq, key=lambda p: self.merges.get(p[0], float("inf")))[0]
 
             # If this pair was not learned during training, stop
             if pair_id not in self.merges:

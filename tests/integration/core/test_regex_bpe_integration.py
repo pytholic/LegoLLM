@@ -206,30 +206,32 @@ The calculation is straightforward!
 class TestRegexBPETokenizerCompressionEfficiency:
     """Test compression efficiency of the tokenizer."""
 
-    def test_compression_ratio(self, sample_corpus: str):
-        """Test that BPE doesn't expand text."""
+    def test_characters_per_token(self, sample_corpus: str):
+        """Test that BPE achieves reasonable compression (chars/token >= 1.0)."""
         tokenizer = RegexBPETokenizer()
         tokenizer.train(sample_corpus, vocab_size=300)
 
         encoded = tokenizer.encode(sample_corpus)
         original_bytes = len(sample_corpus.encode("utf-8"))
-        compressed_tokens = len(encoded)
+        tokens = len(encoded)
+        chars_per_token = original_bytes / tokens
 
-        # Should not expand (may not compress on small text)
-        assert compressed_tokens <= original_bytes
+        # Should compress: more characters per token means better compression
+        assert chars_per_token >= 1.0, f"Expected chars/token >= 1.0, got {chars_per_token:.2f}"
 
-    def test_repeated_text_compression(self):
-        """Test compression on highly repetitive text."""
+    def test_repeated_text_characters_per_token(self):
+        """Test compression on highly repetitive text using chars/token metric."""
         repeated_text = "Hello world! " * 100
         tokenizer = RegexBPETokenizer()
         tokenizer.train(repeated_text, vocab_size=300)
 
         encoded = tokenizer.encode(repeated_text)
         original_bytes = len(repeated_text.encode("utf-8"))
-        compressed_tokens = len(encoded)
+        tokens = len(encoded)
+        chars_per_token = original_bytes / tokens
 
-        # Should not expand on repetitive text
-        assert compressed_tokens <= original_bytes
+        # Should compress well on repetitive text
+        assert chars_per_token >= 1.0, f"Expected chars/token >= 1.0, got {chars_per_token:.2f}"
 
     @pytest.mark.parametrize(
         "vocab_size",
@@ -239,17 +241,43 @@ class TestRegexBPETokenizerCompressionEfficiency:
             pytest.param(400, id="large_vocab"),
         ],
     )
-    def test_vocab_size_affects_compression(self, sample_corpus: str, vocab_size: int):
+    def test_vocab_size_affects_chars_per_token(self, sample_corpus: str, vocab_size: int):
         """Test that tokenizer works with different vocabulary sizes."""
         tokenizer = RegexBPETokenizer()
         tokenizer.train(sample_corpus, vocab_size=vocab_size)
 
         encoded = tokenizer.encode(sample_corpus)
         original_bytes = len(sample_corpus.encode("utf-8"))
-        compression_ratio = len(encoded) / original_bytes
+        tokens = len(encoded)
+        chars_per_token = original_bytes / tokens
 
-        # Should not expand text
-        assert compression_ratio <= 1.0
+        # Should compress: at least 1 char per token
+        assert chars_per_token >= 1.0, f"Expected chars/token >= 1.0, got {chars_per_token:.2f}"
+
+    def test_bpe_actually_merges_pairs(self):
+        """Test that BPE actually merges token pairs and achieves compression.
+
+        This test would have caught the bug where merges weren't being applied
+        during encoding. Without actual merging, chars_per_token would be ~1.0.
+        """
+        # Use highly repetitive text where merging should be very effective
+        repetitive_text = "hello world " * 50  # Strong pattern repetition
+
+        tokenizer = RegexBPETokenizer()
+        tokenizer.train(repetitive_text, vocab_size=500)
+
+        encoded = tokenizer.encode(repetitive_text)
+        original_bytes = len(repetitive_text.encode("utf-8"))
+        tokens = len(encoded)
+        chars_per_token = original_bytes / tokens
+
+        # With BPE working correctly, chars_per_token should be > 1.0
+        # If merging isn't happening, ratio would be ~1.0 (each byte = one token)
+        assert chars_per_token > 1.0, f"Expected chars/token > 1.0, got {chars_per_token:.2f}"
+        # For repetitive text, expect good compression (> 2 chars per token)
+        assert chars_per_token > 2.0, (
+            f"Expected chars/token > 2.0x compression, got {chars_per_token:.2f}"
+        )
 
 
 class TestRegexBPETokenizerPatternComparison:
@@ -306,19 +334,19 @@ class TestRegexBPETokenizerLargeCorpus:
 
         assert decoded == sample
 
-    def test_verdict_corpus_compression(self, verdict_corpus: str):
-        """Test that tokenizer doesn't expand text on realistic corpus."""
+    def test_verdict_corpus_characters_per_token(self, verdict_corpus: str):
+        """Test that tokenizer achieves good compression on realistic corpus."""
         tokenizer = RegexBPETokenizer()
         tokenizer.train(verdict_corpus, vocab_size=350)
 
         # Test compression on full corpus
         encoded = tokenizer.encode(verdict_corpus)
         original_bytes = len(verdict_corpus.encode("utf-8"))
-        compressed_tokens = len(encoded)
+        tokens = len(encoded)
+        chars_per_token = original_bytes / tokens
 
-        compression_ratio = compressed_tokens / original_bytes
-        # Should not expand text
-        assert compression_ratio <= 1.0
+        # Should compress: at least 1 character per token
+        assert chars_per_token >= 1.0, f"Expected chars/token >= 1.0, got {chars_per_token:.2f}"
 
     def test_verdict_corpus_persistence(self, verdict_corpus: str, tmp_path: Path):
         """Test save/load with realistic corpus."""

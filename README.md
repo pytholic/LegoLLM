@@ -121,6 +121,23 @@ ______________________________________________________________________
 
 ## Quick Start
 
+### Command-Line Tools
+
+LegoLLM provides convenient command-line tools for data management:
+
+```shell
+# Download datasets
+download-data tiny_shakespeare ./data/raw/tiny_shakespeare/
+
+# Prepare data for training (tokenize + split)
+prepare --config configs/datasets/tiny_shakespeare.yaml
+
+# Get dataset statistics
+dataset-summary ./data/raw/tiny_shakespeare/tiny_shakespeare.txt
+```
+
+See the [`scripts/` directory](scripts/README.md) for detailed documentation.
+
 ### Training a Tokenizer
 
 ```python
@@ -227,11 +244,23 @@ LegoLLM/
 │   ├── models/              # Coming: Complete models
 │   └── training/            # Coming: Training infrastructure
 │
+├── scripts/                 # Command-line tools
+│   ├── prepare.py          # Data preparation pipeline
+│   ├── download_data.py    # Dataset downloader
+│   └── dataset_summary.py  # Dataset statistics
+│
+├── configs/                 # Configuration files
+│   └── datasets/           # Dataset configs (YAML)
+│
 ├── tests/                   # Test suite
 │   ├── unit/
 │   └── integration/
 │
 ├── data/                    # Training data & models
+│   ├── raw/                # Raw datasets
+│   ├── processed/          # Tokenized train/val splits
+│   └── tokenizers/         # Trained tokenizer models
+│
 ├── experiments/             # Experimental notebooks
 └── docs/                    # Documentation (future)
 ```
@@ -252,6 +281,12 @@ ______________________________________________________________________
 - [x] Regex-based BPE (GPT-2/GPT-4 style)
 - [x] Special token support
 - [x] Save/load functionality
+
+#### Data Processing
+
+- [x] Prepare data
+- [ ] Dataset and sliding window
+- [ ] Dataloader for efficiency
 
 #### Embeddings
 

@@ -75,6 +75,17 @@ class TestRegexBPETokenizerTraining:
         with pytest.raises(TokenizerError, match="vocab_size must be at least 256"):
             tokenizer.train(simple_training_text, vocab_size=200)
 
+    def test_train_minimum_vocab_size_accepted(self, simple_training_text: str):
+        """Test that vocab_size=256 (minimum) is accepted without error."""
+        tokenizer = RegexBPETokenizer()
+        # Should not raise any error
+        tokenizer.train(simple_training_text, vocab_size=256)
+
+        assert tokenizer.is_trained
+        # With vocab_size=256, there should be 0 merges (only base bytes)
+        assert len(tokenizer.merges) == 0
+        assert len(tokenizer.vocab) == 256
+
     def test_train_creates_valid_vocab(self, simple_training_text: str):
         """Test that training creates valid vocabulary with byte values."""
         tokenizer = RegexBPETokenizer()
