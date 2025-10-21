@@ -114,7 +114,7 @@ class RegexBPETokenizer(BaseBPETokenizer):
                 tokenizer.load("data/bpe_tokenizer.json")
             ```
         """
-        if vocab_size <= self.INITIAL_VOCAB_SIZE:
+        if vocab_size < self.INITIAL_VOCAB_SIZE:
             raise TokenizerError(
                 f"vocab_size must be at least {self.INITIAL_VOCAB_SIZE}, got {vocab_size}"
             )
