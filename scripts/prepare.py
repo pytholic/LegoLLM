@@ -229,7 +229,8 @@ def load_tokenizer(tokenizer_type: str, tokenizer_path: Path) -> TrainableTokeni
         raise
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Main entry point for the prepare script."""
     parser = argparse.ArgumentParser(description="Prepare the text data for training.")
     parser.add_argument(
         "--config", type=str, required=True, help="Path to the dataset configuration YAML file."
@@ -247,3 +248,7 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Error: {e}", exc_info=True)
         raise
+
+
+if __name__ == "__main__":
+    main()

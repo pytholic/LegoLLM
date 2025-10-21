@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from data.prepare import DatasetConfig, prepare_dataset
+from scripts.prepare import DatasetConfig, prepare_dataset
 
 
 @pytest.fixture

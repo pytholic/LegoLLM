@@ -14,7 +14,7 @@ logger.setLevel(logging.INFO)
 
 DATA_URLS = {
     "tiny_shakespeare": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/tiny_shakespeare/tiny_shakespeare.txt",
-    "the_verdict": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/the-verdict/the-verdict.txt",
+    "the_verdict": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/the_verdict/the_verdict.txt",
 }
 
 
@@ -35,21 +35,23 @@ def main() -> None:
     url = DATA_URLS[args.data]
     file_name = Path(url).name
 
-    logger.info(f"Downloading file from {url} to {output_dir / file_name}.")
     download_file_from_url(url, output_dir / file_name)
-    logger.info(f"Downloaded file {file_name} to {output_dir}.")
 
 
-def download_file_from_url(url: str, filepath: str | Path) -> None:
+def download_file_from_url(url: str, filepath: Path) -> None:
     """Download data from a URL.
 
     Args:
         url: The URL to download data from.
         filepath: The path to save the downloaded file.
     """
+    if (filepath).exists():
+        logger.info(f"File {filepath} already exists. Skipping download.")
+        return
+
     logger.info(f"Downloading data from {url}...")
     urllib.request.urlretrieve(url, filepath)
-    logger.info("Data downloaded successfully.")
+    logger.info(f"Data downloaded successfully to {filepath}.")
 
 
 if __name__ == "__main__":
