@@ -13,8 +13,8 @@ import numpy as np
 import yaml
 
 from legollm.core.interfaces import TrainableTokenizer
-from legollm.core.logging import logger
 from legollm.core.tokenization.bpe.regex_bpe_tokenizer import RegexBPETokenizer
+from legollm.logging import logger
 from legollm.utils import read_text_file
 
 

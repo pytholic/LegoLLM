@@ -7,7 +7,7 @@ import argparse
 import logging
 from pprint import pformat
 
-from legollm.core.logging import logger
+from legollm.logging import logger
 from legollm.utils import read_text_file
 
 logger.setLevel(logging.INFO)

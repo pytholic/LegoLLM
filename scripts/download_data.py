@@ -8,13 +8,13 @@ import logging
 import urllib.request
 from pathlib import Path
 
-from legollm.core.logging import logger
+from legollm.logging import logger
 
 logger.setLevel(logging.INFO)
 
 DATA_URLS = {
-    "tiny_shakespeare": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/tiny_shakespeare/tiny_shakespeare.txt",
-    "the_verdict": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/feat/data/data/raw/the_verdict/the_verdict.txt",
+    "tiny_shakespeare": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/main/data/raw/tiny_shakespeare/tiny_shakespeare.txt",
+    "the_verdict": "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/main/data/raw/the_verdict/the_verdict.txt",
 }
 
 

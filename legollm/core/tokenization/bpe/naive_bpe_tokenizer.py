@@ -9,8 +9,8 @@ Created by @pytholic on 2025.10.06
 import logging
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.logging import logger, progress_bar
 from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
+from legollm.logging import logger, progress_bar
 
 logger.setLevel(logging.DEBUG)
 

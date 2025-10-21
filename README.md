@@ -227,18 +227,21 @@ ______________________________________________________________________
 
 ```
 LegoLLM/
-├── src/legollm/              # Main package
+├── legollm/                  # Main package
 │   ├── core/                 # Foundation components
 │   │   ├── tokenization/    # ← Current: Complete ✅
-│   │   │   ├── base_bpe.py          # Base BPE tokenizer class
-│   │   │   ├── naive_bpe_tokenizer.py    # Educational BPE
-│   │   │   ├── regex_bpe_tokenizer.py    # Production BPE
-│   │   │   ├── simple_tokenizer.py       # Basic word tokenizer
-│   │   │   └── vocabulary.py             # Vocab management
-│   │   ├── config.py        # Pydantic configurations
+│   │   │   ├── bpe/                # BPE tokenizers
+│   │   │   │   ├── base_bpe.py          # Base BPE class
+│   │   │   │   ├── naive_bpe_tokenizer.py    # Educational BPE
+│   │   │   │   └── regex_bpe_tokenizer.py    # Production BPE
+│   │   │   └── simple/             # Simple tokenizers
+│   │   │       ├── simple_tokenizer.py       # Basic word tokenizer
+│   │   │       └── vocabulary.py             # Vocab management
+│   │   ├── interfaces.py    # Protocol definitions
 │   │   ├── exceptions.py    # Custom exceptions
 │   │   └── utils.py         # Utility functions
 │   │
+│   ├── logging.py           # Logging utilities
 │   ├── attention/            # Coming: Attention mechanisms
 │   ├── layers/              # Coming: Transformer layers
 │   ├── models/              # Coming: Complete models

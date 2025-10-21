@@ -31,8 +31,8 @@ from typing import Final
 import regex as rex
 
 from legollm.core.exceptions import TokenizerError
-from legollm.core.logging import logger, progress_bar
 from legollm.core.tokenization.bpe.base_bpe import BaseBPETokenizer
+from legollm.logging import logger, progress_bar
 
 
 class RegexBPETokenizer(BaseBPETokenizer):

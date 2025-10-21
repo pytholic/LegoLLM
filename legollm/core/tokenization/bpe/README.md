@@ -1075,7 +1075,7 @@ import logging
 
 import tiktoken
 
-from legollm.core.logging import logger
+from legollm.logging import logger
 from legollm.core.tokenization import RegexBPETokenizer
 from legollm.core.utils import read_file
 
