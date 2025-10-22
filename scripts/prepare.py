@@ -15,7 +15,7 @@ import yaml
 from legollm.core.interfaces import TrainableTokenizer
 from legollm.core.tokenization.bpe.regex_bpe_tokenizer import RegexBPETokenizer
 from legollm.logging import logger
-from legollm.utils import read_text_file
+from legollm.utils import get_dtype_for_vocab, read_text_file
 
 
 class TokenizerType(StrEnum):
@@ -138,11 +138,14 @@ def prepare_dataset(config: DatasetConfig, verbose: bool = False) -> None:
     logger.info(f"   Characters per token: {len(text) / len(token_ids):.2f} chars/token")
 
     # Step 4: Split into train/val
+    dtype = get_dtype_for_vocab(config.vocab_size)
     split_idx = int(len(token_ids) * config.train_split)
-    train_tokens = np.array(token_ids[:split_idx], dtype=np.uint16)
-    val_tokens = np.array(token_ids[split_idx:], dtype=np.uint16)
+    train_tokens = np.array(token_ids[:split_idx], dtype=dtype)
+    val_tokens = np.array(token_ids[split_idx:], dtype=dtype)
 
-    logger.info(f"Split: {len(train_tokens):,} train tokens, {len(val_tokens):,} validation tokens")
+    logger.info(
+        f"Split: {len(train_tokens):,} train tokens, {len(val_tokens):,} validation tokens (dtype={dtype})"
+    )
 
     # Step 5: Save as .bin files
     logger.info("Saving train/val dataset files...")
