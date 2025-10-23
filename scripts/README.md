@@ -6,14 +6,14 @@ This directory contains executable Python scripts for data management and prepro
 
 After installing the package (`uv sync` or `pip install -e .`), the following commands are available globally:
 
-### `prepare`
+### `data-prepare`
 
 Prepares raw text data for training by tokenizing and splitting into train/validation sets.
 
 **Usage:**
 
 ```shell
-prepare --config configs/datasets/tiny_shakespeare.yaml [--verbose]
+data-prepare --config configs/datasets/tiny_shakespeare.yaml [--verbose]
 ```
 
 **Arguments:**
@@ -35,7 +35,7 @@ Downloads raw datasets from their sources.
 **Usage:**
 
 ```shell
-download-data <dataset_name> <output_dir>
+data-download <dataset_name> <output_dir>
 ```
 
 **Arguments:**
@@ -46,17 +46,17 @@ download-data <dataset_name> <output_dir>
 **Example:**
 
 ```shell
-download-data tiny_shakespeare ./data/raw/tiny_shakespeare/
+data-download tiny_shakespeare ./data/raw/tiny_shakespeare/
 ```
 
-### `dataset-summary`
+### `data-summary`
 
 Provides a summary of a raw text file (character count, file size).
 
 **Usage:**
 
 ```shell
-dataset-summary <input_file>
+data-summary <input_file>
 ```
 
 **Arguments:**
@@ -66,7 +66,7 @@ dataset-summary <input_file>
 **Example:**
 
 ```shell
-dataset-summary ./data/raw/tiny_shakespeare/tiny_shakespeare.txt
+data-summary ./data/raw/tiny_shakespeare/tiny_shakespeare.txt
 ```
 
 **Output:**

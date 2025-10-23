@@ -35,9 +35,9 @@ build-backend = "hatchling.build"
 packages = ["legollm", "scripts"]
 
 [project.scripts]
-prepare = "scripts.prepare:main"
-download-data = "scripts.download_data:main"
-dataset-summary = "scripts.dataset_summary:main"
+data-prepare = "scripts.prepare:main"
+data-download = "scripts.download_data:main"
+data-summary = "scripts.dataset_summary:main"
 
 [tool.uv]
 package = true

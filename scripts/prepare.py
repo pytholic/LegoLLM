@@ -144,7 +144,7 @@ def prepare_dataset(config: DatasetConfig, verbose: bool = False) -> None:
     val_tokens = np.array(token_ids[split_idx:], dtype=dtype)
 
     logger.info(
-        f"Split: {len(train_tokens):,} train tokens, {len(val_tokens):,} validation tokens (dtype={dtype})"
+        f"Split: {len(train_tokens):,} train tokens, {len(val_tokens):,} validation tokens (dtype={dtype.__name__})"
     )
 
     # Step 5: Save as .bin files
@@ -171,6 +171,7 @@ def prepare_dataset(config: DatasetConfig, verbose: bool = False) -> None:
         "val_tokens": len(val_tokens),
         "train_split": config.train_split,
         "block_size": config.block_size,
+        "data_dtype": dtype.__name__,
     }
     meta_path = config.processed_dir / "meta.json"
     with open(meta_path, "w") as f:

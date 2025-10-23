@@ -12,6 +12,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
+from legollm.core.exceptions import DataLoaderError
 from legollm.utils import get_dtype_for_vocab, load_dataset_metadata
 
 MIN_BUFFER = 10_000  # 20 KB minimum
@@ -26,23 +27,31 @@ class DataLoaderConfig:
     dataset_path: Path
     block_size: int
     batch_size: int
-    shuffle: bool = True
     device: str = "cpu"
     token_buffer_size: int | None = None
     dtype: np.dtype | None = None
+    split: str = "train"  # "train" or "val" or custom name
 
     def __post_init__(self) -> None:
         """Post-init validation and calculation."""
-        if self.token_buffer_size is None:
-            self.token_buffer_size = self._calculate_buffer_size()
+        self.token_buffer_size = self.token_buffer_size or self._calculate_buffer_size()
+
+        # Add check for token_buffer_size >= min required
+        # else we will get stuff in infinite loop in _refill_buffer()
+        min_required = self.batch_size * (self.block_size + 1)
+        if self.token_buffer_size < min_required:
+            raise DataLoaderError(
+                f"token_buffer_size ({self.token_buffer_size}) must be >= "
+                f"batch_size * (block_size + 1) = {min_required}"
+            )
 
         # Validate
         if self.block_size <= 0:
-            raise ValueError(f"block_size must be positive, got {self.block_size}")
+            raise DataLoaderError(f"block_size must be positive, got {self.block_size}")
         if self.batch_size <= 0:
-            raise ValueError(f"batch_size must be positive, got {self.batch_size}")
+            raise DataLoaderError(f"batch_size must be positive, got {self.batch_size}")
         if not self.dataset_path.exists():
-            raise FileNotFoundError(f"Dataset path not found: {self.dataset_path}")
+            raise DataLoaderError(f"Dataset path not found: {self.dataset_path}")
 
     def _calculate_buffer_size(self) -> int:
         """Auto-calculate buffer size based on batch size and block size."""
@@ -50,7 +59,7 @@ class DataLoaderConfig:
         buffer_size = DEFAULT_BUFFER_BATCHES * tokens_per_batch
 
         # clamp to reasonable limits
-        return max(MIN_BUFFER, min(buffer_size, MAX_BUFFER))
+        return int(max(MIN_BUFFER, min(buffer_size, MAX_BUFFER)))
 
 
 class DataLoader:
@@ -65,13 +74,13 @@ class DataLoader:
     def __init__(self, config: DataLoaderConfig) -> None:
         """Initialize the DataLoader."""
         self.config = config
-        train_file_path = config.dataset_path / "train.bin"
+        data_file_path = config.dataset_path / f"{config.split}.bin"
         metadata = load_dataset_metadata(config.dataset_path)
         self.vocab_size = int(metadata["vocab_size"])
-        self.dtype = get_dtype_for_vocab(self.vocab_size) if config.dtype is None else config.dtype
+        self.dtype = config.dtype or get_dtype_for_vocab(self.vocab_size)
 
         # Load data
-        self.data = np.memmap(train_file_path, dtype=self.dtype, mode="r")
+        self.data = np.memmap(data_file_path, dtype=self.dtype, mode="r")
         self.token_buffer: deque[int] = deque(maxlen=config.token_buffer_size)
         self.current_pos = 0
 
@@ -122,7 +131,6 @@ if __name__ == "__main__":
         dataset_path=Path("data/processed/tiny_shakespeare"),
         block_size=4,
         batch_size=num_batches,
-        shuffle=True,
         device="cpu",
         token_buffer_size=10000,
         dtype=np.uint16,

@@ -26,7 +26,7 @@ run:
 
 .PHONY: test
 test:
-	uv run pytest -x
+	uv run pytest -x --tb=no -rs
 
 .PHONY: test-cov
 test-cov:
