@@ -128,7 +128,7 @@ if __name__ == "__main__":
     num_batches = 3
 
     config = DataLoaderConfig(
-        dataset_path=Path("data/processed/tiny_shakespeare"),
+        dataset_path=Path("data/processed/the_verdict"),
         block_size=4,
         batch_size=num_batches,
         device="cpu",

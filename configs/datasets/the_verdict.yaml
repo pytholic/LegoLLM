@@ -7,3 +7,8 @@ train_split: 0.9
 block_size: 256
 special_tokens:
   "<|endoftext|>": 100257
+document_splitter: double_newline
+shuffle_documents: true
+shuffle_seed: 42
+min_document_chars: 50
+join_separator: "\n\n"

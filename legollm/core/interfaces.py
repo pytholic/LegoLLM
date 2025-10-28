@@ -131,3 +131,11 @@ class PreTokenizable(Protocol):
             ["Hello", ",", "world", "!"]
         """
         ...
+
+
+class DocumentSplitter(Protocol):
+    """Document splitter interface."""
+
+    def split(self, text: str) -> list[str]:
+        """Split text into documents."""
+        ...
