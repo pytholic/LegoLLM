@@ -11,3 +11,9 @@ class TokenizerError(ProjectBaseError):
     """Exception for tokenizer errors."""
 
     pass
+
+
+class DataLoaderError(ProjectBaseError):
+    """Exception for dataloader errors."""
+
+    pass

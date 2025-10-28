@@ -16,23 +16,22 @@ from scripts.prepare import DatasetConfig, prepare_dataset
 @pytest.fixture
 def test_config(tmp_path: Path, fixtures_dir: Path) -> DatasetConfig:
     """Test config for testing."""
-    print(fixtures_dir)
     return DatasetConfig(
         name="test_dataset",
-        raw_file=fixtures_dir / "test_input.txt",
+        raw_file=fixtures_dir / "sample_input.txt",
         processed_dir=tmp_path / "test_processed",
         tokenizer_type="regex_bpe",
         vocab_size=256,
         train_split=0.8,
         block_size=64,
-        special_tokens={"<|endoftext|>": 255},
+        special_tokens={"<|endoftext|>": 100257},
     )
 
 
 @pytest.fixture
 def test_input(fixtures_dir: Path) -> Path:
     """Test input for testing."""
-    return fixtures_dir / "test_input.txt"
+    return fixtures_dir / "sample_input.txt"
 
 
 class TestPrepare:
@@ -78,8 +77,12 @@ class TestPrepare:
         assert (test_config.processed_dir / "meta.json").exists()
 
         # load the train/val splits
-        train_tokens = np.fromfile(test_config.processed_dir / "train.bin", dtype=np.uint16)
-        val_tokens = np.fromfile(test_config.processed_dir / "val.bin", dtype=np.uint16)
+        with open(test_config.processed_dir / "meta.json") as f:
+            meta = json.load(f)
+        data_dtype = np.dtype(meta["data_dtype"])
+
+        train_tokens = np.fromfile(test_config.processed_dir / "train.bin", dtype=data_dtype)
+        val_tokens = np.fromfile(test_config.processed_dir / "val.bin", dtype=data_dtype)
 
         total_tokens = len(train_tokens) + len(val_tokens)
         # check that the train/val split is correct
@@ -94,11 +97,12 @@ class TestPrepare:
         assert (test_config.processed_dir / "meta.json").exists()
 
         # load the train/val splits
-        train_tokens = np.fromfile(test_config.processed_dir / "train.bin", dtype=np.uint16)
-        val_tokens = np.fromfile(test_config.processed_dir / "val.bin", dtype=np.uint16)
-
         with open(test_config.processed_dir / "meta.json") as f:
             meta = json.load(f)
+        data_dtype = np.dtype(meta["data_dtype"])
+
+        train_tokens = np.fromfile(test_config.processed_dir / "train.bin", dtype=data_dtype)
+        val_tokens = np.fromfile(test_config.processed_dir / "val.bin", dtype=data_dtype)
 
         assert len(train_tokens) + len(val_tokens) == meta["total_tokens"], (
             "Total tokens mismatch => Data leakage detected"
@@ -112,8 +116,9 @@ class TestPrepare:
             meta = json.load(f)
 
         # Load actual data
-        train_tokens = np.fromfile(test_config.processed_dir / "train.bin", dtype=np.uint16)
-        val_tokens = np.fromfile(test_config.processed_dir / "val.bin", dtype=np.uint16)
+        data_dtype = np.dtype(meta["data_dtype"])
+        train_tokens = np.fromfile(test_config.processed_dir / "train.bin", dtype=data_dtype)
+        val_tokens = np.fromfile(test_config.processed_dir / "val.bin", dtype=data_dtype)
 
         # Verify metadata matches reality
         assert meta["train_tokens"] == len(train_tokens)

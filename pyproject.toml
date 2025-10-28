@@ -13,6 +13,7 @@ dependencies = [
     "python-dotenv>=1.0.0,<2.0.0",
     "regex>=2025.9.18",
     "rich>=13.7.0,<14.0.0",
+    "torch>=2.9.0",
 ]
 
 [dependency-groups]
@@ -34,9 +35,9 @@ build-backend = "hatchling.build"
 packages = ["legollm", "scripts"]
 
 [project.scripts]
-prepare = "scripts.prepare:main"
-download-data = "scripts.download_data:main"
-dataset-summary = "scripts.dataset_summary:main"
+data-prepare = "scripts.prepare:main"
+data-download = "scripts.download_data:main"
+data-summary = "scripts.dataset_summary:main"
 
 [tool.uv]
 package = true

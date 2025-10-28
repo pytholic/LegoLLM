@@ -11,5 +11,6 @@
   "train_tokens": 320089,
   "val_tokens": 35566,
   "train_split": 0.9,
-  "block_size": 256
+  "block_size": 256,
+  "data_dtype": "uint16"
 }
