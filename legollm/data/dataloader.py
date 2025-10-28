@@ -123,20 +123,23 @@ class DataLoader:
         while True:
             yield self.get_batch()
 
+    def __len__(self) -> int:
+        """Return number of batches in one epoch (complete pass through dataset)."""
+        tokens_per_batch = self.config.batch_size * (self.config.block_size + 1)
+        return len(self.data) // tokens_per_batch
+
 
 if __name__ == "__main__":
-    num_batches = 3
-
     config = DataLoaderConfig(
         dataset_path=Path("data/processed/the_verdict"),
         block_size=4,
-        batch_size=num_batches,
+        batch_size=3,
         device="cpu",
         token_buffer_size=10000,
         dtype=np.uint16,
     )
-
     dl = DataLoader(config)
+    num_batches = len(dl)
 
     for i in range(num_batches):
         print("-" * 70)
@@ -147,3 +150,10 @@ if __name__ == "__main__":
         print(f"Target:     {batch[1].numpy().tolist()}")
         print("-" * 70)
         print()
+
+    print(f"Number of tokens in original text: {len(dl.data)}")
+    print(
+        f"Number of batches in one epoch: {len(dl.data) // (config.batch_size * (config.block_size + 1))}"
+    )
+
+    print(f"Number of batches in one epoch: {num_batches}")
