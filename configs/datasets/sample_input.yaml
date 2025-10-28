@@ -1,0 +1,13 @@
+name: sample_input
+raw_file: data/raw/sample_input/sample_input.txt
+processed_dir: data/processed/sample_input
+tokenizer_type: regex_bpe
+vocab_size: 256
+train_split: 0.8
+block_size: 256
+special_tokens:
+  "<|endoftext|>": 100257
+document_splitter: none
+shuffle_documents: false
+shuffle_seed: 42
+min_document_chars: 0

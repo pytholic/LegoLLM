@@ -30,7 +30,15 @@ test:
 
 .PHONY: test-cov
 test-cov:
-	uv run pytest --cov=src --cov-report=term-missing --cov-report=html
+	uv run pytest --cov=legollm --cov=scripts --cov-report=term-missing
+
+.PHONY: test-unit
+test-unit:
+	uv run pytest -x --tb=no -rs tests/unit
+
+.PHONY: test-integration
+test-integration:
+	uv run pytest -x --tb=no -rs tests/integration
 
 .PHONY: lint
 lint:

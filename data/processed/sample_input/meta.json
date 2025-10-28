@@ -1,0 +1,16 @@
+{
+  "dataset_name": "sample_input",
+  "raw_file": "data/raw/sample_input/sample_input.txt",
+  "processed_dir": "data/processed/sample_input",
+  "total_characters": 2615,
+  "vocab_size": 256,
+  "tokenizer_type": "regex_bpe",
+  "tokenizer_path": "data/tokenizers/sample_input_regex_bpe.json",
+  "total_tokens": 2621,
+  "characters_per_token": 0.9977107974055703,
+  "train_tokens": 2096,
+  "val_tokens": 525,
+  "train_split": 0.8,
+  "block_size": 256,
+  "data_dtype": "uint8"
+}
