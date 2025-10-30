@@ -6,7 +6,7 @@ Created by @pytholic on 2025.10.28
 import pytest
 import torch
 
-from legollm.models.token_embeddings import TokenEmbedding
+from legollm.models.token_embedding import TokenEmbedding
 
 
 class TestTokenEmbedding:
