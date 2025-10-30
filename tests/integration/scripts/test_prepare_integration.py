@@ -32,7 +32,12 @@ def shared_tokenizer_dir(tmp_path_factory) -> Path:
 
 @pytest.fixture(scope="class")
 def trained_tokenizer(shared_tokenizer_dir: Path, fixtures_dir: Path):
-    """Train tokenizer once and reuse across all tests in the class."""
+    """Train tokenizer once and reuse across all tests in the class.
+
+    Note:
+        - Trained on sample_input.txt, but tests may use different text.
+    This is intentional - we're testing the prepare pipeline, not tokenization quality. The small vocab_size (256) ensures byte-level fallback works for any text.
+    """
     from legollm.utils import read_text_file
     from scripts.prepare import train_tokenizer
 

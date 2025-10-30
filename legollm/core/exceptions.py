@@ -17,3 +17,9 @@ class DataLoaderError(ProjectBaseError):
     """Exception for dataloader errors."""
 
     pass
+
+
+class EmbeddingsError(ProjectBaseError):
+    """Exception for embeddings errors."""
+
+    pass
