@@ -1,4 +1,4 @@
-"""Test the TokenEmbeddings class.
+"""Test the embedding classes.
 
 Created by @pytholic on 2025.10.28
 """
@@ -6,7 +6,10 @@ Created by @pytholic on 2025.10.28
 import pytest
 import torch
 
+from legollm.core.exceptions import EmbeddingsError
+from legollm.models.positional_embedding import PositionalEmbedding
 from legollm.models.token_embedding import TokenEmbedding
+from legollm.models.transformer_embeddings import TransformerEmbeddings
 
 
 class TestTokenEmbedding:
@@ -151,3 +154,87 @@ class TestTokenEmbedding:
         token_ids = torch.tensor([[1, 2, 3]]).to(device)
         output = emb(token_ids)
         assert output.device.type == device
+
+
+class TestPositionalEmbedding:
+    """Test the PositionalEmbedding class."""
+
+    def test_output_shape(self):
+        """Test the output shape of the PositionalEmbedding model."""
+        positional_embedding = PositionalEmbedding(max_seq_len=100, embed_dim=10)
+        output = positional_embedding(seq_len=10)
+        assert output.shape == (10, 10)
+
+    def test_max_seq_len_boundary(self):
+        """Test that the positional embeddings are correct at the boundary of the sequence length."""
+        positional_embedding = PositionalEmbedding(max_seq_len=100, embed_dim=10)
+        output = positional_embedding(seq_len=100)
+        assert output.shape == (100, 10)
+        assert output[0, 0] == positional_embedding.pos_embedding.weight[0, 0]
+        assert output[99, 0] == positional_embedding.pos_embedding.weight[99, 0]
+
+    def test_position_embeddings_are_learnable(self):
+        """Test that the positional embeddings are learnable."""
+        positional_embedding = PositionalEmbedding(max_seq_len=100, embed_dim=10)
+        assert positional_embedding.pos_embedding.weight.requires_grad
+
+
+class TestTransformerEmbeddings:
+    """Test the TransformerEmbeddings class."""
+
+    def test_output_shape(self):
+        """Test the output shape of the TransformerEmbeddings model."""
+        seq_len = 3
+        transformer_embeddings = TransformerEmbeddings(
+            vocab_size=100, embed_dim=10, max_seq_len=100
+        )
+        token_ids = torch.arange(seq_len).unsqueeze(0)
+        output = transformer_embeddings(token_ids=token_ids, seq_len=seq_len)
+        assert output.shape == (1, seq_len, 10)
+
+    def test_combines_token_and_positional_embeddings(self):
+        """Test that the TransformerEmbeddings model combines the token and positional embeddings correctly."""
+        seq_len = 3
+
+        transformer_embeddings = TransformerEmbeddings(
+            vocab_size=100, embed_dim=10, max_seq_len=100
+        )
+        transformer_embeddings.eval()  # disable dropout
+
+        token_ids = torch.arange(seq_len).unsqueeze(0)
+
+        # Get transformer embeddings
+        output = transformer_embeddings(token_ids=token_ids, seq_len=seq_len)
+
+        # Get separate token and positional embeddings
+        token_embeddings = transformer_embeddings.token_embedding(token_ids)
+        positional_embeddings = transformer_embeddings.positional_embedding(seq_len)
+
+        # Assert that the combined embeddings are equal to the transformer embeddings
+        assert torch.allclose(output, token_embeddings + positional_embeddings)
+
+    def test_dropout_is_applied(self):
+        pass
+
+    def test_sequence_length_flexibility(self):
+        """Test that the TransformerEmbeddings model can handle sequences of different lengths till max_seq_len."""
+        max_seq_len = 100
+        seq_lens = [3, 5, 7, max_seq_len]
+        for seq_len in seq_lens:
+            transformer_embeddings = TransformerEmbeddings(
+                vocab_size=100, embed_dim=10, max_seq_len=max_seq_len
+            )
+            token_ids = torch.arange(seq_len).unsqueeze(0)
+            output = transformer_embeddings(token_ids=token_ids, seq_len=seq_len)
+            assert output.shape == (1, seq_len, 10)
+
+    def test_sequence_length_greater_than_max_seq_len_raises_error(self):
+        """Test that the TransformerEmbeddings model raises an error if the sequence length is greater than max_seq_len."""
+        max_seq_len = 100
+        seq_len = 101
+        transformer_embeddings = TransformerEmbeddings(
+            vocab_size=100, embed_dim=10, max_seq_len=max_seq_len
+        )
+        token_ids = torch.arange(seq_len).unsqueeze(0)
+        with pytest.raises(EmbeddingsError):
+            transformer_embeddings(token_ids=token_ids, seq_len=seq_len)
