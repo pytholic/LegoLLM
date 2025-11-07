@@ -8,24 +8,19 @@ import torch.nn as nn
 
 
 class PositionalEmbedding(nn.Module):
-    """Learned positional embeddings (GPT-2 style).
+    """Learned positional embeddings (GPT-2 style)."""
 
-    Args:
-        max_seq_len: Maximum sequence length
-        embed_dim: Dimension of embedding vectors
-    """
-
-    def __init__(self, max_seq_len: int, embed_dim: int) -> None:
+    def __init__(self, context_length: int, embed_dim: int) -> None:
         """Initialize the PositionalEmbedding layer.
 
         Args:
-            max_seq_len: Maximum sequence length (context window)
+            context_length: Maximum sequence length (context window)
             embed_dim: Dimension of embedding vectors
         """
         super().__init__()
-        self.max_seq_len = max_seq_len
+        self.context_length = context_length
         self.embed_dim = embed_dim
-        self.pos_embedding = nn.Embedding(max_seq_len, embed_dim)
+        self.pos_embedding = nn.Embedding(context_length, embed_dim)
 
     def forward(self, seq_len: int) -> torch.Tensor:
         """Forward pass.

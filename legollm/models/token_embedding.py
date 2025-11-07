@@ -10,10 +10,6 @@ from torch import nn
 class TokenEmbedding(nn.Module):
     """Token embedding layer.
 
-    Args:
-        vocab_size: Size of vocabulary
-        embed_dim: Dimension of embedding vectors
-
     Attributes:
         vocab_size: Size of vocabulary
         embed_dim: Dimension of embedding vectors

@@ -23,3 +23,9 @@ class EmbeddingsError(ProjectBaseError):
     """Exception for embeddings errors."""
 
     pass
+
+
+class NNModuleError(ProjectBaseError):
+    """Exception for neural network module errors."""
+
+    pass
