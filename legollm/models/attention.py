@@ -20,7 +20,7 @@ class CausalAttention(nn.Module):
     def __init__(
         self,
         d_in: int,
-        d_out: int,
+        head_dim: int,
         context_length: int,
         dropout: float = 0.0,  # not used in modern LLMs
         bias: bool = True,
@@ -29,8 +29,8 @@ class CausalAttention(nn.Module):
         """Initialize the Attention layer.
 
         Args:
-            d_in: Input dimension
-            d_out: Output dimension
+            d_in: Input dimension (embedding dimension)
+            head_dim: Dimension of each head
             context_length: Context window length
             dropout: Dropout probability for attention weights
             bias: Whether to use bias in linear projections
@@ -38,16 +38,16 @@ class CausalAttention(nn.Module):
         """
         super().__init__()
         self.d_in = d_in
-        self.d_out = d_out
+        self.head_dim = head_dim
         self.causal = causal
 
         # Linear projections for queries, keys, values
-        self.q_proj = nn.Linear(d_in, d_out, bias=bias)
-        self.k_proj = nn.Linear(d_in, d_out, bias=bias)
-        self.v_proj = nn.Linear(d_in, d_out, bias=bias)
+        self.q_proj = nn.Linear(d_in, head_dim, bias=bias)
+        self.k_proj = nn.Linear(d_in, head_dim, bias=bias)
+        self.v_proj = nn.Linear(d_in, head_dim, bias=bias)
 
         # Linear projection for output
-        self.out_proj = nn.Linear(d_out, d_in, bias=bias)
+        self.out_proj = nn.Linear(head_dim, d_in, bias=bias)
 
         # Dropout for attention weights
         self.dropout = nn.Dropout(dropout)
@@ -65,21 +65,21 @@ class CausalAttention(nn.Module):
             x: Input tensor of shape (batch_size, seq_len, d_in)
 
         Returns:
-            Output tensor of shape (batch_size, seq_len, d_out)
+            Output tensor of shape (batch_size, seq_len, d_in)
         """
         _, seq_len, _ = x.shape
 
         # Project to Q, K, and V
-        Q = self.q_proj(x)  # (b, seq_len, d_out)
-        K = self.k_proj(x)  # (b, seq_len, d_out)
-        V = self.v_proj(x)  # (b, seq_len, d_out)
+        Q = self.q_proj(x)  # (b, seq_len, head_dim)
+        K = self.k_proj(x)  # (b, seq_len, head_dim)
+        V = self.v_proj(x)  # (b, seq_len, head_dim)
 
         # Scale dot-product attention
         # scores = QK^T / sqrt(d_k)
-        # -2,-1 means last two dimensions i.e. seq_len, d_out
+        # -2,-1 means last two dimensions i.e. seq_len, head_dim
         attn_scores = Q @ K.transpose(
             -2, -1
-        )  # (b, seq_len, d_out) @ (b, d_out, seq_len) -> (b, seq_len, seq_len)
+        )  # (b, seq_len, head_dim) @ (b, head_dim, seq_len) -> (b, seq_len, seq_len)
 
         # Apply causal mask if provided
         # NOTE: We need to account for the cases where the sequence length is less than the maximum context length
@@ -89,12 +89,9 @@ class CausalAttention(nn.Module):
             )  # *_ ops are in-place
 
         # Softmax attention weights
-        attn_weights = F.softmax(attn_scores / K.shape[-1] ** 0.5, dim=-1)
-
-        # DEBUG: verify that the attention weights sum to 1 for each token
-        assert torch.allclose(
-            attn_weights.sum(dim=-1), torch.ones_like(attn_weights.sum(dim=-1)), atol=1e-6
-        ), "Attention weights should sum to 1 for each token"
+        attn_weights = F.softmax(
+            attn_scores * self.head_dim**-0.5, dim=-1
+        )  # scale by sqrt(head_dim)
 
         # Apply dropout to attention weights
         attn_weights = self.dropout(attn_weights)
@@ -187,7 +184,7 @@ class MultiHeadCausalAttention(nn.Module):
 
         # Scale dot-product attention
         # scores = Q_K_^T / sqrt(head_dim)
-        attn_scores = Q_ @ K_.transpose(-2, -1) / self.head_dim**0.5
+        attn_scores = Q_ @ K_.transpose(-2, -1) * self.head_dim**-0.5
 
         # Apply causal mask if provided
         # NOTE: We need to account for the cases where the sequence length is less than the maximum context length
@@ -196,11 +193,6 @@ class MultiHeadCausalAttention(nn.Module):
 
         # Softmax attention weights
         attn_weights = F.softmax(attn_scores, dim=-1)
-
-        # DEBUG: verify that the attention weights sum to 1 for each token
-        assert torch.allclose(
-            attn_weights.sum(dim=-1), torch.ones_like(attn_weights.sum(dim=-1)), atol=1e-6
-        ), "Attention weights should sum to 1 for each token"
 
         # Apply dropout to attention weights
         attn_weights = self.dropout(attn_weights)
@@ -372,22 +364,3 @@ if __name__ == "__main__":
     print(f"Time torch: {time_torch}")
     print(f"Speedup: {time_manual / time_torch:.3f}x")
     print("*" * 100)
-
-    # attention_torch = MultiHeadCausalAttention(
-    #     d_in, d_out, context_length, num_heads, dropout, bias, causal
-    # )
-    # output = attention(x_embed)
-    # print(f"Output: {output}")
-    # print(f"Output shape: {output.shape}")
-
-    # attention_manual = MultiHeadCausalAttention(
-    #     d_in, d_out, context_length, num_heads, dropout, bias, causal
-    # )
-    # output_manual = attention_manual(x_embed)
-    # print(f"Output manual: {output_manual}")
-    # print(f"Output manual shape: {output_manual.shape}")
-    # print("*" * 100)
-
-    # assert torch.allclose(output, output_manual, atol=1e-6)
-    # print("All close")
-    # print("*" * 100)

@@ -24,7 +24,7 @@ def _set_identity_projections(module: CausalAttention) -> None:
     """
     with torch.no_grad():
         proj_weight = torch.zeros_like(module.q_proj.weight)
-        shared_dim = min(module.d_in, module.d_out)
+        shared_dim = min(module.d_in, module.head_dim)
         proj_weight[:shared_dim, :shared_dim] = torch.eye(shared_dim)
         module.q_proj.weight.copy_(proj_weight)
         module.k_proj.weight.copy_(proj_weight)
@@ -37,7 +37,7 @@ def _set_identity_projections(module: CausalAttention) -> None:
             module.v_proj.bias.zero_()
 
         out_weight = torch.zeros_like(module.out_proj.weight)
-        out_dim = min(module.d_in, module.d_out)
+        out_dim = min(module.d_in, module.head_dim)
         out_weight[:out_dim, :out_dim] = torch.eye(out_dim)
         module.out_proj.weight.copy_(out_weight)
         if module.out_proj.bias is not None:
@@ -70,12 +70,12 @@ class TestCausalAttention:
 
     def test_output_shape(self) -> None:
         """Test the output shape of the Attention module."""
-        d_in = d_out = 4
+        d_in = head_dim = 4
         context_length = seq_len = 4
 
         attention = CausalAttention(
             d_in=d_in,
-            d_out=d_out,
+            head_dim=head_dim,
             context_length=context_length,
             dropout=0.0,
             bias=False,
@@ -86,16 +86,16 @@ class TestCausalAttention:
 
         x = torch.arange(seq_len * d_in, dtype=torch.float32).view(1, seq_len, d_in)
         output = attention(x)
-        assert output.shape == (1, seq_len, d_out)
+        assert output.shape == (1, seq_len, head_dim)
 
     def test_attention_causal_mask_blocks_future_positions(self) -> None:
         """Ensure causal masking prevents attending to future tokens."""
-        d_in = d_out = 4
+        d_in = head_dim = 4
         context_length = seq_len = 4
 
         attention = CausalAttention(
             d_in=d_in,
-            d_out=d_out,
+            head_dim=head_dim,
             context_length=context_length,
             dropout=0.0,
             bias=False,
@@ -128,12 +128,12 @@ class TestCausalAttention:
 
     def test_attention_without_causal_mask_allows_future_positions(self) -> None:
         """Without causal masking, tokens may attend to future positions."""
-        d_in = d_out = 4
+        d_in = head_dim = 4
         context_length = seq_len = 4
 
         attention = CausalAttention(
             d_in=d_in,
-            d_out=d_out,
+            head_dim=head_dim,
             context_length=context_length,
             dropout=0.0,
             bias=False,
