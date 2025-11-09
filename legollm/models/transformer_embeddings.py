@@ -30,12 +30,12 @@ class TransformerEmbeddings(nn.Module):
         self.positional_embedding = PositionalEmbedding(context_length, embed_dim)
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, token_ids: torch.Tensor, seq_len: int) -> torch.Tensor:
+    def forward(self, token_ids: torch.Tensor, seq_len: int | None = None) -> torch.Tensor:
         """Forward pass.
 
         Args:
             token_ids: (batch_size, seq_len) - integer token IDs
-            seq_len: Length of current sequence
+            seq_len: Optional length of current sequence. If not provided, inferred from token_ids.
 
         Returns:
             embeddings: (batch_size, seq_len, embed_dim)
@@ -43,6 +43,8 @@ class TransformerEmbeddings(nn.Module):
         Raises:
             EmbeddingsError: If the sequence length is greater than context length
         """
+        if seq_len is None:
+            seq_len = token_ids.size(1)
         if seq_len > self.positional_embedding.context_length:
             raise EmbeddingsError(
                 f"Sequence length {seq_len} is greater than context length {self.positional_embedding.context_length}"
