@@ -148,7 +148,7 @@ class MultiHeadCausalAttention(nn.Module):
         self.v_proj = nn.Linear(d_in, d_out, bias=bias)
 
         # Linear projection for output (combining heads)
-        self.out_proj = nn.Linear(d_out, d_out, bias=False)
+        self.out_proj = nn.Linear(d_out, d_out, bias=bias)
 
         # Dropout for attention weights
         self.dropout = nn.Dropout(dropout)
@@ -258,7 +258,7 @@ class MultiHeadCausalAttentionPyTorch(nn.Module):
         self.v_proj = nn.Linear(d_in, d_out, bias=bias)
 
         # Linear projection for output (combining heads)
-        self.out_proj = nn.Linear(d_out, d_out, bias=False)
+        self.out_proj = nn.Linear(d_out, d_out, bias=bias)
 
         # Register buffer for causal mask
         if causal:

@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch.nn as nn
 
 
 def read_text_file(filepath: str | Path) -> str:
@@ -50,3 +51,8 @@ def load_dataset_metadata(data_path: Path) -> dict[str, str | int | float]:
         raise FileNotFoundError(f"Metadata file not found: {metadata_path.as_posix()}")
     with open(metadata_path) as f:
         return json.load(f)
+
+
+def count_model_params(model: nn.Module) -> float:
+    """Count the number of parameters in the PyTorch neural network model in millions."""
+    return sum(p.numel() for p in model.parameters()) / 1e6  # in millions
