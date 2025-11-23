@@ -10,12 +10,18 @@ from enum import StrEnum
 import torch
 import torch.nn.functional as F
 
+from legollm.core.interfaces import Tokenizer
+
 
 class SamplingStrategy(StrEnum):
-    """Sampling strategy to use for text generation."""
+    """Sampling strategy to use for text generation.
+
+    GREEDY: Pick the most likely token i.e. highest probability.
+    STOCHASTIC: Sample from the distribution using temperature and top-k/top-p filtering.
+    """
 
     GREEDY = "greedy"
-    SAMPLE = "sample"
+    STOCHASTIC = "stochastic"
 
 
 @torch.inference_mode()
@@ -56,7 +62,7 @@ def generate_text(
             logits = model(token_ids_context)  # (batch, seq, vocab)
             logits = logits[:, -1, :]  # get las position (batch, vocab)
 
-        if strategy == SamplingStrategy.SAMPLE:
+        if strategy == SamplingStrategy.STOCHASTIC:
             if temperature != 1.0:
                 logits = logits / temperature
             if top_k is not None:
@@ -129,6 +135,9 @@ def apply_top_p_filtering(logits: torch.Tensor, top_p: float) -> torch.Tensor:
     2     | 3.0   |  0.6% | 99.6%  |  True  |   True      | ❌ REMOVE (cumsum > 0.7)
     3     | 2.0   |  0.2% | 99.9%  |  True  |   True      | ❌ REMOVE (cumsum > 0.7)
     4     | 1.0   |  0.1% | 100.0% |  True  |   True      | ❌ REMOVE (cumsum > 0.7)
+
+    References:
+    - https://gist.github.com/bsantraigi/5752667525d88d375207f099bd78818b
     """
     filter_value = -float("inf")
 
@@ -144,7 +153,6 @@ def apply_top_p_filtering(logits: torch.Tensor, top_p: float) -> torch.Tensor:
     sorted_indices_to_remove = cumulative_probs > top_p
     sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
     sorted_indices_to_remove[..., 0] = 0
-
     # Scatter the removal mask back to original indices
     indices_to_remove = sorted_indices_to_remove.scatter(
         dim=1, index=sorted_indices, src=sorted_indices_to_remove
@@ -156,24 +164,81 @@ def apply_top_p_filtering(logits: torch.Tensor, top_p: float) -> torch.Tensor:
     return logits
 
 
+def generate_and_decode(
+    prompt: str,
+    tokenizer: Tokenizer,
+    model: torch.nn.Module,
+    max_new_tokens: int,
+    temperature: float = 1.0,
+    top_k: int | None = None,
+    top_p: float | None = None,
+    strategy: SamplingStrategy = SamplingStrategy.GREEDY,
+) -> str:
+    """High-level function: encode prompt, generate, decode.
+
+    Args:
+        prompt: The prompt to generate text from.
+        tokenizer: The tokenizer to use.
+        model: The model to generate text from.
+        max_new_tokens: The maximum number of new tokens to generate.
+        temperature: The temperature to use for stochastic sampling.
+        top_k: The number of top tokens to keep for stochastic sampling.
+        top_p: The cumulative probability threshold for stochastic sampling.
+        strategy: The sampling strategy to use.
+
+    Returns:
+        The generated text.
+    """
+    # Encode prompt
+    token_ids = torch.tensor(
+        tokenizer.encode(prompt),
+        dtype=torch.long,
+    ).unsqueeze(0)  # add batch dimension
+
+    # Move prompt to model's device
+    token_ids = token_ids.to(model.device)
+
+    # Generate
+    generated_token_ids = generate_text(
+        model=model,
+        token_ids=token_ids,
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_k=top_k,
+        top_p=top_p,
+        strategy=strategy,
+        eos_token_id=None,
+    )
+
+    # Decode
+    generated_text = tokenizer.decode(generated_token_ids[0].tolist())
+    return generated_text
+
+
 if __name__ == "__main__":
-    # let's test our generate_text function
     import torch
 
+    from legollm.config import TOKENIZERS_DIR
+    from legollm.core.tokenization import RegexBPETokenizer
     from legollm.models.architectures.gpt import GPT, GPT2Config125M
     from legollm.models.generate import generate_text
 
     torch.manual_seed(42)
 
     model = GPT(GPT2Config125M())
-    token_ids = torch.randint(0, 10, (1, 5))
-    generated_token_ids = generate_text(
-        model,
-        token_ids,
-        max_new_tokens=5,
-        temperature=5.0,
-        top_k=5,
-        top_p=0.9,
-        strategy=SamplingStrategy.SAMPLE,
+    tokenizer = RegexBPETokenizer()
+
+    trained_tokenizer = TOKENIZERS_DIR / "tiny_shakespeare_regex_bpe.json"
+    tokenizer.load(str(trained_tokenizer))
+
+    generated_text = generate_and_decode(
+        prompt="I am a software engineer and I love to code",
+        tokenizer=tokenizer,
+        model=model,
+        max_new_tokens=10,
+        temperature=10.0,
+        top_k=20,
+        top_p=0.99,
+        strategy=SamplingStrategy.STOCHASTIC,
     )
-    print(generated_token_ids)
+    print(generated_text)
