@@ -166,7 +166,7 @@ class TestPrepareDatasetIntegration:
         self, tmp_path: Path, sample_text_file: Path, trained_tokenizer: Path
     ):
         """Verify same seed produces identical results."""
-        seed = 1337
+        seed = 42
 
         # First run
         config1 = DatasetConfig(

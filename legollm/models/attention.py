@@ -84,9 +84,8 @@ class CausalAttention(nn.Module):
         # Apply causal mask if provided
         # NOTE: We need to account for the cases where the sequence length is less than the maximum context length
         if self.causal:
-            attn_scores.masked_fill_(
-                self.causal_mask[:seq_len, :seq_len] == 0, float("-inf")
-            )  # *_ ops are in-place
+            mask = self.causal_mask[:seq_len, :seq_len]
+            attn_scores.masked_fill_(mask == 0, float("-inf"))  # *_ ops are in-place
 
         # Softmax attention weights
         attn_weights = F.softmax(
@@ -189,7 +188,8 @@ class MultiHeadCausalAttention(nn.Module):
         # Apply causal mask if provided
         # NOTE: We need to account for the cases where the sequence length is less than the maximum context length
         if self.causal:
-            attn_scores.masked_fill_(self.causal_mask[:seq_len, :seq_len] == 0, float("-inf"))
+            mask = self.causal_mask[:seq_len, :seq_len]
+            attn_scores.masked_fill_(mask == 0, float("-inf"))
 
         # Softmax attention weights
         attn_weights = F.softmax(attn_scores, dim=-1)

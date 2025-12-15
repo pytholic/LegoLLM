@@ -25,6 +25,7 @@ class GPTConfig(Protocol):
     hidden_dim: int
     dropout: float
     bias: bool
+    dtype: torch.dtype
 
 
 @dataclass
@@ -39,6 +40,7 @@ class GPT2Config125M:
     hidden_dim: int = 4 * embed_dim
     dropout: float = 0.1
     bias: bool = True
+    dtype: torch.dtype = torch.float32
 
 
 config_mapping = {
@@ -73,6 +75,9 @@ class GPT(nn.Module):
         # Tie the weights of the output head to the input embeddings (GPT-2 weight tying).
         self.out_head.weight = self.transformer_embeddings.token_embedding.embedding.weight
 
+        # Convert entire model to specified dtype
+        self.to(config.dtype)
+
     def forward(self, token_ids: torch.Tensor) -> torch.Tensor:
         """Forward pass for the GPT architecture."""
         seq_len = token_ids.size(1)
@@ -83,6 +88,16 @@ class GPT(nn.Module):
         x = self.ln_f(x)
         logits = self.out_head(x)
         return logits
+
+    @property
+    def device(self) -> torch.device:
+        """Get the device of the model."""
+        return next(self.parameters()).device
+
+    @property
+    def dtype(self) -> torch.dtype:
+        """Get the dtype of the model."""
+        return next(self.parameters()).dtype
 
 
 class LayerNorm(nn.Module):
