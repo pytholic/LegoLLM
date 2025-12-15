@@ -3,8 +3,6 @@
 Created by @pytholic on 2025.11.14
 """
 
-# first let's test if typing literal disallows rest of the values
-
 from enum import StrEnum
 
 import torch
@@ -60,7 +58,7 @@ def generate_text(
 
         with torch.no_grad():
             logits = model(token_ids_context)  # (batch, seq, vocab)
-            logits = logits[:, -1, :]  # get las position (batch, vocab)
+            logits = logits[:, -1, :]  # get last position (batch, vocab)
 
         if strategy == SamplingStrategy.STOCHASTIC:
             if temperature != 1.0:
