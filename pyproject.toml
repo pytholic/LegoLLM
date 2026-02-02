@@ -5,7 +5,7 @@ description = "A complete LLM development framework from first principles, desig
 authors = [
     {name = "pytholic", email = "rajahaseeb147@gmail.com"},
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 readme = "README.md"
 license = {text = "MIT"}
 dependencies = [
@@ -58,8 +58,8 @@ omit-covered-files = true
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
-exclude = ["__pycache__"]
+target-version = "py313"
+exclude = ["__pycache__", "tests/"]
 
 [tool.ruff.lint]
 select = [

@@ -15,7 +15,7 @@ on:
       python-version:
         description: "Python version to use"
         required: false
-        default: "3.12"
+        default: "3.13"
       runner-label:
         description: "Self-hosted runner label"
         required: false
