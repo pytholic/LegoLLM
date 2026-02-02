@@ -70,6 +70,8 @@ def generate_text(
             logits = logits[:, -1, :]  # get last position (batch, vocab)
 
         if strategy == SamplingStrategy.STOCHASTIC:
+            # TODO: Handle case where 0 is passed as temperature
+            # We should use greedy sampling in this case
             if temperature != 1.0:
                 logits = logits / temperature
             if top_k is not None:
