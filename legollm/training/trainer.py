@@ -7,6 +7,7 @@ import math
 from dataclasses import dataclass
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 
@@ -23,6 +24,14 @@ class TrainerConfig:
 
     Reference: https://github.com/karpathy/nanoGPT
     """
+
+    # Data
+    dataset_path: Path = Path("data/processed/the_verdict")
+    block_size: int = 256
+    batch_size: int = 8
+
+    # Model
+    model_type: str = "gpt2-124m"
 
     # Training
     max_iters: int = 600000
@@ -61,6 +70,9 @@ class TrainerConfig:
 
     # Evaluation
     eval_iters: int = 200  # Number of batches for validation
+
+    # Resume training
+    resume_from: Path | None = None
 
     def __post_init__(self) -> None:
         """Set derived values."""
@@ -266,3 +278,36 @@ class Trainer:
 
         logger.info(f"Training completed. Best val_loss: {self.best_val_loss:.4f}")
         return history
+
+    def plot_losses(
+        self, history: dict[str, list[float]], save_path: str | Path | None = None
+    ) -> None:
+        """Plot training/validation losses and learning rate vs iteration."""
+        if save_path is None:
+            save_path = self.config.checkpoint_dir / "loss.png"
+
+        # Compute actual iteration numbers for each series
+        train_iters = [i * self.config.log_interval for i in range(len(history["train_loss"]))]
+        val_iters = [i * self.config.eval_interval for i in range(len(history["val_loss"]))]
+        lr_iters = train_iters  # lr is logged at the same interval as train_loss
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+        # Loss plot
+        ax1.plot(train_iters, history["train_loss"], label="Train")
+        ax1.plot(val_iters, history["val_loss"], label="Val", marker="o", markersize=3)
+        ax1.set_xlabel("Iteration")
+        ax1.set_ylabel("Loss")
+        ax1.set_title("Loss")
+        ax1.legend()
+
+        # LR plot
+        ax2.plot(lr_iters, history["lr"])
+        ax2.set_xlabel("Iteration")
+        ax2.set_ylabel("Learning Rate")
+        ax2.set_title("Learning Rate Schedule")
+
+        fig.tight_layout()
+        fig.savefig(save_path, dpi=150)
+        plt.close(fig)
+        logger.info(f"Saved loss plot to {save_path}")

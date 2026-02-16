@@ -4,6 +4,7 @@ Created by @pytholic on 2025.11.14
 Moved to generation/ on 2026.01.15
 """
 
+from collections.abc import Generator
 from enum import StrEnum
 
 import torch
@@ -33,8 +34,11 @@ def generate_text(
     top_p: float | None = None,
     strategy: SamplingStrategy = SamplingStrategy.GREEDY,
     eos_token_id: int | None = None,
-) -> torch.Tensor:
+    stream: bool = False,
+) -> torch.Tensor | Generator[int]:
     """Generate text tokens autoregressively.
+
+    Uses a pre-allocated buffer to avoid repeated tensor allocations.
 
     Args:
         model: The model to generate text from.
@@ -45,57 +49,123 @@ def generate_text(
         top_p: Nucleus sampling threshold (cumulative probability)
         strategy: Sampling strategy to use
         eos_token_id: Stop generation if this token is generated
+        stream: If True, yields token IDs one at a time instead of returning full tensor.
 
     Returns:
-        Generated token IDs including context (batch_size, seq_len + new_tokens)
+        If stream=False: Generated token IDs including context (batch_size, seq_len + new_tokens)
+        If stream=True: Generator yielding individual token IDs.
     """
+    if stream:
+        return _generate_stream(
+            model, token_ids, max_new_tokens, temperature, top_k, top_p, strategy, eos_token_id
+        )
+
     model.eval()
-    rng = None
+    seq_len = token_ids.size(1)
+    context_length = _get_context_length(model, seq_len)
+
+    # Pre-allocate buffer for all generated tokens
+    buffer = torch.zeros(
+        (token_ids.size(0), seq_len + max_new_tokens),
+        dtype=torch.long,
+        device=token_ids.device,
+    )
+
+    buffer[:, :seq_len] = token_ids
+    total_len = seq_len
 
     for _ in range(max_new_tokens):
-        # Get context length from model config (supports both dict and dataclass)
-        if hasattr(model, "context_length"):
-            context_length = model.context_length
-        elif hasattr(model, "config"):
-            cfg = model.config
-            context_length = cfg["context_length"] if isinstance(cfg, dict) else cfg.context_length
-        else:
-            context_length = token_ids.size(1)  # fallback
+        start = max(0, total_len - context_length)
+        token_ids_context = buffer[:, start:total_len]
 
-        # Token IDs grow so we need to limit it to the most recent tokens within the context length
-        token_ids_context = token_ids[:, -context_length:]
+        logits = model(token_ids_context)
+        logits = logits[:, -1, :]
 
-        with torch.no_grad():
-            logits = model(token_ids_context)  # (batch, seq, vocab)
-            logits = logits[:, -1, :]  # get last position (batch, vocab)
+        next_token = _sample_next_token(logits, strategy, temperature, top_k, top_p)
 
-        if strategy == SamplingStrategy.STOCHASTIC:
-            # TODO: Handle case where 0 is passed as temperature
-            # We should use greedy sampling in this case
-            if temperature != 1.0:
-                logits = logits / temperature
-            if top_k is not None:
-                logits = apply_top_k_filtering(logits, top_k)
-            if top_p is not None:
-                logits = apply_top_p_filtering(logits, top_p)
+        buffer[:, total_len] = next_token.squeeze(-1)
+        total_len += 1
 
-            probs = F.softmax(logits, dim=-1)
-            next_token = torch.multinomial(probs, num_samples=1, generator=rng)
-
-        elif strategy == SamplingStrategy.GREEDY:
-            # Greedy: just pick argmax (no filters needed)
-            next_token = torch.argmax(logits, dim=-1, keepdim=True)
-
-        else:
-            raise ValueError(f"Invalid sampling strategy: {strategy}")
-
-        # Append next token to context
-        token_ids = torch.cat([token_ids, next_token], dim=1)
-
-        if eos_token_id is not None and next_token == eos_token_id:
+        if eos_token_id is not None and next_token.item() == eos_token_id:
             break
 
-    return token_ids
+    return buffer[:, :total_len]
+
+
+@torch.inference_mode()
+def _generate_stream(
+    model: torch.nn.Module,
+    token_ids: torch.Tensor,
+    max_new_tokens: int,
+    temperature: float,
+    top_k: int | None,
+    top_p: float | None,
+    strategy: SamplingStrategy,
+    eos_token_id: int | None,
+) -> Generator[int]:
+    """Internal streaming generator. Called by generate_text(stream=True)."""
+    model.eval()
+    seq_len = token_ids.size(1)
+    context_length = _get_context_length(model, seq_len)
+
+    buffer = torch.zeros(
+        (token_ids.size(0), seq_len + max_new_tokens),
+        dtype=torch.long,
+        device=token_ids.device,
+    )
+    buffer[:, :seq_len] = token_ids
+    total_len = seq_len
+
+    for _ in range(max_new_tokens):
+        start = max(0, total_len - context_length)
+        token_ids_context = buffer[:, start:total_len]
+
+        logits = model(token_ids_context)
+        logits = logits[:, -1, :]
+
+        next_token = _sample_next_token(logits, strategy, temperature, top_k, top_p)
+        token_id: int = int(next_token.item())
+
+        buffer[:, total_len] = token_id
+        total_len += 1
+
+        yield token_id
+
+        if eos_token_id is not None and token_id == eos_token_id:
+            break
+
+
+def _get_context_length(model: torch.nn.Module, fallback: int) -> int:
+    """Get context length from model config."""
+    if hasattr(model, "context_length"):
+        return model.context_length
+    if hasattr(model, "config"):
+        cfg = model.config
+        return cfg["context_length"] if isinstance(cfg, dict) else cfg.context_length
+    return fallback
+
+
+def _sample_next_token(
+    logits: torch.Tensor,
+    strategy: SamplingStrategy,
+    temperature: float,
+    top_k: int | None,
+    top_p: float | None,
+) -> torch.Tensor:
+    """Sample next token from logits using the given strategy."""
+    if strategy == SamplingStrategy.STOCHASTIC:
+        if temperature != 1.0:
+            logits = logits / temperature
+        if top_k is not None:
+            logits = apply_top_k_filtering(logits, top_k)
+        if top_p is not None:
+            logits = apply_top_p_filtering(logits, top_p)
+        probs = F.softmax(logits, dim=-1)
+        return torch.multinomial(probs, num_samples=1)
+    elif strategy == SamplingStrategy.GREEDY:
+        return torch.argmax(logits, dim=-1, keepdim=True)
+    else:
+        raise ValueError(f"Invalid sampling strategy: {strategy}")
 
 
 def apply_top_k_filtering(logits: torch.Tensor, top_k: int) -> torch.Tensor:
@@ -182,7 +252,8 @@ def generate_and_decode(
     top_k: int | None = None,
     top_p: float | None = None,
     strategy: SamplingStrategy = SamplingStrategy.GREEDY,
-) -> str:
+    stream: bool = False,
+) -> str | Generator[str]:
     """High-level function: encode prompt, generate, decode.
 
     Args:
@@ -194,9 +265,11 @@ def generate_and_decode(
         top_k: The number of top tokens to keep for stochastic sampling.
         top_p: The cumulative probability threshold for stochastic sampling.
         strategy: The sampling strategy to use.
+        stream: If True, yields decoded tokens one at a time.
 
     Returns:
-        The generated text.
+        If stream=False: The full generated text as a string.
+        If stream=True: Generator yielding decoded token strings.
     """
     # Encode prompt
     token_ids = torch.tensor(
@@ -207,7 +280,19 @@ def generate_and_decode(
     # Move prompt to model's device
     token_ids = token_ids.to(model.device)
 
-    # Generate
+    if stream:
+        return _stream_and_decode(
+            tokenizer,
+            model,
+            token_ids,
+            max_new_tokens,
+            temperature,
+            top_k,
+            top_p,
+            strategy,
+        )
+
+    # Generate all at once
     generated_token_ids = generate_text(
         model=model,
         token_ids=token_ids,
@@ -216,12 +301,35 @@ def generate_and_decode(
         top_k=top_k,
         top_p=top_p,
         strategy=strategy,
-        eos_token_id=None,
     )
 
     # Decode
-    generated_text = tokenizer.decode(generated_token_ids[0].tolist())
-    return generated_text
+    return tokenizer.decode(generated_token_ids[0].tolist())
+
+
+def _stream_and_decode(
+    tokenizer: Tokenizer,
+    model: torch.nn.Module,
+    token_ids: torch.Tensor,
+    max_new_tokens: int,
+    temperature: float,
+    top_k: int | None,
+    top_p: float | None,
+    strategy: SamplingStrategy,
+) -> Generator[str]:
+    """Internal streaming decoder. Called by generate_and_decode(stream=True)."""
+    token_stream: Generator[int] = generate_text(  # type: ignore[assignment]
+        model=model,
+        token_ids=token_ids,
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_k=top_k,
+        top_p=top_p,
+        strategy=strategy,
+        stream=True,
+    )
+    for token_id in token_stream:
+        yield tokenizer.decode([token_id])
 
 
 if __name__ == "__main__":
