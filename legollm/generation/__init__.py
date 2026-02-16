@@ -1,7 +1,7 @@
 """Text generation utilities.
 
 Available:
-- generate_text: Core generation function with sampling strategies
+- generate_text: Core generation function with sampling strategies (supports stream=True)
 - generate_and_decode: High-level generate + decode function
 - SamplingStrategy: Enum for greedy/stochastic sampling
 - apply_top_k_filtering: Top-k filtering

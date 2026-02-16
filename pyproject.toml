@@ -5,10 +5,11 @@ description = "A complete LLM development framework from first principles, desig
 authors = [
     {name = "pytholic", email = "rajahaseeb147@gmail.com"},
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 readme = "README.md"
 license = {text = "MIT"}
 dependencies = [
+    "matplotlib>=3.10.8",
     "numpy>=2.3.4",
     "python-dotenv>=1.0.0,<2.0.0",
     "regex>=2025.9.18",
@@ -58,8 +59,8 @@ omit-covered-files = true
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
-exclude = ["__pycache__"]
+target-version = "py313"
+exclude = ["__pycache__", "tests/"]
 
 [tool.ruff.lint]
 select = [

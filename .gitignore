@@ -5,6 +5,11 @@ tmp/
 .ruff_cache/
 .mypy_cache/
 .cursor/
+.claude/
+checkpoints/
+*.pt
+*.pth
+*.pth.tar
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

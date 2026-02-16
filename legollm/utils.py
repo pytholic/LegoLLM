@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch
 import torch.nn as nn
 
 
@@ -56,3 +57,22 @@ def load_dataset_metadata(data_path: Path) -> dict[str, str | int | float]:
 def count_model_params(model: nn.Module) -> float:
     """Count the number of parameters in the PyTorch neural network model in millions."""
     return sum(p.numel() for p in model.parameters()) / 1e6  # in millions
+
+
+def load_pretrained_state_dict(
+    model_path: Path,
+    map_location: str = "cpu",
+    weights_only: bool = False,
+) -> torch.Tensor:
+    """Load a pretrained model's state dictionary from a checkpoint.
+
+    Args:
+        model_path: Path to the checkpoint file.
+        map_location: Device to map the checkpoint to.
+        weights_only: Whether to load only the weights of the model.
+
+    Returns:
+        The state dictionary of the pretrained model.
+    """
+    checkpoint = torch.load(model_path, map_location=map_location, weights_only=weights_only)
+    return checkpoint["model_state_dict"]

@@ -1,0 +1,31 @@
+# Training config for The Verdict (~5K tokens, ~10 epochs).
+# Optimized for small datasets (the_verdict, tiny_shakespeare).
+#
+# For large-scale training (OpenWebText), use nanoGPT values:
+#   max_iters: 600000, block_size: 1024, batch_size: 12,
+#   warmup_iters: 2000, lr_decay_iters: 600000
+#   Reference: https://github.com/karpathy/nanoGPT
+
+config:
+  dataset_path: "data/processed/the_verdict"
+  block_size: 256
+  batch_size: 8
+  model_type: "gpt2-124m"
+  max_iters: 500
+  eval_interval: 50
+  log_interval: 6
+  checkpoint_interval: 200
+  checkpoint_dir: "checkpoints"
+  learning_rate: 0.001
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  decay_lr: true
+  warmup_iters: 100
+  lr_decay_iters: 5000
+  min_lr: 0.0001
+  grad_clip: 1.0
+  compile: false
+  eval_iters: 5
+  device: "mps"
+  resume_from: null

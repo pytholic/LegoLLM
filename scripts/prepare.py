@@ -1,5 +1,11 @@
 """Prepare the text data for training.
 
+This involves
+- Tokenizing the text
+- Splitting the text into train/val splits
+- Saving the data as binary files
+- Saving the metadata
+
 Created by @pytholic on 2025.10.19
 """
 
