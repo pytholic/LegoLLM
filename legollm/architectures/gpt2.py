@@ -10,11 +10,15 @@ Restructured to self-contained format on 2026.01.15
 """
 
 from dataclasses import dataclass
+from enum import StrEnum
+from pathlib import Path
 from typing import Protocol
 
+import requests
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from safetensors.torch import load_file
 
 # =============================================================================
 # Configuration
@@ -97,6 +101,24 @@ GPT2_CONFIG_1558M: dict[str, int | float | bool | torch.dtype] = {
     "dropout": 0.1,
     "bias": True,
     "dtype": torch.float32,
+}
+
+
+class GPT2Variant(StrEnum):
+    """Available pretrained GPT-2 model variants."""
+
+    GPT2 = "gpt2"  # gpt2-small (124M)
+    GPT2_MEDIUM = "gpt2-medium"  # gpt2-medium (355M)
+    GPT2_LARGE = "gpt2-large"  # gpt2-large (774M)
+    GPT2_XL = "gpt2-xl"  # gpt2-xl (1558M)
+
+
+# Variant → config lookup
+MODEL_CONFIGS: dict[GPT2Variant, dict[str, int | float | bool | torch.dtype]] = {
+    GPT2Variant.GPT2: GPT2_CONFIG_124M,
+    GPT2Variant.GPT2_MEDIUM: GPT2_CONFIG_355M,
+    GPT2Variant.GPT2_LARGE: GPT2_CONFIG_774M,
+    GPT2Variant.GPT2_XL: GPT2_CONFIG_1558M,
 }
 
 
@@ -382,18 +404,106 @@ class GPT2(nn.Module):
 # =============================================================================
 
 
-def load_gpt2_weights(model: GPT2, weights: dict[str, torch.Tensor]) -> None:
-    """Load pretrained GPT-2 weights into the model.
+def load_gpt2_weights(model: GPT2, variant: GPT2Variant = GPT2Variant.GPT2) -> None:
+    """Download and load pretrained GPT-2 weights into the model.
 
-    TODO: Implement weight loading from HuggingFace or OpenAI checkpoints.
+    The model must have been created with the matching config (e.g. GPT2_CONFIG_124M
+    for GPT2Variant.GPT2). If there's a mismatch, load_state_dict will raise an error.
 
     Args:
-        model: GPT2 model instance
-        weights: Dictionary of weight tensors
+        model: GPT2 model instance.
+        variant: Which pretrained GPT-2 to download.
     """
-    raise NotImplementedError(
-        "Weight loading not yet implemented. See Sebastian's ch05 for reference implementation."
-    )
+    safetensors_path = _download_gpt2_safetensors(variant)
+    hf_weights = load_file(safetensors_path)
+    mapped = _map_hf_weights(hf_weights)
+    # strict=False because out_head.weight is tied to tok_emb.weight (not in mapped dict)
+    model.load_state_dict(mapped, strict=False)
+
+
+def _download_gpt2_safetensors(
+    variant: GPT2Variant = GPT2Variant.GPT2, cache_dir: Path | None = None
+) -> Path:
+    """Download GPT-2 safetensors file from HuggingFace Hub.
+
+    Args:
+        variant: Which pretrained GPT-2 to download.
+        cache_dir: Directory to cache downloads (default: ~/.cache/legollm/).
+
+    Returns:
+        Path to the downloaded safetensors file.
+    """
+    url = f"https://huggingface.co/openai-community/{variant.value}/resolve/main/model.safetensors"
+
+    if cache_dir is None:
+        cache_dir = Path.home() / ".cache" / "legollm"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    output_path = cache_dir / f"{variant.value}.safetensors"
+    if not output_path.exists():
+        print(f"Downloading {variant.value} weights from HuggingFace...")
+        response = requests.get(url, stream=True, timeout=30)
+        response.raise_for_status()
+        with open(output_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Saved to {output_path}")
+
+    return output_path
+
+
+def _map_hf_weights(hf: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
+    """Map HuggingFace GPT-2 state dict keys to our GPT2 model keys.
+
+    Three transforms:
+    1. Key renaming (e.g. "h.0.ln_1.weight" → "blocks.0.ln1.scale")
+    2. Transposing Conv1D weights → Linear weights (.T on 4 matrices per block)
+    3. Splitting fused c_attn (QKV) into separate q_proj, k_proj, v_proj
+    """
+    mapped: dict[str, torch.Tensor] = {}
+
+    # Embeddings
+    mapped["tok_emb.weight"] = hf["wte.weight"]
+    mapped["pos_emb.weight"] = hf["wpe.weight"]
+
+    # Final layer norm
+    mapped["ln_f.scale"] = hf["ln_f.weight"]
+    mapped["ln_f.shift"] = hf["ln_f.bias"]
+
+    # out_head.weight is tied to tok_emb.weight — skip it
+
+    # Transformer blocks
+    num_layers = sum(1 for k in hf if k.startswith("h.") and k.endswith(".ln_1.weight"))
+
+    for i in range(num_layers):
+        # Layer norms
+        mapped[f"blocks.{i}.ln1.scale"] = hf[f"h.{i}.ln_1.weight"]
+        mapped[f"blocks.{i}.ln1.shift"] = hf[f"h.{i}.ln_1.bias"]
+        mapped[f"blocks.{i}.ln2.scale"] = hf[f"h.{i}.ln_2.weight"]
+        mapped[f"blocks.{i}.ln2.shift"] = hf[f"h.{i}.ln_2.bias"]
+
+        # Attention: split fused c_attn into q, k, v and transpose
+        q_w, k_w, v_w = hf[f"h.{i}.attn.c_attn.weight"].chunk(3, dim=-1)
+        mapped[f"blocks.{i}.attn.q_proj.weight"] = q_w.T
+        mapped[f"blocks.{i}.attn.k_proj.weight"] = k_w.T
+        mapped[f"blocks.{i}.attn.v_proj.weight"] = v_w.T
+
+        q_b, k_b, v_b = hf[f"h.{i}.attn.c_attn.bias"].chunk(3, dim=0)
+        mapped[f"blocks.{i}.attn.q_proj.bias"] = q_b
+        mapped[f"blocks.{i}.attn.k_proj.bias"] = k_b
+        mapped[f"blocks.{i}.attn.v_proj.bias"] = v_b
+
+        # Attention output projection: transpose
+        mapped[f"blocks.{i}.attn.out_proj.weight"] = hf[f"h.{i}.attn.c_proj.weight"].T
+        mapped[f"blocks.{i}.attn.out_proj.bias"] = hf[f"h.{i}.attn.c_proj.bias"]
+
+        # MLP: transpose both weight matrices
+        mapped[f"blocks.{i}.mlp.fc1.weight"] = hf[f"h.{i}.mlp.c_fc.weight"].T
+        mapped[f"blocks.{i}.mlp.fc1.bias"] = hf[f"h.{i}.mlp.c_fc.bias"]
+        mapped[f"blocks.{i}.mlp.fc2.weight"] = hf[f"h.{i}.mlp.c_proj.weight"].T
+        mapped[f"blocks.{i}.mlp.fc2.bias"] = hf[f"h.{i}.mlp.c_proj.bias"]
+
+    return mapped
 
 
 # =============================================================================
