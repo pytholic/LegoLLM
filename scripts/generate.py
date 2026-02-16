@@ -7,11 +7,11 @@ Usage:
 
 import argparse
 
-from legollm.architectures.gpt2 import GPT2, GPT2_CONFIG_124M
-from legollm.core.tokenization import RegexBPETokenizer
+import tiktoken
+
+from legollm.architectures.gpt2 import GPT2, GPT2_CONFIG_124M, GPT2Variant, load_gpt2_weights
 from legollm.generation import SamplingStrategy, generate_and_decode
 from legollm.logging import logger
-from legollm.utils import load_pretrained_state_dict
 
 
 def main() -> None:
@@ -41,28 +41,38 @@ def main() -> None:
     args = parser.parse_args()
 
     # Load tokenizer
+    ## Tiktoken tokenizer
     logger.info("Loading tokenizer...")
-    tokenizer = RegexBPETokenizer()
-    # Try to load The Verdict tokenizer; fall back to untrained if not found
-    try:
-        from legollm.config import TOKENIZERS_DIR
+    tokenizer = tiktoken.get_encoding("gpt2")
 
-        tokenizer.load(str(TOKENIZERS_DIR / "the_verdict_regex_bpe.json"))
-        logger.info("Loaded The Verdict tokenizer")
-    except FileNotFoundError:
-        logger.warning("The Verdict tokenizer not found; using untrained tokenizer")
+    ## Custom RegexBPE tokenizer
+    # tokenizer = RegexBPETokenizer()
+    # # Try to load The Verdict tokenizer; fall back to untrained if not found
+    # try:
+    #     from legollm.config import TOKENIZERS_DIR
+
+    #     tokenizer.load(str(TOKENIZERS_DIR / "the_verdict_regex_bpe.json"))
+    #     logger.info("Loaded The Verdict tokenizer")
+    # except FileNotFoundError:
+    #     logger.warning("The Verdict tokenizer not found; using untrained tokenizer")
 
     # Load model
     logger.info("Loading model...")
     model = GPT2(GPT2_CONFIG_124M)
     model = model.to(args.device)
 
-    # Load checkpoint
-    logger.info(f"Loading checkpoint from {args.model_path}...")
-    checkpoint = load_pretrained_state_dict(
-        args.model_path, map_location=args.device, weights_only=False
-    )
-    model.load_state_dict(checkpoint)
+    # # Load checkpoint
+    # logger.info(f"Loading checkpoint from {args.model_path}...")
+    # checkpoint = load_pretrained_state_dict(
+    #     args.model_path, map_location=args.device, weights_only=False
+    # )
+    # model.load_state_dict(checkpoint)
+    # model.eval()
+    # logger.info("Model loaded and ready for generation")
+
+    # Load weights from HuggingFace
+    logger.info("Loading weights from HuggingFace...")
+    load_gpt2_weights(model, variant=GPT2Variant.GPT2)
     model.eval()
     logger.info("Model loaded and ready for generation")
 
