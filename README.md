@@ -1,7 +1,7 @@
 # 🧱 LegoLLM: Modular Language Model Development from Scratch
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
 Building a complete LLM development framework from first principles - one modular "Lego piece" at a time. From tokenization to alignment, every component is implemented from scratch for deep understanding and maximum flexibility.
