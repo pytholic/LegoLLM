@@ -6,7 +6,7 @@
 
 Building a complete LLM development framework from first principles - one modular "Lego piece" at a time. From tokenization to alignment, every component is implemented from scratch for deep understanding and maximum flexibility.
 
-> **Current Stage:** Phase 1 - Core Foundation (Tokenization Complete)
+> **Current Stage:** Phase 2 complete — GPT-2 pretrained, next up: Instruction Fine-tuning (SFT)
 
 ______________________________________________________________________
 
@@ -15,6 +15,10 @@ ______________________________________________________________________
 - [Why LegoLLM?](#why-legollm)
 - [Current Components](#current-components)
   - [Tokenization](#tokenization)
+  - [GPT-2 Architecture](#gpt-2-architecture)
+  - [Data Pipeline](#data-pipeline)
+  - [Training](#training)
+  - [Generation](#generation)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Project Structure](#project-structure)
@@ -92,51 +96,111 @@ GPT-2/GPT-4 style tokenizer with important optimizations:
 | **Training speed**           | Faster                      | Slower                 |
 | **Production use**           | ❌ Educational only         | ✅ Production-ready    |
 
+### GPT-2 Architecture
+
+Self-contained implementation in `legollm/architectures/gpt2.py` with all components inline:
+
+- ✅ Custom LayerNorm (learnable scale + shift)
+- ✅ Multi-Head Causal Attention (separate Q/K/V projections)
+- ✅ GELU-activated Feed-Forward Network (MLP)
+- ✅ Pre-norm Transformer Block with residual connections
+- ✅ All 4 model sizes: 124M, 355M, 774M, 1558M
+- ✅ **Pretrained weight loading** from HuggingFace via safetensors
+  - Conv1D → Linear transpose (4 matrices per block)
+  - Fused QKV split into separate q_proj, k_proj, v_proj
+  - Weight tying (tok_emb ↔ out_head)
+
+### Data Pipeline
+
+- ✅ Data preparation: raw text → tokenize → train/val `.bin` files + `meta.json`
+- ✅ Memory-efficient DataLoader using numpy memmap + circular buffer
+- ✅ Configurable batch size, sequence length, device placement
+
+### Training
+
+- ✅ Trainer with cosine LR schedule (linear warmup → cosine decay → min_lr floor)
+- ✅ AdamW with separate param groups (weight decay on 2D params only, not biases/layernorms)
+- ✅ Checkpointing (model + optimizer state + iteration + best val loss)
+
+### Generation
+
+- ✅ Greedy and stochastic sampling (top-k, top-p, temperature)
+- ✅ Streaming generation via Python generators (token-by-token output)
+- ✅ Pre-allocated buffer approach (no torch.cat memory leak)
+- ✅ Context window sliding for sequences beyond model's context length
+
 ______________________________________________________________________
 
 ## Installation
 
 ### Prerequisites
 
-- Python 3.10+
-- [uv](https://github.com/astral-sh/uv) (recommended) or pip
+- Python 3.13+
+- [uv](https://github.com/astral-sh/uv)
 
 ### Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/LegoLLM.git
+git clone https://github.com/pytholic/LegoLLM.git
 cd LegoLLM
-
-# Setup environment (uses uv)
-make setup
-
-# Or manually with pip
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
+uv sync
 ```
 
 ______________________________________________________________________
 
 ## Quick Start
 
-### Command-Line Tools
+### Load Pretrained GPT-2 and Generate
 
-LegoLLM provides convenient command-line tools for data management:
+```python
+import torch
+import tiktoken
+from legollm.architectures.gpt2 import GPT2, GPT2Variant, MODEL_CONFIGS, load_gpt2_weights
 
-```shell
-# Download datasets
-download-data tiny_shakespeare ./data/raw/tiny_shakespeare/
+# Load pretrained GPT-2 124M
+model = GPT2(MODEL_CONFIGS[GPT2Variant.GPT2])
+load_gpt2_weights(model, GPT2Variant.GPT2)
+model.eval()
 
-# Prepare data for training (tokenize + split)
-prepare --config configs/datasets/tiny_shakespeare.yaml
-
-# Get dataset statistics
-dataset-summary ./data/raw/tiny_shakespeare/tiny_shakespeare.txt
+# Generate text
+enc = tiktoken.get_encoding("gpt2")
+ids = torch.tensor(enc.encode("Every effort moves you")).unsqueeze(0)
+with torch.no_grad():
+    for _ in range(30):
+        logits = model(ids[:, -1024:])
+        next_id = logits[:, -1, :].argmax(dim=-1, keepdim=True)
+        ids = torch.cat([ids, next_id], dim=1)
+print(enc.decode(ids[0].tolist()))
 ```
 
-See the [`scripts/` directory](scripts/README.md) for detailed documentation.
+### Command-Line Tools
+
+LegoLLM provides convenient CLI commands (registered in `pyproject.toml`):
+
+```bash
+# Download datasets
+uv run data-download tiny_shakespeare ./data/raw/tiny_shakespeare/
+
+# Prepare data for training (tokenize + split)
+uv run data-prepare --config configs/dataset_config.yaml --verbose
+
+# Get dataset statistics
+uv run data-summary ./data/raw/tiny_shakespeare/tiny_shakespeare.txt
+```
+
+### Train on Custom Data
+
+```bash
+# Train GPT-2
+uv run python scripts/train.py --dataset data/processed/the_verdict --model gpt2-124m
+
+# Generate from trained model
+uv run python scripts/generate.py \
+    --checkpoint checkpoints/latest.pt \
+    --prompt "The verdict was" \
+    --max-new-tokens 100 \
+    --strategy stochastic --temperature 0.8
+```
 
 ### Training a Tokenizer
 
@@ -226,153 +290,95 @@ ______________________________________________________________________
 ## Project Structure
 
 ```
-LegoLLM/
-├── legollm/                  # Main package
-│   ├── core/                 # Foundation components
-│   │   ├── tokenization/    # ← Current: Complete ✅
-│   │   │   ├── bpe/                # BPE tokenizers
-│   │   │   │   ├── base_bpe.py          # Base BPE class
-│   │   │   │   ├── naive_bpe_tokenizer.py    # Educational BPE
-│   │   │   │   └── regex_bpe_tokenizer.py    # Production BPE
-│   │   │   └── simple/             # Simple tokenizers
-│   │   │       ├── simple_tokenizer.py       # Basic word tokenizer
-│   │   │       └── vocabulary.py             # Vocab management
-│   │   ├── interfaces.py    # Protocol definitions
-│   │   ├── exceptions.py    # Custom exceptions
-│   │   └── utils.py         # Utility functions
-│   │
-│   ├── logging.py           # Logging utilities
-│   ├── attention/            # Coming: Attention mechanisms
-│   ├── layers/              # Coming: Transformer layers
-│   ├── models/              # Coming: Complete models
-│   └── training/            # Coming: Training infrastructure
-│
-├── scripts/                 # Command-line tools
-│   ├── prepare.py          # Data preparation pipeline
-│   ├── download_data.py    # Dataset downloader
-│   └── dataset_summary.py  # Dataset statistics
-│
-├── configs/                 # Configuration files
-│   └── datasets/           # Dataset configs (YAML)
-│
-├── tests/                   # Test suite
-│   ├── unit/
-│   └── integration/
-│
-├── data/                    # Training data & models
-│   ├── raw/                # Raw datasets
-│   ├── processed/          # Tokenized train/val splits
-│   └── tokenizers/         # Trained tokenizer models
-│
-├── experiments/             # Experimental notebooks
-└── docs/                    # Documentation (future)
+legollm/
+├── architectures/           # Self-contained model files
+│   └── gpt2.py             #   GPT-2 (all sizes) + pretrained weight loading
+├── components/              # Reusable building blocks
+│   ├── attention.py         #   Multi-head attention
+│   ├── embeddings.py        #   Token + positional embeddings
+│   ├── feedforward.py       #   MLP / feed-forward networks
+│   ├── normalization.py     #   Layer normalization
+│   └── blocks.py            #   Transformer blocks
+├── core/
+│   ├── interfaces.py        #   Protocol contracts (Tokenizer, DocumentSplitter)
+│   ├── exceptions.py        #   Exception hierarchy
+│   └── tokenization/        #   BPE tokenizers (RegexBPE, NaiveBPE, Simple)
+├── data/dataloader.py       #   Memory-efficient DataLoader (memmap + circular buffer)
+├── training/trainer.py      #   Trainer (cosine LR, AdamW, checkpointing)
+├── generation/              #   Text generation (greedy, top-k, top-p, streaming)
+├── peft/lora.py             #   LoRA (stub — upcoming)
+├── finetuning/              #   Instruction fine-tuning (upcoming)
+├── config.py                #   Path constants
+├── utils.py                 #   Helpers (dtype, metadata, param counting)
+└── logging.py               #   Rich-based logging
+
+scripts/
+├── train.py                 # Training entry point (CLI + optional YAML config)
+├── generate.py              # Text generation with streaming
+├── prepare.py               # Data preparation: raw text → tokenized .bin files
+└── download_data.py         # Dataset downloading
+
+tests/
+└── unit/                    # 218 tests (tokenization, data, training, generation)
 ```
 
 ______________________________________________________________________
 
 ## Development Roadmap
 
-### ✅ Phase 1: Core Foundation
+### ✅ Phase 1: Core Foundation — Complete
 
-**Status:** In Progress
+- [x] Tokenization (NaiveBPE, RegexBPE, Simple)
+- [x] Token + positional embeddings
+- [x] Multi-head causal attention
+- [x] GPT-2 architecture (124M–1558M)
+- [x] DataLoader (memmap + circular buffer)
+- [x] Trainer (cosine LR, AdamW, checkpointing)
+- [x] Generation (greedy, top-k, top-p, streaming)
 
-#### Tokenization
+### ✅ Phase 2: Validate & Load Pretrained — Complete
 
-- [x] Simple whitespace tokenizer
-- [x] Vocabulary builder
-- [x] Naive BPE implementation
-- [x] Regex-based BPE (GPT-2/GPT-4 style)
-- [x] Special token support
-- [x] Save/load functionality
+- [x] Small-scale pretraining on The Verdict
+- [x] Load pretrained GPT-2 weights from HuggingFace (safetensors)
+- [x] Weight mapping: Conv1D transpose, fused QKV split, key renaming
 
-#### Data Processing
+### 🚧 Phase 3: Instruction Fine-tuning — In Progress
 
-- [x] Prepare data
-- [ ] Dataset and sliding window
-- [ ] Dataloader for efficiency
+- [ ] Instruction dataset + Alpaca-style prompt formatting
+- [ ] Custom collate with dynamic padding + loss masking (-100)
+- [ ] SFT training script (full fine-tuning on GPT-2 124M)
+- [ ] LoRA implementation + comparison with full fine-tuning
 
-#### Embeddings
-
-- [ ] Token embeddings
-- [ ] Positional embeddings (learned)
-- [ ] Positional embeddings (sinusoidal)
-
-#### Attention Mechanism
-
-- [ ] Scaled dot-product attention
-- [ ] Multi-head attention
-- [ ] Causal masking
-
-#### Transformer Block
-
-- [ ] Layer normalization
-- [ ] Feed-forward networks
-- [ ] Residual connections
-- [ ] Complete transformer block
-
-### 📋 Phase 2: Modern Architecture
-
-**Status:** Planned
+### 📋 Phase 4: Modern Architecture (Llama3)
 
 - [ ] RoPE (Rotary Position Embeddings)
-- [ ] RMSNorm & modern activations (SiLU, GELU)
-- [ ] Grouped Query Attention (GQA)
-- [ ] KV caching & generation optimization
-- [ ] Flash Attention integration
+- [ ] RMSNorm + SwiGLU activation
+- [ ] Grouped Query Attention (GQA) + KV Cache
+- [ ] Assemble Llama3 + load pretrained weights
 
-### 📋 Phase 3: Advanced Optimization
+### 📋 Phase 5: Alignment
 
-**Status:** Planned
-
-- [ ] Mixed precision training (AMP)
-- [ ] Gradient checkpointing
-- [ ] LoRA (Low-Rank Adaptation)
-- [ ] QLoRA (Quantized LoRA)
-- [ ] 4-bit quantization (NF4)
-- [ ] Mixture of Experts (MoE)
-
-### 📋 Phase 4: Alignment & Training
-
-**Status:** Planned
-
-- [ ] Training pipeline & data loaders
-- [ ] Reward models & human preferences
-- [ ] PPO (Proximal Policy Optimization)
-- [ ] RLHF (Reinforcement Learning from Human Feedback)
 - [ ] DPO (Direct Preference Optimization)
-- [ ] Evaluation metrics & benchmarks
+- [ ] PPO / RLHF (optional)
+- [ ] Mixture of Experts (MoE)
 
 ______________________________________________________________________
 
 ## Development
 
-### Running Tests
-
 ```bash
 # Run all tests
-make test
+uv run pytest -x --tb=no -rs
 
-# Run with coverage
-make test-coverage
+# Run unit tests only
+uv run pytest -x --tb=no -rs tests/unit
 
-# Run specific test file
-pytest tests/unit/test_tokenization.py -v
-```
+# Run a specific test file
+uv run pytest tests/unit/generation/test_generate.py -v
 
-### Code Quality
-
-```bash
-# Format code
-make format
-
-# Run linters
-make lint
-
-# Type checking
-make type-check
-
-# Run all checks
-make check
+# Lint + format
+uv run ruff check .
+uv run ruff format .
 ```
 
 ______________________________________________________________________
@@ -406,6 +412,9 @@ ______________________________________________________________________
 
 ### Implementations
 
+- [nanoGPT](https://github.com/karpathy/nanoGPT) by Andrej Karpathy
+- [LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) by Sebastian Raschka
+- [nanochat](https://github.com/karpathy/nanochat) by Andrej Karpathy
 - [minbpe](https://github.com/karpathy/minbpe) by Andrej Karpathy
 - [tiktoken](https://github.com/openai/tiktoken) by OpenAI
 
@@ -421,4 +430,4 @@ Built with inspiration from the excellent educational content by:
 
 ______________________________________________________________________
 
-**Next Up:** Token & Positional Embeddings
+**Next Up:** Instruction Fine-tuning (SFT) on pretrained GPT-2
