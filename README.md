@@ -148,6 +148,23 @@ uv sync
 
 ______________________________________________________________________
 
+## Pipeline: End-to-End Walkthrough
+
+Follow these steps sequentially to go from raw text to a fine-tuned instruction-following model:
+
+| Step | What                                                           | Script / Module                                     | Command                                                                                   |
+| ---- | -------------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| 1    | **Download data**                                              | `scripts/download_data.py`                          | `uv run data-download tiny_shakespeare ./data/raw/`                                       |
+| 2    | **Tokenize & split**                                           | `scripts/prepare.py`                                | `uv run data-prepare --config configs/dataset_config.yaml`                                |
+| 3    | **Define model**                                               | `legollm/architectures/gpt2.py`                     | `GPT2(GPT2_CONFIG_124M)`                                                                  |
+| 4    | **Train from scratch**                                         | `scripts/train.py`                                  | `uv run train --dataset data/processed/the_verdict --model gpt2-124m`                     |
+| 5    | **Generate text**                                              | `scripts/generate.py`                               | `uv run generate --checkpoint checkpoints/latest.pt --prompt "Hello"`                     |
+| 6    | **Load weights** (HuggingFace pretrained or custom checkpoint) | `legollm/architectures/gpt2.py`, `legollm/utils.py` | `load_gpt2_weights(model, variant)` for HF, `load_pretrained_state_dict(path)` for custom |
+| 7    | **Instruction fine-tuning (SFT)**                              | `scripts/finetune.py`                               | *upcoming*                                                                                |
+| 8    | **LoRA fine-tuning**                                           | `legollm/peft/lora.py`                              | *upcoming*                                                                                |
+
+______________________________________________________________________
+
 ## Quick Start
 
 ### Load Pretrained GPT-2 and Generate
@@ -427,7 +444,3 @@ Built with inspiration from the excellent educational content by:
 - Andrej Karpathy ([Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html))
 - Sebastian Raschka ([LLMs from Scratch](https://github.com/rasbt/LLMs-from-scratch))
 - Stanford CS336 course materials
-
-______________________________________________________________________
-
-**Next Up:** Instruction Fine-tuning (SFT) on pretrained GPT-2

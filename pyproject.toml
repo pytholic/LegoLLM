@@ -42,6 +42,8 @@ packages = ["legollm", "scripts"]
 data-prepare = "scripts.prepare:main"
 data-download = "scripts.download_data:main"
 data-summary = "scripts.dataset_summary:main"
+train = "scripts.train:main"
+generate = "scripts.generate:main"
 
 [tool.uv]
 package = true
