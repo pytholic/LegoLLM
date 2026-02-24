@@ -15,7 +15,7 @@ from pytest_mock import MockerFixture
 
 from legollm.core.interfaces import TrainableTokenizer
 from legollm.utils import read_text_file
-from scripts.prepare import (
+from scripts.data.prepare import (
     DatasetConfig,
     DocumentSplitMethod,
     TokenizerType,
