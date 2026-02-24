@@ -16,7 +16,7 @@ logger.setLevel(logging.INFO)
 def main() -> None:
     """Main function."""
     parser = argparse.ArgumentParser(description="Generate a summary of input data file.")
-    parser.add_argument("input_file", type=str, help="Path to input data file.")
+    parser.add_argument("input_file", type=str, help="Path to input data file")
     args = parser.parse_args()
 
     text = read_text_file(args.input_file)
