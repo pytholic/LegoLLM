@@ -10,6 +10,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from legollm.logging import logger
+
 
 def read_text_file(filepath: str | Path) -> str:
     """Read a text file and return the content as a string."""
@@ -76,3 +78,38 @@ def load_pretrained_state_dict(
     """
     checkpoint = torch.load(model_path, map_location=map_location, weights_only=weights_only)
     return checkpoint["model_state_dict"]
+
+
+def log_and_raise_exception(
+    err_msg: str, exception_type: type[Exception], from_exc: Exception | None = None
+) -> None:
+    """Utility function to log an error and raise an exception, optionally preserving the chain.
+
+    Args:
+        err_msg : str
+            Error message for logging and the new exception.
+        exception_type : type[Exception]
+            The type of exception to raise.
+        from_exc : Exception | None
+            The original exception to chain from. Defaults to None.
+
+    Raises:
+        An exception of the given type.
+    """
+    logger.error(err_msg)
+    raise exception_type(err_msg) from from_exc
+
+
+def get_device() -> str:
+    """Get the device to use for the model.
+
+    Returns:
+        The device to use for the model.
+    """
+    return (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )

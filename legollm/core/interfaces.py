@@ -13,6 +13,8 @@ class Tokenizer(Protocol):
     regardless of whether it's word-level, subword-level, or character-level.
     """
 
+    eot_token: int
+
     def encode(self, text: str) -> list[int]:
         """Convert text to token IDs.
 

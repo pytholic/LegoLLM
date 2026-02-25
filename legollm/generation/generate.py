@@ -252,6 +252,7 @@ def generate_and_decode(
     top_k: int | None = None,
     top_p: float | None = None,
     strategy: SamplingStrategy = SamplingStrategy.GREEDY,
+    eos_token_id: int | None = None,
     stream: bool = False,
 ) -> str | Generator[str]:
     """High-level function: encode prompt, generate, decode.
@@ -265,6 +266,7 @@ def generate_and_decode(
         top_k: The number of top tokens to keep for stochastic sampling.
         top_p: The cumulative probability threshold for stochastic sampling.
         strategy: The sampling strategy to use.
+        eos_token_id: Stop generation when this token is produced.
         stream: If True, yields decoded tokens one at a time.
 
     Returns:
@@ -290,6 +292,7 @@ def generate_and_decode(
             top_k,
             top_p,
             strategy,
+            eos_token_id,
         )
 
     # Generate all at once
@@ -301,10 +304,14 @@ def generate_and_decode(
         top_k=top_k,
         top_p=top_p,
         strategy=strategy,
+        eos_token_id=eos_token_id,
     )
 
-    # Decode
-    return tokenizer.decode(generated_token_ids[0].tolist())
+    # Decode only new tokens (strip prompt), stopping before EOS
+    new_token_ids = generated_token_ids[0][token_ids.shape[1] :].tolist()
+    if eos_token_id is not None and eos_token_id in new_token_ids:
+        new_token_ids = new_token_ids[: new_token_ids.index(eos_token_id)]
+    return tokenizer.decode(new_token_ids)
 
 
 def _stream_and_decode(
@@ -316,6 +323,7 @@ def _stream_and_decode(
     top_k: int | None,
     top_p: float | None,
     strategy: SamplingStrategy,
+    eos_token_id: int | None = None,
 ) -> Generator[str]:
     """Internal streaming decoder. Called by generate_and_decode(stream=True)."""
     token_stream: Generator[int] = generate_text(  # type: ignore[assignment]
@@ -326,9 +334,12 @@ def _stream_and_decode(
         top_k=top_k,
         top_p=top_p,
         strategy=strategy,
+        eos_token_id=eos_token_id,
         stream=True,
     )
     for token_id in token_stream:
+        if eos_token_id is not None and token_id == eos_token_id:
+            return
         yield tokenizer.decode([token_id])
 
 
@@ -341,9 +352,10 @@ if __name__ == "__main__":
 
     torch.manual_seed(42)
 
+    # Load pretrained model
     model = GPT2(GPT2_CONFIG_124M)
-    tokenizer = RegexBPETokenizer()
 
+    tokenizer = RegexBPETokenizer()
     trained_tokenizer = TOKENIZERS_DIR / "tiny_shakespeare_regex_bpe.json"
     tokenizer.load(str(trained_tokenizer))
 
@@ -351,10 +363,12 @@ if __name__ == "__main__":
         prompt="I am a software engineer and I love to code",
         tokenizer=tokenizer,
         model=model,
-        max_new_tokens=10,
+        max_new_tokens=20,
         temperature=10.0,
         top_k=20,
         top_p=0.99,
         strategy=SamplingStrategy.STOCHASTIC,
+        stream=True,
     )
-    print(generated_text)
+    for token_text in generated_text:
+        print(token_text, end="", flush=True)

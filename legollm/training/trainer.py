@@ -13,6 +13,7 @@ import torch.nn as nn
 
 from legollm.data.dataloader import DataLoader
 from legollm.logging import logger
+from legollm.utils import get_device
 
 
 @dataclass
@@ -59,13 +60,7 @@ class TrainerConfig:
     grad_clip: float = 1.0
 
     # System
-    device: str = (
-        "cuda"
-        if torch.cuda.is_available()
-        else "mps"
-        if torch.backends.mps.is_available()
-        else "cpu"
-    )
+    device: str = get_device()
     compile: bool = True  # use PyTorch 2.0 to compile the model
 
     # Evaluation
