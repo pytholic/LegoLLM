@@ -14,94 +14,10 @@ Created by @pytholic on 2026.02.19
 
 import json
 import random
-from dataclasses import dataclass
 from pathlib import Path
 
-import requests
-from tqdm import tqdm
-
-
-@dataclass
-class Config:
-    """Ollama configuration."""
-
-    model_name: str = "llama3.1:8b"
-    host: str = "localhost"
-    port: int = 11434
-
-
-config = Config()
-
-
-@dataclass
-class Message:
-    """Message object for Ollama."""
-
-    role: str
-    content: str
-
-    def to_dict(self) -> dict[str, str]:
-        """Convert the message to a dictionary."""
-        return {"role": self.role, "content": self.content}
-
-
-@dataclass
-class LLMOptions:
-    """LLM options for generating chat responses."""
-
-    temperature: float | None = None
-    num_ctx: int | None = None
-    seed: int | None = None
-    num_predict: int | None = None
-    top_k: int | None = None
-    top_p: float | None = None
-
-    def to_dict(self) -> dict[str, float | int]:
-        """Convert the LLM options to a dictionary."""
-        return {k: v for k, v in self.__dict__.items() if v is not None}
-
-
-def generate_chat_response(
-    messages: list[Message],
-    model: str = config.model_name,
-    host: str = config.host,
-    port: int = config.port,
-    options: LLMOptions | None = None,
-    output_format: dict[str, object] | None = None,
-) -> str:
-    """Generate a chat response from the LLM."""
-    url = f"http://{host}:{port}/api/chat"
-
-    payload: dict[str, object] = {
-        "model": model,
-        "messages": [msg.to_dict() for msg in messages],
-        "stream": True,
-    }
-
-    options_dict = options.to_dict() if options else None
-    if options_dict:
-        payload["options"] = options_dict
-    if output_format:
-        payload["format"] = output_format
-
-    try:
-        with requests.post(url, json=payload, stream=True, timeout=120) as response:
-            response.raise_for_status()
-            response_data = ""
-            for line in response.iter_lines(decode_unicode=True):
-                if not line:
-                    continue
-                json_response = json.loads(line)
-                message = json_response.get("message", {})
-                if message.get("content"):
-                    response_data += message["content"]
-
-        return response_data
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        return ""
-
+from legollm.logging import progress_bar
+from legollm.post_training.ollama import LLMOptions, Message, generate_chat_response
 
 # ---------------------------------------------------------------------------
 # Task type definitions
@@ -220,57 +136,65 @@ if __name__ == "__main__":
         num_predict=512,
     )
 
-    dataset_size = 1100
+    dataset_size = 5
     dataset: list[dict[str, str]] = []
 
-    for _ in tqdm(range(dataset_size)):
-        mode = random.choices(["A", "B"], weights=[MODE_WEIGHTS["A"], MODE_WEIGHTS["B"]])[0]
+    with progress_bar("Generating instructions", total=dataset_size) as (progress, task):
+        for _ in range(dataset_size):
+            mode = random.choices(["A", "B"], weights=[MODE_WEIGHTS["A"], MODE_WEIGHTS["B"]])[0]
 
-        if mode == "A":
-            task_type = random.choice(list(MODE_A_TASK_TYPES))
-            prompt = build_mode_a_prompt(task_type)
+            if mode == "A":
+                task_type = random.choice(list(MODE_A_TASK_TYPES))
+                prompt = build_mode_a_prompt(task_type)
 
-            instruction = generate_chat_response(
-                [Message(role="user", content=prompt)],
-                options=instruction_options,
-            ).strip()
+                instruction = generate_chat_response(
+                    [Message(role="user", content=prompt)],
+                    options=instruction_options,
+                ).strip()
 
-            if not instruction:
-                continue
+                if not instruction:
+                    continue
 
-            output = generate_chat_response(
-                [Message(role="user", content=build_response_prompt(instruction, ""))],
-                options=response_options,
-            ).strip()
+                output = generate_chat_response(
+                    [Message(role="user", content=build_response_prompt(instruction, ""))],
+                    options=response_options,
+                ).strip()
 
-            dataset.append({"instruction": instruction, "input": "", "output": output})
+                dataset.append({"instruction": instruction, "input": "", "output": output})
 
-        else:  # Mode B
-            task_type = random.choice(list(MODE_B_TASK_TYPES))
-            prompt = build_mode_b_prompt(task_type)
+                progress.update(task, advance=1)
 
-            raw = generate_chat_response(
-                [Message(role="user", content=prompt)],
-                options=instruction_options,
-                output_format=MODE_B_SCHEMA,
-            ).strip()
+            else:  # Mode B
+                task_type = random.choice(list(MODE_B_TASK_TYPES))
+                prompt = build_mode_b_prompt(task_type)
 
-            parsed: dict[str, str] = json.loads(raw)
-            instruction = parsed["instruction"]
-            input_text = parsed["input"]
+                raw = generate_chat_response(
+                    [Message(role="user", content=prompt)],
+                    options=instruction_options,
+                    output_format=MODE_B_SCHEMA,
+                ).strip()
 
-            if not instruction or not input_text:
-                continue
+                parsed: dict[str, str] = json.loads(raw)
+                instruction = parsed["instruction"]
+                input_text = parsed["input"]
 
-            output = generate_chat_response(
-                [Message(role="user", content=build_response_prompt(instruction, input_text))],
-                options=response_options,
-            ).strip()
+                if not instruction or not input_text:
+                    continue
 
-            dataset.append({"instruction": instruction, "input": input_text, "output": output})
+                output = generate_chat_response(
+                    [Message(role="user", content=build_response_prompt(instruction, input_text))],
+                    options=response_options,
+                ).strip()
+
+                dataset.append({"instruction": instruction, "input": input_text, "output": output})
+
+                progress.update(task, advance=1)
 
     output_path = (
-        Path(__file__).parent.parent.parent / "data" / "finetuning" / "instruction_dataset.json"
+        Path(__file__).parent.parent.parent
+        / "data"
+        / "finetuning"
+        / "instruction_dataset_test.json"
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f:

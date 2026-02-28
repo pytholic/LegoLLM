@@ -8,6 +8,7 @@ from typing import Any
 from rich.logging import RichHandler
 from rich.progress import (
     BarColumn,
+    MofNCompleteColumn,
     Progress,
     SpinnerColumn,
     TextColumn,
@@ -46,6 +47,7 @@ def create_progress_bar(description: str = "Processing") -> Progress:
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
         BarColumn(finished_style="green"),
+        MofNCompleteColumn(),
         TextColumn("•"),
         TimeRemainingColumn(),
     )
@@ -54,7 +56,7 @@ def create_progress_bar(description: str = "Processing") -> Progress:
 @contextmanager
 def progress_bar(
     description: str = "Processing", total: int = 100
-) -> Generator[tuple[Progress, int], Any, None]:
+) -> Generator[tuple[Progress, int], Any]:
     """Context manager for progress bar - simpler API for common use cases.
 
     Args:

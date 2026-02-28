@@ -20,6 +20,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from safetensors.torch import load_file
 
+from legollm.logging import logger
+
 # =============================================================================
 # Configuration
 # =============================================================================
@@ -414,16 +416,15 @@ def load_gpt2_weights(model: GPT2, variant: GPT2Variant = GPT2Variant.GPT2) -> N
         model: GPT2 model instance.
         variant: Which pretrained GPT-2 to download.
     """
-    safetensors_path = _download_gpt2_safetensors(variant)
-    hf_weights = load_file(safetensors_path)
+    hf_weights = _download_and_load_gpt2_safetensors(variant)
     mapped = _map_hf_weights(hf_weights)
     # strict=False because out_head.weight is tied to tok_emb.weight (not in mapped dict)
     model.load_state_dict(mapped, strict=False)
 
 
-def _download_gpt2_safetensors(
+def _download_and_load_gpt2_safetensors(
     variant: GPT2Variant = GPT2Variant.GPT2, cache_dir: Path | None = None
-) -> Path:
+) -> dict[str, torch.Tensor]:
     """Download GPT-2 safetensors file from HuggingFace Hub.
 
     Args:
@@ -431,7 +432,7 @@ def _download_gpt2_safetensors(
         cache_dir: Directory to cache downloads (default: ~/.cache/legollm/).
 
     Returns:
-        Path to the downloaded safetensors file.
+        Dictionary of weights.
     """
     url = f"https://huggingface.co/openai-community/{variant.value}/resolve/main/model.safetensors"
 
@@ -441,15 +442,20 @@ def _download_gpt2_safetensors(
 
     output_path = cache_dir / f"{variant.value}.safetensors"
     if not output_path.exists():
-        print(f"Downloading {variant.value} weights from HuggingFace...")
+        logger.info(f"Downloading {variant.value} weights from HuggingFace...")
         response = requests.get(url, stream=True, timeout=30)
         response.raise_for_status()
         with open(output_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
-        print(f"Saved to {output_path}")
+        logger.info(f"Saved to {output_path}")
+    else:
+        logger.info(f"Model weights already downloaded at {output_path}")
 
-    return output_path
+    logger.info(f"Loading {variant.value} weights...")
+    hf_weights = load_file(output_path)
+
+    return hf_weights
 
 
 def _map_hf_weights(hf: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
