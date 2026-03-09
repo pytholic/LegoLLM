@@ -71,7 +71,7 @@ class HttpBackend:
         payload["stream"] = True
 
         try:
-            with requests.post(self._url, json=payload, stream=True, timeout=120) as resp:
+            with requests.post(self._url, json=payload, stream=True, timeout=600) as resp:
                 resp.raise_for_status()
                 result = ""
                 for line in resp.iter_lines(decode_unicode=True):
