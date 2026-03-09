@@ -17,7 +17,8 @@ import random
 from pathlib import Path
 
 from legollm.logging import progress_bar
-from legollm.post_training.ollama import LLMOptions, Message, generate_chat_response
+from legollm.post_training.providers.base import LLMOptions, Message
+from legollm.post_training.providers.ollama_provider import HttpBackend
 
 # ---------------------------------------------------------------------------
 # Task type definitions
@@ -120,6 +121,8 @@ def build_response_prompt(instruction: str, input_text: str) -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    provider = HttpBackend()
+
     instruction_options = LLMOptions(
         temperature=1.0,
         num_ctx=2048,
@@ -147,17 +150,23 @@ if __name__ == "__main__":
                 task_type = random.choice(list(MODE_A_TASK_TYPES))
                 prompt = build_mode_a_prompt(task_type)
 
-                instruction = generate_chat_response(
+                instruction = provider.chat(
                     [Message(role="user", content=prompt)],
+                    model="llama3.1:8b",
                     options=instruction_options,
+                    output_format=None,
+                    stream=False,
                 ).strip()
 
                 if not instruction:
                     continue
 
-                output = generate_chat_response(
+                output = provider.chat(
                     [Message(role="user", content=build_response_prompt(instruction, ""))],
+                    model="llama3.1:8b",
                     options=response_options,
+                    output_format=None,
+                    stream=False,
                 ).strip()
 
                 dataset.append({"instruction": instruction, "input": "", "output": output})
@@ -168,10 +177,12 @@ if __name__ == "__main__":
                 task_type = random.choice(list(MODE_B_TASK_TYPES))
                 prompt = build_mode_b_prompt(task_type)
 
-                raw = generate_chat_response(
+                raw = provider.chat(
                     [Message(role="user", content=prompt)],
+                    model="llama3.1:8b",
                     options=instruction_options,
                     output_format=MODE_B_SCHEMA,
+                    stream=False,
                 ).strip()
 
                 parsed: dict[str, str] = json.loads(raw)
@@ -181,9 +192,12 @@ if __name__ == "__main__":
                 if not instruction or not input_text:
                     continue
 
-                output = generate_chat_response(
+                output = provider.chat(
                     [Message(role="user", content=build_response_prompt(instruction, input_text))],
+                    model="llama3.1:8b",
                     options=response_options,
+                    output_format=None,
+                    stream=False,
                 ).strip()
 
                 dataset.append({"instruction": instruction, "input": input_text, "output": output})
