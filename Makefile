@@ -20,6 +20,10 @@ install-dev:
 install-dev-docs:
 	uv sync --group dev --group docs
 
+.PHONY: install-extras
+install-extras:
+	uv sync --all-extras
+
 .PHONY: run
 run:
 	python main.py
@@ -86,3 +90,37 @@ help:
 .PHONY: delete-venv
 delete-venv:
 	uv venv --clear
+
+# ── Ollama multi-GPU ──────────────────────────────────────────────────────────
+OLLAMA_BIN       ?= ./bin/ollama
+NUM_GPUS         ?= 8
+WORKERS_PER_GPU  ?= 1
+BASE_PORT        ?= 11434
+MODEL            ?= qwen3.5:9b
+
+.PHONY: ollama-serve
+ollama-serve:
+	@mkdir -p logs
+	@echo "Starting $(NUM_GPUS) Ollama instances from port $(BASE_PORT) ($(WORKERS_PER_GPU) workers/GPU)..."
+	@for i in $$(seq 0 $$(($(NUM_GPUS) - 1))); do \
+		port=$$(($(BASE_PORT) + i)); \
+		echo "  GPU $$i → port $$port"; \
+		CUDA_VISIBLE_DEVICES=$$i OLLAMA_HOST=0.0.0.0:$$port OLLAMA_NUM_PARALLEL=$(WORKERS_PER_GPU) $(OLLAMA_BIN) serve >> logs/ollama_$$port.log 2>&1 & \
+	done
+	@echo "Done. Logs in logs/ollama_<port>.log"
+
+.PHONY: ollama-pull
+ollama-pull:
+	@echo "Pulling $(MODEL) on all $(NUM_GPUS) instances..."
+	@for i in $$(seq 0 $$(($(NUM_GPUS) - 1))); do \
+		port=$$(($(BASE_PORT) + i)); \
+		OLLAMA_HOST=localhost:$$port $(OLLAMA_BIN) pull $(MODEL) & \
+	done
+	@wait
+	@echo "Done."
+
+.PHONY: ollama-stop
+ollama-stop:
+	@echo "Stopping all Ollama instances..."
+	@pkill -f "$(OLLAMA_BIN) serve" || true
+	@echo "Done."

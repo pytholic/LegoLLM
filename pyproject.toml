@@ -21,6 +21,10 @@ dependencies = [
     "tqdm>=4.67.3",
 ]
 
+[project.optional-dependencies]
+ollama = ["ollama>=0.6.0"]
+openai = ["openai>=2.26.0"]
+
 [dependency-groups]
 dev = [
     "pytest>=8.0.0,<9.0.0",
@@ -92,6 +96,7 @@ ignore = [
     "D103",  # Missing docstring in public function
     "D104",  # Missing docstring in public package
     "D105",  # Missing docstring in magic method
+    "D107",  # Missing docstring in __init__
     "D205",  # 1 blank line required between summary line and description
     "D209",  # Multi-line docstring
     "D210",  # No whitespaces allowed surrounding docstring text

@@ -7,25 +7,14 @@ import json
 import re
 
 from legollm.logging import progress_bar
-from legollm.post_training.ollama import LLMOptions, Message, generate_chat_response
+from legollm.post_training.providers.base import LLMOptions, Message
+from legollm.post_training.providers.ollama_provider import HttpBackend
+from legollm.post_training.sft.instruction_dataset import format_input
 
 file_path = "data/finetuning/instruction_dataset_test_responses.json"
 
 with open(file_path, encoding="utf-8") as f:
     test_data = json.load(f)
-
-
-def format_input(sample: dict[str, str]) -> str:
-    """Format an instruction sample into Alpaca-style prompt (without response)."""
-    instruction_text = (
-        f"Below is an instruction that describes a task. "
-        f"Write a response that appropriately completes the request."
-        f"\n\n### Instruction:\n{sample['instruction']}"
-    )
-
-    input_text = f"\n\n### Input:\n{sample['input']}" if sample["input"] else ""
-
-    return instruction_text + input_text
 
 
 response_options = LLMOptions(
@@ -54,6 +43,9 @@ Feedback: (one-sentence rationale)
 Score: (integer 1-5)"""
 
 
+_provider = HttpBackend()
+
+
 def generate_model_scores(json_data: list[dict[str, str]], model: str = "llama3.1:8b") -> list[int]:
     """Generate scores for the model."""
     scores: list[int] = []
@@ -68,10 +60,11 @@ def generate_model_scores(json_data: list[dict[str, str]], model: str = "llama3.
                 reference=sample["output"],
                 answer=sample["generated_response"],
             )
-            response = generate_chat_response(
+            response = _provider.chat(
                 [Message(role="user", content=prompt)],
                 model=model,
                 options=response_options,
+                output_format=None,
                 stream=False,
             )
             try:
