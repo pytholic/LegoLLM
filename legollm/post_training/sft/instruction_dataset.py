@@ -21,6 +21,9 @@ def download_and_load_instruction_dataset(file_path: str, url: str) -> list[dict
 
     Returns:
         list[dict[str, str]]: The instruction dataset.
+
+    Note:
+        - Handles both `json` and `jsonl` files.
     """
     if not os.path.exists(file_path):
         response = requests.get(url, timeout=30)
@@ -30,7 +33,10 @@ def download_and_load_instruction_dataset(file_path: str, url: str) -> list[dict
             file.write(text_data)
 
     with open(file_path, encoding="utf-8") as file:
-        data = json.load(file)
+        if file_path.endswith(".jsonl"):
+            data = [json.loads(line) for line in file if line.strip()]
+        else:
+            data = json.load(file)
 
     return data
 

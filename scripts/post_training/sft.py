@@ -59,8 +59,9 @@ def main() -> None:
     args = parse_args()
 
     # Load data
-    file_path = "data/finetuning/instruction_dataset.json"
-    url = "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/main/data/finetuning/instruction_dataset.json"
+    file_path = "data/finetuning/instruction_dataset_reflection_instruction.jsonl"
+    # file_path = "data/finetuning/instruction_dataset.json"
+    url = "https://raw.githubusercontent.com/pytholic/LegoLLM/refs/heads/main/data/finetuning/instruction_dataset_reflection_instruction.jsonl"
     data = download_and_load_instruction_dataset(file_path, url)
 
     # Load tokenizer
@@ -128,11 +129,14 @@ def main() -> None:
 
     # Plot losses
     plot_losses(
-        history["steps"], history["train_loss"], history["val_loss"], "checkpoints/sft/loss.png"
+        history["steps"],
+        history["train_loss"],
+        history["val_loss"],
+        "checkpoints/sft/loss_reflection.png",
     )
 
     # Load best checkpoint for evaluation
-    best_checkpoint_path = f"checkpoints/sft/{variant}-sft.pt"
+    best_checkpoint_path = f"checkpoints/sft/{variant}-sft-reflection.pt"
     checkpoint = torch.load(best_checkpoint_path, map_location=device, weights_only=False)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
@@ -182,7 +186,7 @@ def main() -> None:
             )
             test_data[i]["generated_response"] = str(generated_text).strip()
             progress.update(task, advance=1)
-    with open("data/finetuning/instruction_dataset_test_responses.json", "w") as f:
+    with open("data/finetuning/instruction_dataset_test_responses_reflection.json", "w") as f:
         json.dump(test_data, f, indent=2, ensure_ascii=False)
 
 

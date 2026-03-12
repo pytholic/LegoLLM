@@ -24,13 +24,13 @@ uv run python scripts/post_training/reflection.py --provider ollama --model deep
 Steps:
 
 Step 1: Start instances on the same GPU
-make ollama-serve NUM_INSTANCES=3 GPU_IDS=0,0,0 WORKERS_PER_GPU=1 OLLAMA_BIN=/usr/local/bin/ollama BASE_PORT=11434 MODEL=deepseek-r1:14b
+make ollama-serve NUM_INSTANCES=4 GPU_IDS=0,1,2,3 WORKERS_PER_GPU=4 OLLAMA_BIN=/lunit/home/pytholic/personal/ollama/bin/ollama BASE_PORT=11434 MODEL=olmo-3.1:32b-think
 
 Step 2: Pull the model on all instances
-make ollama-pull NUM_INSTANCES=3 OLLAMA_BIN=/usr/local/bin/ollama BASE_PORT=11434 MODEL=deepseek-r1:14b
+make ollama-pull NUM_INSTANCES=4 GPU_IDS=0,1,2,3 WORKERS_PER_GPU=4 OLLAMA_BIN=/lunit/home/pytholic/personal/ollama/bin/ollama BASE_PORT=11434 MODEL=olmo-3.1:32b-think
 
 Step 3: Run the reflection script on instances
-uv run python scripts/post_training/reflection.py --provider ollama --model deepseek-r1:14b --mode instruction --ollama-backend http --num-instances 3 --base-port 11434
+uv run python scripts/post_training/reflection.py --provider ollama --model olmo-3.1:32b-think --mode instruction --ollama-backend http --num-instances 4 --base-port 11434 --ollama-host 127.0.0.1 --workers-per-instance 4 --input data/finetuning/instruction_dataset_reflection_instruction_failed.jsonl
 
 Step 4: Stop all ollama instances
 pkill ollama
@@ -38,6 +38,14 @@ pkill ollama
 Note:
 - The instruction mode rewrites both the instruction and the answer.
 - The response mode only rewrites the answer.
+
+Download ollama binary:
+- curl -LO https://github.com/ollama/ollama/releases/download/v0.17.7/ollama-linux-amd64.tar.zst
+- mkdir ollama
+- tar --use-compress-program=unzstd -xvf ollama-linux-amd64.tar.zst -C ollama/
+
+We don't need to send curl each time. We can just start with ./ollama serve, and then open another terminal and do ./ollama pull qwen3.5:27b or ./ollama run qwen3.5:27b
+
 """
 
 import argparse
