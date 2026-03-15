@@ -27,8 +27,9 @@ def _build_payload(
     payload: dict[str, object] = {
         "model": model,
         "messages": [m.to_dict() for m in messages],
-        "think": think,
     }
+    if think:
+        payload["think"] = True
     if options:
         opts = options.to_dict()
         if opts:
@@ -64,7 +65,7 @@ class HttpBackend:
         options: LLMOptions | None,
         output_format: dict[str, object] | None,
         stream: bool,
-        think: bool = True,
+        think: bool = False,
     ) -> str:
         """Send a chat request via raw HTTP (always streams internally)."""
         payload = _build_payload(messages, model, options, output_format, think)
@@ -117,7 +118,7 @@ class SdkBackend:
         options: LLMOptions | None,
         output_format: dict[str, object] | None,
         stream: bool,
-        think: bool = True,
+        think: bool = False,
     ) -> str:
         """Send a chat request via the ollama-python SDK."""
         kwargs = _build_payload(messages, model, options, output_format, think)

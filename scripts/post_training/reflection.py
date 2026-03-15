@@ -1,51 +1,24 @@
-"""Reflection: a tool for LLMs to reflect on their own behavior and improve.
+"""Improve instruction dataset quality via LLM-based reflection.
 
-Usage examples:
+Two modes:
+  - response:     rewrites only the answer to be more helpful and detailed
+  - instruction:  rewrites both the instruction and the answer to be more complex
 
-uv run python scripts/post_training/reflection.py --provider openai --model gpt-5-nano --mode response
+Usage:
+    # OpenAI provider
+    uv run python scripts/post_training/reflection.py --provider openai --model gpt-4o-mini --mode response
 
-uv run python scripts/post_training/reflection.py --provider ollama --model qwen3.5:9b --mode instruction --ollama-backend http
+    # Ollama, single instance
+    uv run python scripts/post_training/reflection.py --provider ollama --model qwen3.5:9b --mode instruction
 
-# 8 instances across 8 GPUs
-make ollama-serve NUM_INSTANCES=8
-uv run python scripts/post_training/reflection.py --num-instances 8
+    # Ollama, 4 instances across 4 GPUs (2 workers each = 8 concurrent requests)
+    make ollama-serve NUM_INSTANCES=4 WORKERS_PER_GPU=2
+    uv run python scripts/post_training/reflection.py --num-instances 4 --workers-per-instance 2
 
-# 4 instances on the same GPU (for models that don't support OLLAMA_NUM_PARALLEL)
-make ollama-serve NUM_INSTANCES=4 GPU_IDS=0,0,0,0
-uv run python scripts/post_training/reflection.py --num-instances 4
+    # Retry failed samples
+    uv run python scripts/post_training/reflection.py --input data/finetuning/instruction_dataset_reflection_instruction_failed.jsonl
 
-# 4 instances across 4 GPUs, 2 workers each = 8 total concurrent requests
-make ollama-serve NUM_INSTANCES=4 WORKERS_PER_GPU=2
-uv run python scripts/post_training/reflection.py --num-instances 4 --workers-per-instance 2
-
-# For failed cases, use the input file
-uv run python scripts/post_training/reflection.py --provider ollama --model deepseek-r1:14b --mode instruction --ollama-backend http --num-instances 3 --base-port 11434 --input data/finetuning/instruction_dataset_reflection_instruction_failed.jsonl
-
-Steps:
-
-Step 1: Start instances on the same GPU
-make ollama-serve NUM_INSTANCES=4 GPU_IDS=0,1,2,3 WORKERS_PER_GPU=4 OLLAMA_BIN=/lunit/home/pytholic/personal/ollama/bin/ollama BASE_PORT=11434 MODEL=olmo-3.1:32b-think
-
-Step 2: Pull the model on all instances
-make ollama-pull NUM_INSTANCES=4 GPU_IDS=0,1,2,3 WORKERS_PER_GPU=4 OLLAMA_BIN=/lunit/home/pytholic/personal/ollama/bin/ollama BASE_PORT=11434 MODEL=olmo-3.1:32b-think
-
-Step 3: Run the reflection script on instances
-uv run python scripts/post_training/reflection.py --provider ollama --model olmo-3.1:32b-think --mode instruction --ollama-backend http --num-instances 4 --base-port 11434 --ollama-host 127.0.0.1 --workers-per-instance 4 --input data/finetuning/instruction_dataset_reflection_instruction_failed.jsonl
-
-Step 4: Stop all ollama instances
-pkill ollama
-
-Note:
-- The instruction mode rewrites both the instruction and the answer.
-- The response mode only rewrites the answer.
-
-Download ollama binary:
-- curl -LO https://github.com/ollama/ollama/releases/download/v0.17.7/ollama-linux-amd64.tar.zst
-- mkdir ollama
-- tar --use-compress-program=unzstd -xvf ollama-linux-amd64.tar.zst -C ollama/
-
-We don't need to send curl each time. We can just start with ./ollama serve, and then open another terminal and do ./ollama pull qwen3.5:27b or ./ollama run qwen3.5:27b
-
+See scripts/post_training/README.md for the full multi-GPU workflow.
 """
 
 import argparse
