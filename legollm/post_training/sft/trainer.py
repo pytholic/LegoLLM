@@ -27,6 +27,7 @@ def train(
     checkpoint_interval: int = 1,
     model_name: str = "gpt2",
     grad_accumulation_steps: int = 1,
+    checkpoint_suffix: str = "",
 ) -> dict[str, list[float]]:
     """Train the model via supervised fine-tuning.
 
@@ -43,6 +44,7 @@ def train(
         model_name: Model variant name for best checkpoint filename.
             Available: "gpt2", "gpt2-medium", "gpt2-large", "gpt2-xl".
         grad_accumulation_steps: The number of steps to accumulate gradients before updating the model.
+        checkpoint_suffix: The suffix to add to the checkpoint filename.
 
     Returns:
         Dictionary with "train_loss", "val_loss", and "steps" lists.
@@ -82,7 +84,13 @@ def train(
 
                     if val_loss < best_val_loss:
                         best_val_loss = val_loss
-                        save_checkpoint(model, optimizer, epoch, val_loss, f"{model_name}-sft.pt")
+                        save_checkpoint(
+                            model,
+                            optimizer,
+                            epoch,
+                            val_loss,
+                            f"{model_name}-{checkpoint_suffix}.pt",
+                        )
                         logger.info(f"New best val_loss: {val_loss:.4f}")
 
         # Periodic checkpointing

@@ -10,6 +10,8 @@ Usage:
         --baseline data/finetuning/instruction_dataset_test_responses.json \\
         --reflection data/finetuning/instruction_dataset_test_responses_reflection.json \\
         --judge-model deepseek-r1:14b
+
+Created by @pytholic on 2026.03.14
 """
 
 import argparse
@@ -38,8 +40,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--judge-model",
         type=str,
-        default="deepseek-r1:14b",
-        help="Ollama judge model (default: deepseek-r1:14b)",
+        default="llama3.1:8b",
+        help="Ollama judge model (default: llama3.1:8b)",
     )
     parser.add_argument(
         "--judge-backend",
@@ -47,6 +49,18 @@ def parse_args() -> argparse.Namespace:
         default="http",
         choices=[b.value for b in BackendType],
         help="Ollama backend (default: http)",
+    )
+    parser.add_argument(
+        "--judge-host",
+        type=str,
+        default="127.0.0.1",
+        help="Ollama host (default: 127.0.0.1)",
+    )
+    parser.add_argument(
+        "--judge-port",
+        type=int,
+        default=11434,
+        help="Ollama port (default: 11434)",
     )
     return parser.parse_args()
 
@@ -80,7 +94,9 @@ def main() -> None:
         top_p=0.9,
         num_predict=8192,
     )
-    provider = create_ollama_backend(BackendType(args.judge_backend))
+    provider = create_ollama_backend(
+        BackendType(args.judge_backend), host=args.judge_host, port=args.judge_port
+    )
 
     baseline_scores = generate_model_scores(
         baseline_data, provider=provider, model=args.judge_model, options=options

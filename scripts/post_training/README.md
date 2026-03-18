@@ -47,26 +47,22 @@ uv run python scripts/post_training/reflection.py \
 Spin up one Ollama instance per GPU, then run reflection across all of them:
 
 ```shell
-# Step 1: Start instances (one per GPU)
-make ollama-serve NUM_INSTANCES=4 GPU_IDS=0,1,2,3 BASE_PORT=11434 MODEL=olmo-3.1:32b-think
+# Start all instances and pull the model in one step, then run reflection
+make ollama-start reflect NUM_INSTANCES=4 GPU_IDS=0,1,2,3 MODEL=deepseek-r1:14b
 
-# Step 2: Pull the model on all instances
-make ollama-pull NUM_INSTANCES=4 GPU_IDS=0,1,2,3 BASE_PORT=11434 MODEL=olmo-3.1:32b-think
-
-# Step 3: Run reflection across all instances
-uv run python scripts/post_training/reflection.py \
-    --provider ollama --model olmo-3.1:32b-think --mode instruction \
-    --num-instances 4 --base-port 11434 --ollama-host 127.0.0.1
-
-# Step 4: Stop all instances
-pkill ollama
+# Stop all instances when done
+make ollama-stop
 ```
 
-To increase throughput further, use `--workers-per-instance` (set `OLLAMA_NUM_PARALLEL` to the same value when starting `ollama serve`):
+Or run the steps individually if you need more control:
 
 ```shell
-make ollama-serve NUM_INSTANCES=4 WORKERS_PER_GPU=2
-uv run python scripts/post_training/reflection.py --num-instances 4 --workers-per-instance 2
+make ollama-serve NUM_INSTANCES=4 GPU_IDS=0,1,2,3 MODEL=deepseek-r1:14b
+make ollama-pull  NUM_INSTANCES=4 MODEL=deepseek-r1:14b
+uv run python scripts/post_training/reflection.py \
+    --provider ollama --model deepseek-r1:14b --mode instruction \
+    --num-instances 4 --base-port 11434
+make ollama-stop
 ```
 
 ### Retrying failed samples

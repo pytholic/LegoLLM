@@ -1,0 +1,547 @@
+[
+  {
+    "instruction": "List five types of mammals that are native to the continent of Australia.",
+    "input": "",
+    "output": "Here are 5 types of mammals native to Australia:\n\n1. Kangaroo\n2. Koala\n3. Wombat\n4. Tasmanian Devil\n5. Quokka"
+  },
+  {
+    "instruction": "What is the equation for Newton's Law of Universal Gravitation in vector form?",
+    "input": "",
+    "output": "F = G \\* (m1 \\* m2) / r^2"
+  },
+  {
+    "instruction": "List five common ways that humans impact the global climate in a negative way.",
+    "input": "",
+    "output": "Here are five common ways that humans negatively impact the global climate:\n\n1. Burning fossil fuels (coal, oil, gas) releases CO2.\n2. Deforestation removes trees that absorb CO2.\n3. Agriculture contributes to methane emissions through livestock and soil degradation.\n4. Industrial processes like cement production and chemical manufacturing release greenhouse gases.\n5. Transportation emissions from cars, trucks, and airplanes contribute to climate change."
+  },
+  {
+    "instruction": "Rewrite using a simile",
+    "input": "Her voice was like honey dripping from a spoon.",
+    "output": "Her voice was sweet as warm honey flowing freely."
+  },
+  {
+    "instruction": "What is the formula for calculating the volume of a sphere in three-dimensional space?",
+    "input": "",
+    "output": "The formula is: V = (4/3)πr³, where V is the volume and r is the radius of the sphere."
+  },
+  {
+    "instruction": "What is the equation for the kinetic energy of an object in terms of its mass and velocity?",
+    "input": "",
+    "output": "The equation for kinetic energy (KE) is:\n\nKE = ½ mv²\n\nwhere m is mass and v is velocity."
+  },
+  {
+    "instruction": "What is the plural form of child in British English?",
+    "input": "",
+    "output": "The plural form of \"child\" in British English is \"children\"."
+  },
+  {
+    "instruction": "Rewrite in past perfect tense",
+    "input": "By the time I arrived, they had already eaten dinner",
+    "output": "By the time I arrived, they had eaten their dinner.\n\nNote: The original sentence uses \"already\" which is not necessary with past perfect tense."
+  },
+  {
+    "instruction": "Define the concept of symbiotic relationships in coral reef ecosystems.",
+    "input": "",
+    "output": "In coral reef ecosystems, a symbiotic relationship is an interdependent association between different species where one species benefits (obtains food or shelter) and the other species is not harmed. There are three types:\n\n1. Mutualism: Both species benefit (e.g., corals and zooxanthellae).\n2. Commensalism: One species benefits, while the other is neither helped nor harmed.\n3. Parasitism: One species benefits, while the other is harmed.\n\nExamples in coral reef ecosystems include:\n\n* Corals and zooxanthellae (mutualism)\n* Cleaner fish and their clients (commensalism)\n* Sea slugs and their host corals (parasitism)"
+  },
+  {
+    "instruction": "Ask to define the concept of symbiotic relationships in coral reefs.",
+    "input": "",
+    "output": "A symbiotic relationship is a close, long-term connection between different species that live together in a mutually beneficial way, where one or both species benefit from each other's presence. In coral reefs, this often involves corals providing food and shelter to fish and algae, while the fish help maintain water quality and deter predators for the corals."
+  },
+  {
+    "instruction": "Translate the phrase into Spanish.",
+    "input": "Hello, how are you?",
+    "output": "\"Hola, ¿cómo estás?\""
+  },
+  {
+    "instruction": "Convert the sentence into passive voice.",
+    "input": "The manager ordered the team to start working on the project.",
+    "output": "The project was ordered by the manager for the team to start working on it."
+  },
+  {
+    "instruction": "What is the process by which plants convert sunlight into energy called?",
+    "input": "",
+    "output": "Photosynthesis."
+  },
+  {
+    "instruction": "Correct the spelling error in this sentence.",
+    "input": "The capitl of France is Paris.",
+    "output": "The capitl should be spelled \"capital\". \n\nThe corrected sentence is:\n\nThe capital of France is Paris."
+  },
+  {
+    "instruction": "Sort the list of countries alphabetically.",
+    "input": "France, Japan, Brazil, China",
+    "output": "Brazil\nChina\nFrance\nJapan"
+  },
+  {
+    "instruction": "Convert the following sentence to the past perfect tense.",
+    "input": "We had eaten breakfast before leaving for work.",
+    "output": "We had eaten breakfast before leaving for work remains in the past perfect tense as it already expresses an action completed before another action in the past."
+  },
+  {
+    "instruction": "Provide an antonym for the word \"fast\".",
+    "input": "",
+    "output": "Slow."
+  },
+  {
+    "instruction": "Rewrite using a simile.",
+    "input": "She was as calm as a lake on a windless day.",
+    "output": "Her demeanor was serene, like the surface of a still pond."
+  },
+  {
+    "instruction": "Find a word that rhymes with \"cloud\".",
+    "input": "",
+    "output": "Shroud."
+  },
+  {
+    "instruction": "Define the concept of symbiotic relationships in aquatic ecosystems.",
+    "input": "",
+    "output": "Symbiotic relationships in aquatic ecosystems refer to close, long-term associations between different species that live together, where one or both benefit from each other's presence. These relationships can be mutualistic (both benefit), commensalistic (one benefits, the other is unaffected), or parasitic (one benefits, the other is harmed). Examples include coral-algae symbiosis and clownfish-shark mutualism."
+  },
+  {
+    "instruction": "Analyze the sentiment of this short review",
+    "input": "The service was prompt and efficient.",
+    "output": "Neutral to slightly positive."
+  },
+  {
+    "instruction": "What is the largest living structure on Earth, according to the Guinness World Records?",
+    "input": "",
+    "output": "The Great Barrier Reef."
+  },
+  {
+    "instruction": "Identify and list five common species of deciduous trees found in eastern North America.",
+    "input": "",
+    "output": "Here are 5 common species of deciduous trees found in eastern North America:\n\n1. Sugar Maple (Acer saccharum)\n2. American Beech (Fagus grandifolia)\n3. Red Maple (Acer rubrum)\n4. White Oak (Quercus alba)\n5. Yellow Poplar (Liriodendron tulipifera)"
+  },
+  {
+    "instruction": "Convert to passive voice.",
+    "input": "The manager fired the employee yesterday.",
+    "output": "The employee was fired by the manager yesterday."
+  },
+  {
+    "instruction": "List five types of plants that are native to the tropical rainforest biome.",
+    "input": "",
+    "output": "Here are 5 types of plants native to the tropical rainforest biome:\n\n1. Philodendron\n2. Bamboo\n3. Rubber Tree (Hevea brasiliensis)\n4. Kapok Tree (Ceiba pentandra)\n5. Strangler Fig (Ficus aurea)"
+  },
+  {
+    "instruction": "Change 250 milliliters to liters.",
+    "input": "",
+    "output": "0.25 liters."
+  },
+  {
+    "instruction": "What are the present participles of \"go\", \"eat\", and \"watch\"?",
+    "input": "",
+    "output": "The present participles are:\n\n* go: going\n* eat: eating\n* watch: watching"
+  },
+  {
+    "instruction": "Please define the concept of symbiotic relationships in aquatic environments.",
+    "input": "",
+    "output": "Symbiotic relationships in aquatic environments refer to close associations between two or more organisms, such as plants, animals, or microorganisms, that live together and benefit each other in specific ways, including:\n\n* Mutualism: both organisms gain a benefit\n* Commensalism: one organism benefits while the other is unaffected\n* Parasitism: one organism benefits at the expense of the other\n\nExamples include coral-algae symbiosis (mutualism), remora fish attaching to sharks for food (commensalism), and barnacles using their host's energy to photosynthesize (parasitism)."
+  },
+  {
+    "instruction": "Convert 250 milliliters of water from liters.",
+    "input": "",
+    "output": "0.25 liters."
+  },
+  {
+    "instruction": "Convert 275 miles to kilometers.",
+    "input": "",
+    "output": "1 mile ≈ 1.60934 kilometers\n275 miles ≈ 442.38 kilometers"
+  },
+  {
+    "instruction": "Translate the phrase into Spanish",
+    "input": "Hello, how are you?",
+    "output": "\"Hola, ¿cómo estás?\""
+  },
+  {
+    "instruction": "What is the equation for finding the pH level in a solution with sulfuric acid?",
+    "input": "",
+    "output": "The equation to find the pH of a solution with sulfuric acid (H2SO4) is:\n\npH = -log[H+]\n\nFirst, you need to find [H+], which is the concentration of hydrogen ions in moles per liter.\n\nFor strong acids like H2SO4, the concentration of H+ is equal to the molarity of the acid divided by 2 (since it donates two H+ ions per molecule).\n\n[H+] = Molarity of H2SO4 / 2"
+  },
+  {
+    "instruction": "What is the equation for calculating centripetal force on an object in circular motion?",
+    "input": "",
+    "output": "F = (m × v^2) / r \n\nWhere:\n- F is the centripetal force\n- m is the mass of the object\n- v is its velocity\n- r is the radius of the circular path"
+  },
+  {
+    "instruction": "Translate into Spanish.",
+    "input": "I'm reading a book in my free time.",
+    "output": "Estoy leyendo un libro en mi tiempo libre."
+  },
+  {
+    "instruction": "Convert 7 ounces to grams.",
+    "input": "",
+    "output": "1 ounce is equal to 28.35 grams, so:\n\n7 ounces = 7 × 28.35 grams\n= 198.45 grams"
+  },
+  {
+    "instruction": "Convert 7 pounds to kilograms.",
+    "input": "",
+    "output": "1 pound is approximately equal to 0.45 kilograms. \n\n7 pounds = 3.15 kilograms (approximately)"
+  },
+  {
+    "instruction": "Correct any spelling errors.",
+    "input": "The companey has annouced a new prodct launch.",
+    "output": "Here is the corrected text:\n\nThe company has announced a new product launch."
+  },
+  {
+    "instruction": "What is a rhyme for the word \"laugh\"?",
+    "input": "",
+    "output": "Chuff."
+  },
+  {
+    "instruction": "Convert 7.8 liters of water from milliliters to a unit with a larger base value.",
+    "input": "",
+    "output": "1 liter = 1000 milliliters (mL)\n\nSo, 7.8 liters = 7.8 × 1000 mL = 7800 mL"
+  },
+  {
+    "instruction": "What is the largest planet in our solar system by both mass and diameter?",
+    "input": "",
+    "output": "Jupiter."
+  },
+  {
+    "instruction": "Provide an antonym for the word \"quick\".",
+    "input": "",
+    "output": "Slow."
+  },
+  {
+    "instruction": "What is the primary function of a catalyst in a chemical reaction?",
+    "input": "",
+    "output": "The primary function of a catalyst is to speed up a chemical reaction without being consumed or altered in the process, allowing it to be used multiple times."
+  },
+  {
+    "instruction": "Classify the event as either man-made, natural, or complex.",
+    "input": "Hurricane Katrina",
+    "output": "Natural."
+  },
+  {
+    "instruction": "Convert 7 pounds to kilograms.",
+    "input": "",
+    "output": "1 pound is approximately equal to 0.453592 kilograms, so:\n\n7 pounds = 3.175 kilograms"
+  },
+  {
+    "instruction": "Remove unnecessary words from this sentence.",
+    "input": "The manager of the company will be attending the meeting tomorrow morning.",
+    "output": "The manager will attend the meeting tomorrow morning."
+  },
+  {
+    "instruction": "Convert 75 liters of water from milliliters.",
+    "input": "",
+    "output": "1000 milliliters = 1 liter\n\nSo, 75 liters is equal to: 75,000 milliliters"
+  },
+  {
+    "instruction": "Translate this phrase into Spanish",
+    "input": "Hello, how are you?",
+    "output": "\"Hola, ¿cómo estás?\""
+  },
+  {
+    "instruction": "Translate the name of the biggest planet in our solar system from English to Spanish.",
+    "input": "Jupiter",
+    "output": "Júpiter."
+  },
+  {
+    "instruction": "Correct the spelling error in the following sentence.",
+    "input": "The capitl building is very nice.",
+    "output": "The capitl -> Capital"
+  },
+  {
+    "instruction": "Convert 27 liters of gasoline to gallons at a temperature of 18°C.",
+    "input": "",
+    "output": "1 liter ≈ 0.2642 gallon\n27 liters × 0.2642 gallon/liter = approximately 7.15 gallons"
+  },
+  {
+    "instruction": "Provide an antonym of the word \"fertile\" in a botanical context.",
+    "input": "",
+    "output": "Barren."
+  },
+  {
+    "instruction": "Convert 7 gallons of water from Fahrenheit to Celsius.",
+    "input": "",
+    "output": "To convert 7 gallons (which is a unit of volume) to temperature, I assume you mean 7 gallons of water at some temperature in Fahrenheit. However, the problem doesn't specify the initial temperature. \n\nIf we assume the initial temperature is 32°F (freezing point), then:\n\n- 1 gallon of water at 32°F = 0°C\n- So, 7 gallons would be approximately 0°C\n\nHowever, if you meant to ask for a conversion from Fahrenheit to Celsius for a different temperature, please provide the initial temperature in Fahrenheit."
+  },
+  {
+    "instruction": "List five different types of mammals that are known for their ability to jump long distances.",
+    "input": "",
+    "output": "Here are 5 types of mammals known for their jumping ability:\n\n1. Kangaroo\n2. Springbok\n3. Gazelle\n4. Jerboa\n5. Puma (can jump up to 40 feet)"
+  },
+  {
+    "instruction": "What is the singular possessive form of the noun \"house\"?",
+    "input": "",
+    "output": "The house's."
+  },
+  {
+    "instruction": "Rewrite in a more formal tone",
+    "input": "Let's get this project done ASAP.",
+    "output": "Here is the rewritten version with a more formal tone:\n\nI would appreciate it if you could provide a timely completion of this project.\n\nPlease respond promptly and clearly to my inquiry."
+  },
+  {
+    "instruction": "Calculate the weight in grams of a paperclip made from aluminum that weighs 12.5 grams.",
+    "input": "",
+    "output": "Since there's no conversion needed (the paperclip is already made of aluminum), its weight remains 12.5 grams."
+  },
+  {
+    "instruction": "What is the formula for Coulomb's Law between two point charges in free space?",
+    "input": "",
+    "output": "F = (k * q1 * q2) / r²"
+  },
+  {
+    "instruction": "Rewrite using a metaphor",
+    "input": "The city is a jungle.",
+    "output": "Urban life is a beast to tame."
+  },
+  {
+    "instruction": "Change the volume of 250 milliliters to liters.",
+    "input": "",
+    "output": "1 liter = 1000 milliliters\n\n250 milliliters / 1000 milliliters/liter = 0.25 liters"
+  },
+  {
+    "instruction": "What is the present participle of swim?",
+    "input": "",
+    "output": "Swimming"
+  },
+  {
+    "instruction": "Who was the first person to walk on the surface of the Moon during a NASA mission?",
+    "input": "",
+    "output": "Neil Armstrong."
+  },
+  {
+    "instruction": "List at least five distinct examples of European monarchies that still exist today.",
+    "input": "",
+    "output": "Here are five distinct examples of European monarchies that still exist today:\n\n1. United Kingdom (Queen Elizabeth II)\n2. Spain (King Felipe VI)\n3. Sweden (King Carl XVI Gustaf)\n4. Norway (King Harald V)\n5. Monaco (Prince Albert II)"
+  },
+  {
+    "instruction": "What is the longest river in South America?",
+    "input": "",
+    "output": "The Paraná River, with a total length of approximately 4,880 kilometers (3,030 miles), is often considered the longest river in South America. However, some sources argue that it's a combination of two rivers: the Paraná and Paraguay Rivers, which are connected by the Iguazu Falls."
+  },
+  {
+    "instruction": "Classify this text as an idiom, a proverb, or a common saying.",
+    "input": "The early bird catches the worm.",
+    "output": "Proverb."
+  },
+  {
+    "instruction": "Arrange this list in alphabetical order",
+    "input": "Cat Dog Apple Banana Elephant",
+    "output": "Apple, Banana, Cat, Dog, Elephant"
+  },
+  {
+    "instruction": "List two ancient civilizations that were known for their advanced knowledge of astronomy.",
+    "input": "",
+    "output": "1. Babylonians\n2. Mayans"
+  },
+  {
+    "instruction": "What are the nominative and accusative forms of the word \"knight\" in Latin?",
+    "input": "",
+    "output": "The Latin word for \"knight\" is \"miles\". \n\n* Nominative: miles\n* Accusative: militem (or milem)"
+  },
+  {
+    "instruction": "Provide a rhyme for the word \"spoon\".",
+    "input": "",
+    "output": "\"A spoon is used to scoop it soon.\""
+  },
+  {
+    "instruction": "List two major differences between traditional and modern comic book art styles.",
+    "input": "",
+    "output": "Two major differences between traditional and modern comic book art styles are:\n\n1. **Linework**: Traditional comic books often feature bold, dark lines with minimal shading, while modern comics frequently use more subtle, expressive linework with varying line weights.\n2. **Inking techniques**: Traditional comics typically used ink-on-paper techniques, whereas modern comics often employ digital inking tools and software, allowing for greater flexibility and precision."
+  },
+  {
+    "instruction": "What is the formula for calculating the volume of an elliptical cylinder?",
+    "input": "",
+    "output": "The formula for calculating the volume of an elliptical cylinder is:\n\nV = πabc\n\nwhere a, b, and c are the lengths of the semi-major axis, semi-minor axis, and height of the ellipse, respectively."
+  },
+  {
+    "instruction": "Rewrite using a metaphor",
+    "input": "She was as happy as could be.",
+    "output": "She was on top of the sunbeam, basking in its warmth and radiance."
+  },
+  {
+    "instruction": "Rewrite this informal sentence in a more formal tone.",
+    "input": "I'm thinking of going to the beach on Friday.",
+    "output": "\"I plan to visit the beach on Friday.\""
+  },
+  {
+    "instruction": "List five different types of traditional Scottish folk music.",
+    "input": "",
+    "output": "Here are 5 traditional Scottish folk music styles:\n\n1. Piobaireachd (bagpipe music)\n2. Strathspey\n3. Reel\n4. Lament\n5. Hornpipe"
+  },
+  {
+    "instruction": "What is an antonym of free?",
+    "input": "",
+    "output": "Trapped or confined."
+  },
+  {
+    "instruction": "List five common symptoms associated with a viral respiratory infection in children.",
+    "input": "",
+    "output": "Here are the 5 common symptoms:\n\n1. Runny nose\n2. Coughing\n3. Sore throat\n4. Fatigue (tiredness)\n5. Loss of appetite"
+  },
+  {
+    "instruction": "What is the comparative form of happy?",
+    "input": "",
+    "output": "Happier"
+  },
+  {
+    "instruction": "What is the largest island in the Mediterranean Sea?",
+    "input": "",
+    "output": "Sicily, Italy."
+  },
+  {
+    "instruction": "Convert 12 inches to centimeters.",
+    "input": "",
+    "output": "1 inch is equal to 2.54 centimeters. \n\n12 inches = 12 × 2.54 = 30.48 centimeters."
+  },
+  {
+    "instruction": "List four traditional Japanese musical instruments used in a taiko drum ensemble performance.",
+    "input": "",
+    "output": "Here are four traditional Japanese musical instruments used in a taiko drum ensemble performance:\n\n1. Taiko (large drum)\n2. Shime-daiko (smaller drum)\n3. Tsuzumi (hourglass-shaped drum)\n4. Fue (Japanese flute)"
+  },
+  {
+    "instruction": "What is a symbiotic relationship between two different species that live in close association?",
+    "input": "",
+    "output": "Mutualism."
+  },
+  {
+    "instruction": "What is the imperative singular form of write?",
+    "input": "",
+    "output": "Write."
+  },
+  {
+    "instruction": "Provide an antonym for the word \"speed\" in the context of transportation.",
+    "input": "",
+    "output": "Slowness"
+  },
+  {
+    "instruction": "What is the present participle form of the word \"running\"?",
+    "input": "",
+    "output": "Running."
+  },
+  {
+    "instruction": "Define the concept of symbiotic relationships in an oceanic marine environment.",
+    "input": "",
+    "output": "Symbiotic relationships in a marine environment occur when different species live together, often relying on each other for survival benefits such as food, protection, or reproduction. This can include:\n\n* Mutualism: both species benefit (e.g., clownfish and sea anemone)\n* Commensalism: one species benefits, the other is not affected (e.g., remora fish attaching to sharks)\n* Parasitism: one species benefits, the other is harmed (e.g., barnacles on whales)\n\nThese relationships often involve complex interactions and adaptations, promoting coexistence and diversity in marine ecosystems."
+  },
+  {
+    "instruction": "Find the general equation for calculating the focal length in a parabolic mirror.",
+    "input": "",
+    "output": "The general equation for calculating the focal length of a parabolic mirror is:\n\nf = (4 \\* R) / π\n\nwhere f is the focal length and R is the radius of curvature of the parabola."
+  },
+  {
+    "instruction": "What is the formula for calculating the speed of an object in uniform circular motion?",
+    "input": "",
+    "output": "v = rω, where:\n\n* v is the speed\n* r is the radius of the circle\n* ω (omega) is the angular velocity (in radians per second)"
+  },
+  {
+    "instruction": "Calculate the area of a rectangle with length 8.5 meters and width 2.75 meters in square feet.",
+    "input": "",
+    "output": "First, convert measurements to feet:\nLength: 8.5 m * (1 ft / 0.3048 m) ≈ 27.87 ft\nWidth: 2.75 m * (1 ft / 0.3048 m) ≈ 9.05 ft\n\nArea = length × width\n≈ 27.87 ft × 9.05 ft\n≈ 252.53 sq ft"
+  },
+  {
+    "instruction": "What is the present participle of run?",
+    "input": "",
+    "output": "Running"
+  },
+  {
+    "instruction": "Correct the spelling error in the following sentence.",
+    "input": "The capitl of France is Paris",
+    "output": "The correct sentence should read: \"The capital of France is Paris.\""
+  },
+  {
+    "instruction": "Translate into Spanish",
+    "input": "Hello, how are you?",
+    "output": "¡Hola! ¿Cómo estás?"
+  },
+  {
+    "instruction": "Translate into French",
+    "input": "I have a cold.",
+    "output": "J'ai froid."
+  },
+  {
+    "instruction": "Define the concept of homeostasis in an ecological context.",
+    "input": "",
+    "output": "In an ecological context, homeostasis refers to the ability of an ecosystem or organism to maintain a stable internal environment despite external changes, such as fluctuations in temperature, moisture, or nutrient availability. This is achieved through self-regulating mechanisms that counteract deviations from equilibrium, ensuring the continued survival and functioning of the system."
+  },
+  {
+    "instruction": "What is the process by which plants make their own food called?",
+    "input": "",
+    "output": "Photosynthesis."
+  },
+  {
+    "instruction": "Translate 'Good morning' into Spanish",
+    "input": "Good morning",
+    "output": "Buenos días"
+  },
+  {
+    "instruction": "Convert this sentence into passive voice.",
+    "input": "The company will build a new office complex in 2024.",
+    "output": "A new office complex will be built by the company in 2024."
+  },
+  {
+    "instruction": "List five common symptoms associated with acid reflux disease.",
+    "input": "",
+    "output": "Here are 5 common symptoms of acid reflux disease:\n\n1. Heartburn\n2. Regurgitation\n3. Chest pain or discomfort\n4. Difficulty swallowing (dysphagia)\n5. Bloating or fullness after eating"
+  },
+  {
+    "instruction": "What are the plural forms of a mouse in British English?",
+    "input": "",
+    "output": "In British English, the plural form of \"mouse\" is \"mice\"."
+  },
+  {
+    "instruction": "Correct the subject-verb agreement.",
+    "input": "The team is, John and Mary are going to play soccer.",
+    "output": "The corrected sentence should read: \"The team is, and John and Mary are going to play soccer.\" \n\nOr, in a single sentence with proper agreement: \"The team is going to play soccer, along with John and Mary.\""
+  },
+  {
+    "instruction": "What is the process by which plants convert sunlight into energy called in biology?",
+    "input": "",
+    "output": "Photosynthesis."
+  },
+  {
+    "instruction": "List five significant historical events that occurred during the Renaissance period in Europe.",
+    "input": "",
+    "output": "Here are 5 significant historical events of the Renaissance period:\n\n1. **Fall of Constantinople (1453)**: Ottoman Empire conquered Byzantine capital, marking end of Eastern Roman Empire.\n2. **Vatican Library Established (1475)**: Pope Sixtus IV founded library to collect and preserve ancient texts, sparking a revival of classical learning.\n3. **Lorenzo de' Medici's Rule in Florence (1469-1492)**: Powerful leader patronized artists, including Michelangelo and Leonardo da Vinci, fostering artistic innovation.\n4. **Reformation Begins (1517)**: Martin Luther's 95 Theses sparked a Protestant movement that challenged Catholic Church authority and divided Europe.\n5. **French Invasion of Italy (1494)**: Charles VIII's military campaign marked the beginning of foreign intervention in Italian politics, leading to decades of conflict."
+  },
+  {
+    "instruction": "Provide an antonym for the word \"patient\".",
+    "input": "",
+    "output": "Impatient."
+  },
+  {
+    "instruction": "What is the largest living structure on Earth by area, found in the Great Barrier Reef?",
+    "input": "",
+    "output": "The Great Barrier Reef itself."
+  },
+  {
+    "instruction": "Convert this sentence into passive voice.",
+    "input": "The manager was watching the employee.",
+    "output": "The employee was being watched by the manager."
+  },
+  {
+    "instruction": "What is the mathematical expression for the magnitude of the cross product of two vectors?",
+    "input": "",
+    "output": "The magnitude of the cross product of two vectors a and b is given by:\n\n|a × b| = |a||b|sin(θ)\n\nwhere θ is the angle between the two vectors, and |a| and |b| are the magnitudes of the vectors a and b."
+  },
+  {
+    "instruction": "List five common applications of polymer chemistry in everyday consumer products.",
+    "input": "",
+    "output": "Here are 5 common applications of polymer chemistry in everyday consumer products:\n\n1. Plastic water bottles\n2. Clothing (synthetic fabrics like polyester, nylon)\n3. Adhesives (e.g. glue sticks, epoxy)\n4. Carpet and upholstery materials\n5. Packaging materials (e.g. plastic bags, containers)"
+  },
+  {
+    "instruction": "Classify the sentiment as positive, negative, or neutral.",
+    "input": "I'm really disappointed with this new restaurant. Food is overpriced and not great.",
+    "output": "Negative."
+  },
+  {
+    "instruction": "What is the formula for calculating the critical damping ratio in a second-order system?",
+    "input": "",
+    "output": "ζ = c / (2 √(m*k)), where:\n\n* ζ = critical damping ratio\n* c = damping coefficient\n* m = mass\n* k = spring constant"
+  },
+  {
+    "instruction": "What is the equation for kinetic energy in terms of mass and velocity?",
+    "input": "",
+    "output": "Kinetic Energy (KE) = 0.5 × m × v², where m is mass and v is velocity."
+  },
+  {
+    "instruction": "What is the chemical symbol for gold?",
+    "input": "",
+    "output": "Au."
+  }
+]

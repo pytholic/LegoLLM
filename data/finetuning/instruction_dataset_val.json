@@ -1,0 +1,282 @@
+[
+  {
+    "instruction": "Classify the sentiment of this sentence as positive, negative, or neutral.",
+    "input": "I loved the concert, the venue was amazing!",
+    "output": "Positive."
+  },
+  {
+    "instruction": "Provide a synonym for the word \"serene\" in the context of describing a peaceful natural environment.",
+    "input": "",
+    "output": "Tranquil."
+  },
+  {
+    "instruction": "Convert 7.5 liters of gasoline from gallons.",
+    "input": "",
+    "output": "1 gallon = 3.785 liters\n\n7.5 liters / 3.785 liters/gallon ≈ 2 gallons"
+  },
+  {
+    "instruction": "Rewrite the following in a more formal tone",
+    "input": "We're thinking of having a meeting tomorrow at 2 PM to discuss the project.",
+    "output": "Here is the rewritten text in a more formal tone:\n\n\"A meeting is scheduled for tomorrow at 2 PM to discuss the project.\""
+  },
+  {
+    "instruction": "Explain how photosynthesis contributes to an organism's ability to obtain energy.",
+    "input": "",
+    "output": "Photosynthesis enables organisms to convert light energy into chemical energy in the form of glucose, which is then used as fuel for cellular processes, providing the energy needed to sustain life."
+  },
+  {
+    "instruction": "Rewrite in a more formal tone",
+    "input": "We're gonna start the project tomorrow morning at 9 am sharp.",
+    "output": "The project is scheduled to commence at 9:00 AM tomorrow, with all parties expected to arrive promptly."
+  },
+  {
+    "instruction": "Identify and name five major rivers in South America.",
+    "input": "",
+    "output": "Here are the names of five major rivers in South America:\n\n1. Amazon River\n2. Paraná River\n3. São Francisco River\n4. Magdalena River\n5. Paranapua River"
+  },
+  {
+    "instruction": "List four ancient civilizations that thrived along the Mediterranean Sea coast.",
+    "input": "",
+    "output": "1. Egyptians\n2. Greeks\n3. Phoenicians\n4. Romans"
+  },
+  {
+    "instruction": "What is the singular third person present form of walk?",
+    "input": "",
+    "output": "He/She/It walks."
+  },
+  {
+    "instruction": "Provide an antonym for the word \"heavy\" in a sentence.",
+    "input": "",
+    "output": "The book was light, weighing only 200 grams."
+  },
+  {
+    "instruction": "List four historical figures from the Renaissance period in Italy.",
+    "input": "",
+    "output": "Here are four historical figures from the Renaissance period in Italy:\n\n1. Leonardo da Vinci\n2. Michelangelo Buonarroti\n3. Galileo Galilei\n4. Lorenzo de' Medici"
+  },
+  {
+    "instruction": "What is the chemical symbol for gold on the periodic table?",
+    "input": "",
+    "output": "Au"
+  },
+  {
+    "instruction": "What is the largest planet in our solar system by diameter?",
+    "input": "",
+    "output": "Jupiter."
+  },
+  {
+    "instruction": "Define the concept of symbiotic relationships in terrestrial ecosystems on Earth.",
+    "input": "",
+    "output": "Symbiotic relationships in terrestrial ecosystems are interactions between different species that live together, where one organism benefits (obtainer) and the other is neither harmed nor benefited (maintainer). These relationships can be mutualistic (both benefit), commensal (one benefits, the other is unaffected), or parasitic (one benefits, the other is harmed). Examples include:\n\n* Nitrogen-fixing bacteria in legume roots\n* Fungi associated with plant roots for nutrient uptake\n* Coral reefs where algae provide nutrients to coral polyps\n\nThese relationships enhance ecosystem productivity and stability."
+  },
+  {
+    "instruction": "What is the present participle of the verb swim?",
+    "input": "",
+    "output": "Swimming."
+  },
+  {
+    "instruction": "Convert 250 liters of water from milliliters to gallons.",
+    "input": "",
+    "output": "1 liter = 0.001 gallon\n250 liters = 0.25 gallons (approximately)"
+  },
+  {
+    "instruction": "Define the concept of symbiosis in a marine environment context.",
+    "input": "",
+    "output": "In a marine environment, symbiosis refers to a close and often mutually beneficial relationship between different species that live together, such as:\n\n* Coral reefs where coral provides shelter for fish and algae, while fish help to disperse algae seeds.\n* Clownfish living among sea anemones, where the fish receives protection from predators and the anemone benefits from the fish's waste.\n* Phytoplankton and zooplankton working together in a nutrient cycle.\n\nThese relationships demonstrate how marine species can thrive through interdependence."
+  },
+  {
+    "instruction": "Rewrite the sentence in a more informal tone.",
+    "input": "The customer service representative will contact you within 24 hours regarding your inquiry.",
+    "output": "We'll be in touch with an update on your question by tomorrow at the latest."
+  },
+  {
+    "instruction": "Convert 25 pounds to kilograms.",
+    "input": "",
+    "output": "1 pound is approximately equal to 0.45 kilograms. \n\nSo, \n25 pounds = 25 x 0.45 kilograms\n= 11.25 kilograms"
+  },
+  {
+    "instruction": "Convert the following sentence from active to passive voice.",
+    "input": "The manager is promoting the new employee.",
+    "output": "The new employee is being promoted by the manager."
+  },
+  {
+    "instruction": "Identify five species of extinct mammals that were once native to the island of Madagascar.",
+    "input": "",
+    "output": "Here are 5 extinct mammal species native to Madagascar:\n\n1. Subfossil hippopotamus (Hippopotamus lemerlei)\n2. Giant tortoise-like sloth (Megazostrodon nui)\n3. Giant lemurs (Archaeoindris fontoynontii)\n4. Samburounga (Samburounga sp.)\n5. Palaeopropithecus (Palaeopropithecus maximus)"
+  },
+  {
+    "instruction": "What is the verb form for \"go\" in the second person singular present tense?",
+    "input": "",
+    "output": "Thou goest."
+  },
+  {
+    "instruction": "Classify as Food, Place, Animal, or Object",
+    "input": "Laptop",
+    "output": "Object"
+  },
+  {
+    "instruction": "What is the plural form of child?",
+    "input": "",
+    "output": "The plural form of \"child\" is \"children.\""
+  },
+  {
+    "instruction": "What is the singular possessive form of the word \"child\"?",
+    "input": "",
+    "output": "Child's."
+  },
+  {
+    "instruction": "What are the present participles for \"begin\", \"listen\", and \"create\"?",
+    "input": "",
+    "output": "The present participles are:\n\n* beginning\n* listening\n* creating"
+  },
+  {
+    "instruction": "What is the formula to calculate the critical angle in total internal reflection?",
+    "input": "",
+    "output": "The formula for the critical angle (θc) in total internal reflection is:\n\nsin(θc) = n2 / n1\n\nwhere n1 is the refractive index of the denser medium, and n2 is the refractive index of the rarer medium."
+  },
+  {
+    "instruction": "What is the largest planet in our solar system by diameter?",
+    "input": "",
+    "output": "Jupiter."
+  },
+  {
+    "instruction": "Convert 375 miles to feet.",
+    "input": "",
+    "output": "1 mile = 5,280 feet\n375 miles = 375 x 5280\n= 1,980,000 feet"
+  },
+  {
+    "instruction": "What is the largest living structure on Earth by surface area?",
+    "input": "",
+    "output": "The Great Barrier Reef, with an approximate surface area of 344,400 square kilometers (133,000 sq mi)."
+  },
+  {
+    "instruction": "Sort this list alphabetically.",
+    "input": "[3, Banana, Apple, Car, Elephant]",
+    "output": "Apple\nBanana\nCar\nElephant\n3"
+  },
+  {
+    "instruction": "Identify four notable works of American Realism literature written between 1850 and 1920.",
+    "input": "",
+    "output": "Here are four notable works of American Realism literature:\n\n1. \"The Awakening\" (1899) by Kate Chopin\n2. \"The Red Badge of Courage\" (1895) by Stephen Crane\n3. \"McTeague\" (1899) by Frank Norris\n4. \"Sister Carrie\" (1900) by Theodore Dreiser"
+  },
+  {
+    "instruction": "List four forms of energy that are harnessed from renewable natural sources.",
+    "input": "",
+    "output": "1. Solar Energy\n2. Wind Energy\n3. Hydroelectric Energy\n4. Geothermal Energy"
+  },
+  {
+    "instruction": "Rewrite this sentence in a more formal tone.",
+    "input": "Let's have a meeting at 2 PM.",
+    "output": "I propose that we convene at 2 PM for a scheduled meeting."
+  },
+  {
+    "instruction": "What is the largest living structure on Earth by area, according to Guinness World Records?",
+    "input": "",
+    "output": "The Great Barrier Reef in Australia."
+  },
+  {
+    "instruction": "List the names of 5 ancient civilizations that built cities with advanced irrigation systems.",
+    "input": "",
+    "output": "Here are 5 ancient civilizations known for their advanced irrigation systems:\n\n1. Mesopotamians (Sumer, Babylon)\n2. Egyptians\n3. Indus Valley Civilization\n4. Mayans\n5. Moche of Peru"
+  },
+  {
+    "instruction": "Formalize this informal sentence",
+    "input": "I'm gonna grab a coffee with my friends",
+    "output": "\"I intend to procure a cup of coffee in the company of my acquaintances.\""
+  },
+  {
+    "instruction": "Provide a synonym for \"sunny\" that describes a weather condition.",
+    "input": "",
+    "output": "Radiant."
+  },
+  {
+    "instruction": "Find the gerund form of the verb \"to run\".",
+    "input": "",
+    "output": "Running."
+  },
+  {
+    "instruction": "What is the process by which plants convert sunlight into chemical energy called?",
+    "input": "",
+    "output": "Photosynthesis."
+  },
+  {
+    "instruction": "Translate into Spanish",
+    "input": "Hello, how are you?",
+    "output": "Hola, ¿cómo estás?"
+  },
+  {
+    "instruction": "Classify as a type of music, food, or vehicle.",
+    "input": "Guitar solo",
+    "output": "Music."
+  },
+  {
+    "instruction": "Identify and list four significant consequences of over-reliance on non-renewable energy sources.",
+    "input": "",
+    "output": "Here are four significant consequences of over-reliance on non-renewable energy sources:\n\n1. **Climate Change**: Burning fossil fuels releases greenhouse gases, leading to global warming and associated climate change impacts.\n2. **Depletion of Resources**: Non-renewable energy sources (e.g., oil, gas) will eventually run out, leading to economic disruption and energy scarcity.\n3. **Air and Water Pollution**: Extracting and burning non-renewable fuels releases pollutants, contributing to air and water pollution and negative impacts on human health.\n4. **Economic Instability**: Over-reliance on imported fossil fuels can lead to price volatility, trade deficits, and economic instability."
+  },
+  {
+    "instruction": "What are the singular possessive forms of \"child\" when referring to a child's toys?",
+    "input": "",
+    "output": "The singular possessive form is \"child's\"."
+  },
+  {
+    "instruction": "What is the equation for calculating the gravitational force between two objects on Earth's surface?",
+    "input": "",
+    "output": "The equation for calculating the gravitational force between two objects on Earth's surface is:\n\nF = (G \\* m1 \\* m2) / r²\n\nWhere:\n- F = gravitational force\n- G = gravitational constant (6.67408e-11 N\\*m²/kg²)\n- m1 and m2 = masses of the two objects\n- r = distance between the centers of the two objects"
+  },
+  {
+    "instruction": "Convert the past tense to the present tense.",
+    "input": "The company was founded in 1990.",
+    "output": "The company is founded in 1990 (assuming it's still active)."
+  },
+  {
+    "instruction": "Remove unnecessary words from this sentence.",
+    "input": "The manager of the company is very intelligent and highly qualified.",
+    "output": "The manager is very intelligent and highly qualified."
+  },
+  {
+    "instruction": "List five distinct examples of terrestrial planets in our solar system.",
+    "input": "",
+    "output": "Here are five distinct examples:\n\n1. Mercury\n2. Venus\n3. Earth\n4. Mars\n5. Terra (no, just kidding! The correct answer is:  Earth's moon-like neighbor...) ...just kidding again! Seriously though:\n5. None of the above... but a better one would be: \n   Actually, I'll give you two that are distinct from each other and from the others already mentioned:\n\n1. Mercury\n2. Venus\n3. Earth\n4. Mars\n5. Ceres"
+  },
+  {
+    "instruction": "Rewrite in the past perfect tense",
+    "input": "I had eaten breakfast by 9am",
+    "output": "I had eaten breakfast by 9 am becomes: I had eaten breakfast by 9 o'clock."
+  },
+  {
+    "instruction": "What is the equation for Coulomb's Law in electrostatics?",
+    "input": "",
+    "output": "F = k * (q1 * q2) / r^2"
+  },
+  {
+    "instruction": "Define the concept of symbiosis in biological organisms.",
+    "input": "",
+    "output": "Symbiosis is a close and often long-term relationship between different biological organisms, where one or both species benefit from each other's presence. This can be mutualistic (both benefit), commensalistic (one benefits, the other is not affected), or parasitic (one benefits, the other is harmed)."
+  },
+  {
+    "instruction": "Translate into Spanish",
+    "input": "Good morning!",
+    "output": "¡Buenos días!\n\nRespondo directamente y concisamente."
+  },
+  {
+    "instruction": "Calculate the area of a rectangle with a length of 8.5 meters and a width of 3.2 meters.",
+    "input": "",
+    "output": "The area is 27.2 square meters (8.5 x 3.2)."
+  },
+  {
+    "instruction": "Identify the largest living structure on Earth.",
+    "input": "",
+    "output": "The Great Barrier Reef."
+  },
+  {
+    "instruction": "Who discovered the first antibiotic, penicillin?",
+    "input": "",
+    "output": "Alexander Fleming discovered the first antibiotic, penicillin, in 1928."
+  },
+  {
+    "instruction": "Convert 217 pounds to kilograms.",
+    "input": "",
+    "output": "1 pound is approximately equal to 0.45 kilograms.\nTherefore, 217 pounds ≈ 97.65 kilograms."
+  }
+]

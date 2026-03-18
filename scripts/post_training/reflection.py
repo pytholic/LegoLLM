@@ -9,16 +9,22 @@ Usage:
     uv run python scripts/post_training/reflection.py --provider openai --model gpt-4o-mini --mode response
 
     # Ollama, single instance
-    uv run python scripts/post_training/reflection.py --provider ollama --model qwen3.5:9b --mode instruction
+    uv run python scripts/post_training/reflection.py --provider ollama --model olmo-3.1:32b-think --mode instruction
 
-    # Ollama, 4 instances across 4 GPUs (2 workers each = 8 concurrent requests)
-    make ollama-serve NUM_INSTANCES=4 WORKERS_PER_GPU=2
-    uv run python scripts/post_training/reflection.py --num-instances 4 --workers-per-instance 2
+    # Ollama, 4 instances across 4 GPUs — set NUM_INSTANCES once for all steps
+    make ollama-start reflect NUM_INSTANCES=4 GPU_IDS=0,1,2,3 MODEL=olmo-3.1:32b-think
+
+    # Or run steps individually:
+    make ollama-serve NUM_INSTANCES=4 GPU_IDS=0,1,2,3 MODEL=olmo-3.1:32b-think
+    make ollama-pull NUM_INSTANCES=4 MODEL=olmo-3.1:32b-think
+    uv run python scripts/post_training/reflection.py --num-instances 4 --base-port 11434 --input data/finetuning/instruction_dataset_train.json --mode instruction
 
     # Retry failed samples
     uv run python scripts/post_training/reflection.py --input data/finetuning/instruction_dataset_reflection_instruction_failed.jsonl
 
 See scripts/post_training/README.md for the full multi-GPU workflow.
+
+Created by @pytholic on 2026.03.14
 """
 
 import argparse
@@ -57,8 +63,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         type=str,
-        default="qwen3.5:9b",
-        help="The model to use for reflection (default: qwen3.5:9b).",
+        default="olmo-3.1:32b-think",
+        help="The model to use for reflection (default: olmo-3.1:32b-think).",
     )
     parser.add_argument(
         "--provider",
@@ -89,8 +95,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--ollama-host",
         type=str,
-        default="localhost",
-        help="Ollama host (default: 'localhost').",
+        default="127.0.0.1",
+        help="Ollama host (default: '127.0.0.1').",
     )
     parser.add_argument(
         "--ollama-port",
@@ -103,13 +109,6 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=1,
         help="Number of Ollama instances (can share a GPU, default: 1).",
-    )
-    parser.add_argument(
-        "--workers-per-instance",
-        type=int,
-        default=1,
-        help="Concurrent requests per Ollama instance (default: 1). "
-        "Set OLLAMA_NUM_PARALLEL to the same value when starting ollama serve.",
     )
     parser.add_argument(
         "--no-think",
@@ -153,7 +152,7 @@ Paris.
 3-4. Improved instruction and answer:
 
 [New Instruction] Explain Paris's historical, political, and cultural significance as the capital of France, including how its role has evolved from the medieval period to the present day. [End]
-[New Answer] Paris has served as the capital of France since the late 10th century when Hugh Capet, the first Capetian king, established it as his seat of power. Historically, the city grew around the Île de la Cité on the Seine, benefiting from its strategic position for trade and defense. During the medieval period, Paris became a center of learning with the founding of the University of Paris (c. 1150), one of Europe's earliest universities. Politically, Paris has been the epicenter of major events including the French Revolution (1789), which transformed France from an absolute monarchy into a republic. The city housed the National Assembly and became synonymous with democratic ideals. Culturally, Paris earned its reputation as the "City of Light" during the Enlightenment and later as a hub for art movements including Impressionism and Existentialism. Today, Paris serves as France's administrative capital, hosting the Élysée Palace (presidency), the National Assembly, and the Senate, while remaining a global center for fashion, gastronomy, and diplomacy. [End]"""
+[Better Answer] Paris has served as the capital of France since the late 10th century when Hugh Capet, the first Capetian king, established it as his seat of power. Historically, the city grew around the Île de la Cité on the Seine, benefiting from its strategic position for trade and defense. During the medieval period, Paris became a center of learning with the founding of the University of Paris (c. 1150), one of Europe's earliest universities. Politically, Paris has been the epicenter of major events including the French Revolution (1789), which transformed France from an absolute monarchy into a republic. The city housed the National Assembly and became synonymous with democratic ideals. Culturally, Paris earned its reputation as the "City of Light" during the Enlightenment and later as a hub for art movements including Impressionism and Existentialism. Today, Paris serves as France's administrative capital, hosting the Élysée Palace (presidency), the National Assembly, and the Senate, while remaining a global center for fashion, gastronomy, and diplomacy. [End]"""
 
 _RESPONSE_EXAMPLE = """Here is an example of the expected output format:
 
@@ -243,14 +242,14 @@ We would like you to evaluate and improve the quality of the instruction.
 
 {_INSTRUCTION_EXAMPLE}
 
-Now do the same for the following. You MUST use the exact tags [New Instruction], [New Answer], and [End] as shown in the example above. Do NOT wrap these tags in markdown bold (**) or any other formatting.
+Now do the same for the following. You MUST use the exact tags [New Instruction], [Better Answer], and [End] as shown in the example above. Do NOT wrap these tags in markdown bold (**) or any other formatting.
 
 Format your output exactly as:
 [New Instruction] your improved instruction [End]
-[New Answer] your detailed answer to the new instruction [End]
+[Better Answer] your detailed answer to the new instruction [End]
 
 IMPORTANT:
-- Use the EXACT tags: [New Instruction], [New Answer], and [End] — no markdown, no bold, no extra brackets.
+- Use the EXACT tags: [New Instruction], [Better Answer], and [End] — no markdown, no bold, no extra brackets.
 - Do NOT repeat or continue writing after the final [End].
 
 {sample}"""
@@ -258,17 +257,24 @@ IMPORTANT:
     return system_prompt, prompt.strip()
 
 
-def extract_instruction_and_output(text: str) -> tuple[str, str] | tuple[None, None]:
-    """Extract [New Instruction] and [New Answer] blocks from reflected text."""
-    # Strip markdown bold/formatting around tags: **[New Instruction]** -> [New Instruction]
+def extract_reflection_output(text: str, mode: ReflectionMode) -> tuple[str | None, str | None]:
+    """Extract reflected content based on mode.
+
+    Instruction mode: returns (new_instruction, better_answer).
+    Response mode:    returns (None, better_answer).
+    """
     cleaned = re.sub(r"\*{1,2}\[", "[", text)
     cleaned = re.sub(r"\]\*{1,2}", "]", cleaned)
 
-    instruction_match = re.search(r"\[New Instruction\]\s*(.*?)\s*\[End\]", cleaned, re.DOTALL)
-    output_match = re.search(r"\[New Answer\]\s*(.*?)\s*\[End\]", cleaned, re.DOTALL)
-    if instruction_match and output_match:
-        return instruction_match.group(1).strip(), output_match.group(1).strip()
-    return None, None
+    answer_match = re.search(r"\[Better Answer\]\s*(.*?)\s*\[End\]", cleaned, re.DOTALL)
+    answer = answer_match.group(1).strip() if answer_match else None
+
+    instruction = None
+    if mode == ReflectionMode.INSTRUCTION:
+        instr_match = re.search(r"\[New Instruction\]\s*(.*?)\s*\[End\]", cleaned, re.DOTALL)
+        instruction = instr_match.group(1).strip() if instr_match else None
+
+    return instruction, answer
 
 
 def _create_provider(args: argparse.Namespace) -> LLMProvider:
@@ -380,20 +386,25 @@ def main() -> None:
                 output_format=None,
                 stream=False,
             )
-        instruction, output = extract_instruction_and_output(response)
+
+        print(response)
+        new_instr, new_output = extract_reflection_output(response, args.mode)
 
         with write_lock:
-            if instruction and output:
+            if new_output:
                 with open(output_path, "a") as f:
-                    entry = {"instruction": instruction, "input": inp, "output": output}
+                    entry = {
+                        "instruction": new_instr or instr,
+                        "input": inp,
+                        "output": new_output,
+                    }
                     f.write(json.dumps(entry, ensure_ascii=False) + "\n")
             else:
-                logger.error("Failed to extract instruction and output from response")
+                logger.error("Failed to extract improved answer from response")
                 with open(failed_path, "a") as f:
                     f.write(json.dumps(sample, ensure_ascii=False) + "\n")
 
-    # Reflection loop: total_workers = num_instances * workers_per_instance
-    num_workers = len(providers) * args.workers_per_instance
+    num_workers = len(providers)
     with progress_bar("Reflecting", total=len(data)) as (progress, task):
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
             futures = {

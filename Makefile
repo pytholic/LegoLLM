@@ -92,21 +92,21 @@ delete-venv:
 	uv venv --clear
 
 # ── Ollama serving ────────────────────────────────────────────────────────────
-OLLAMA_BIN       ?= /usr/local/bin/ollama
+OLLAMA_BIN       ?= ~/personal/ollama/bin/ollama
 NUM_INSTANCES    ?= 1
-WORKERS_PER_GPU  ?= 1
 BASE_PORT        ?= 11434
-MODEL            ?= gemma3:27b-it-qat
+MODEL            ?= deepseek-r1:14b
+
 # GPU assignment: comma-separated GPU IDs, one per instance.
 # Examples:
-#   GPU_IDS=0,1,2,3  — 4 instances, each on a different GPU (default: 0..NUM_INSTANCES-1)
-#   GPU_IDS=0,0,0,0  — 4 instances, all on GPU 0
+#   GPU_IDS=0,1,2,3  — 4 instances, each on a different GPU
+#   GPU_IDS=0        — all instances on GPU 0
 GPU_IDS          ?= 0
 
 .PHONY: ollama-serve
 ollama-serve:
 	@mkdir -p logs
-	@echo "Starting $(NUM_INSTANCES) Ollama instance(s) from port $(BASE_PORT) ($(WORKERS_PER_GPU) workers each)..."
+	@echo "Starting $(NUM_INSTANCES) Ollama instance(s) from port $(BASE_PORT)..."
 	@gpu_ids="$(GPU_IDS)"; \
 	for i in $$(seq 0 $$(($(NUM_INSTANCES) - 1))); do \
 		port=$$(($(BASE_PORT) + i)); \
@@ -116,7 +116,7 @@ ollama-serve:
 			gpu=$$i; \
 		fi; \
 		echo "  Instance $$i → GPU $$gpu, port $$port"; \
-		CUDA_VISIBLE_DEVICES=$$gpu OLLAMA_HOST=127.0.0.1:$$port OLLAMA_NUM_PARALLEL=$(WORKERS_PER_GPU) $(OLLAMA_BIN) serve >> logs/ollama_$$port.log 2>&1 & \
+		CUDA_VISIBLE_DEVICES=$$gpu OLLAMA_HOST=127.0.0.1:$$port $(OLLAMA_BIN) serve >> logs/ollama_$$port.log 2>&1 & \
 	done
 	@echo "Done. Logs in logs/ollama_<port>.log"
 
@@ -129,6 +129,25 @@ ollama-pull:
 	done
 	@wait
 	@echo "Done."
+
+REFLECT_INPUT    ?= data/finetuning/instruction_dataset_train.json
+REFLECT_MODE     ?= response
+
+.PHONY: ollama-start
+ollama-start: ollama-serve
+	@echo "Waiting for instances to be ready..."
+	@sleep 3
+	@$(MAKE) ollama-pull
+
+.PHONY: reflect
+reflect:
+	uv run python scripts/post_training/reflection.py \
+		--num-instances $(NUM_INSTANCES) \
+		--base-port $(BASE_PORT) \
+		--ollama-host 127.0.0.1 \
+		--model $(MODEL) \
+		--input $(REFLECT_INPUT) \
+		--mode $(REFLECT_MODE)
 
 .PHONY: ollama-stop
 ollama-stop:
